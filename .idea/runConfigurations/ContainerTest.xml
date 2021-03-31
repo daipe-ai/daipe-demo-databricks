@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="ContainerTest" type="tests" factoryName="Unittests">
-    <module name="__daipe__" />
+    <module name="daipe-demo-databricks" />
     <option name="INTERPRETER_OPTIONS" value="" />
     <option name="PARENT_ENVS" value="true" />
     <envs>
