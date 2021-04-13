@@ -1,14 +1,8 @@
-parameters:
-  - name: "serviceConnectionName"
-    type: "string"
-  - name: "environmentName"
-    type: "string"
-
 ## DEPLOY
 jobs:
   - deployment: DeployDbxNtbs
     displayName: Deploy Databricks notebooks
-    environment: ${{ parameters.environmentName }}
+    environment: $(ENV)
     pool:
       vmImage: 'ubuntu-20.04'
     workspace:
@@ -24,7 +18,7 @@ jobs:
               name: getDbxVars
               displayName: Get Databricks Workspace variables
               inputs:
-                azureSubscription: ${{ parameters.serviceConnectionName }}
+                azureSubscription: $(SERVICE_CONNECTION_NAME)
                 scriptType: 'bash'
                 scriptLocation: 'inlineScript'
                 inlineScript: |
@@ -41,7 +35,7 @@ jobs:
             - task: AzureKeyVault@1
               displayName: 'Azure Key Vault: get Databricks token'
               inputs:
-                azureSubscription: ${{ parameters.serviceConnectionName }}
+                azureSubscription: $(SERVICE_CONNECTION_NAME)
                 KeyVaultName: '$(KEYVAULT_NAME)'
                 SecretsFilter: 'unit-dbx-token'
             # set orgId and Workspace Url to env based config for deployment
@@ -51,7 +45,6 @@ jobs:
                 targetType: inline
                 script: |
                   sed -i "s/address: .*/address: https:\/\/$(getDbxVars.WORKSPACE_URL)/g" src/daipedemo/_config/config_$(ENV).yaml
-                  sed -i "s/orgId: '.*'/orgId: '$(getDbxVars.DBX_ORG_ID)'/g" src/daipedemo/_config/config_$(ENV).yaml
                   cat src/daipedemo/_config/config_$(ENV).yaml
             # environment initialization
             - task: Bash@3
