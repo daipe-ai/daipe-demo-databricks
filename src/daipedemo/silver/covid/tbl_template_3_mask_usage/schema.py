@@ -1,8 +1,9 @@
 import pyspark.sql.types as t
+from datalakebundle.table.schema.DeltaTableSchema import DeltaTableSchema
 
 
 def get_schema():
-    return t.StructType(
+    return DeltaTableSchema(
         [
             t.StructField(
                 "COUNTYFP",
@@ -74,5 +75,6 @@ def get_schema():
                     "comment": "",
                 },
             ),
-        ]
+        ],
+        primary_key="COUNTYFP",
     )

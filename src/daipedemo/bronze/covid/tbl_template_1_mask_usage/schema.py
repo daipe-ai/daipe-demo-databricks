@@ -1,8 +1,9 @@
 import pyspark.sql.types as t
+from datalakebundle.table.schema.DeltaTableSchema import DeltaTableSchema
 
 
 def get_schema():
-    return t.StructType(
+    return DeltaTableSchema(
         [
             t.StructField("COUNTYFP", t.IntegerType(), True),
             t.StructField("NEVER", t.DoubleType(), True),
@@ -11,5 +12,6 @@ def get_schema():
             t.StructField("FREQUENTLY", t.DoubleType(), True),
             t.StructField("ALWAYS", t.DoubleType(), True),
             t.StructField("INSERT_TS", t.TimestampType(), True),
-        ]
+        ],
+        primary_key="COUNTYFP",
     )

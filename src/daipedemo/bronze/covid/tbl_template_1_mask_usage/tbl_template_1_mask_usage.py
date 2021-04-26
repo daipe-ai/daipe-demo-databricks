@@ -18,13 +18,9 @@
 # COMMAND ----------
 
 import os
-from datetime import datetime
-from pyspark.sql import functions as f
-from logging import Logger
-from pyspark.sql import SparkSession
+from pyspark.sql import functions as f, SparkSession
 from pyspark.sql.dataframe import DataFrame
-from datalakebundle.notebook.decorators import notebook_function, data_frame_loader, transformation, data_frame_saver, table_params
-from datalakebundle.table.TableManager import TableManager
+from datalakebundle.notebook.decorators import notebook_function, transformation, read_csv, table_overwrite
 
 # COMMAND ----------
 
@@ -44,68 +40,37 @@ def init(spark: SparkSession):
 
 # COMMAND ----------
 
-# MAGIC %md #### Reading a CSV file
+# MAGIC %md
 # MAGIC
-# MAGIC Let's use `@data_frame_loader` notebook function to load our first data! Notice how the `logger` object is used to print logging information to the output.
+# MAGIC #### Reading a CSV file
+# MAGIC
+# MAGIC Use the `read_csv()` function inside the `@transformation` decorator to load the CSV file into Spark dataframe.
+# MAGIC
+# MAGIC To display the loaded dataframe, set the `display=True` keyword argument of the `@transformation` decorator.
 
 # COMMAND ----------
 
 
-@data_frame_loader(table_params("bronze_covid.tbl_template_1_mask_usage").source_csv_path)
-def read_csv_mask_usage(source_csv_path: str, spark: SparkSession, logger: Logger):
-    logger.info(f"Reading CSV from source path: `{source_csv_path}`.")
-    return (
-        spark.read.format("csv")
-        .option("header", "true")
-        .option("inferSchema", "true")  # Tip: it might be better idea to define schema!
-        .load(source_csv_path)
-        .limit(10)  # only for test
-    )
+@transformation(
+    read_csv("dbfs:/databricks-datasets/COVID/covid-19-data/mask-use/mask-use-by-county.csv", options=dict(header=True, inferSchema=True)),
+    display=False,
+)
+def add_something(df: DataFrame):
+    return df.limit(10).withColumn("INSERT_TS", f.current_timestamp())
 
 
 # COMMAND ----------
 
 # MAGIC %md
 # MAGIC
-# MAGIC #### Transform data by adding new column
+# MAGIC #### Writing transformed data into a table
 # MAGIC
-# MAGIC Using the `@transformation` notebook function. Notice the usage of `display=True` to display transformation outputs
+# MAGIC In Daipe it is recommended to **write data into Hive tables rather than datalake paths**. The following code writes the returned Spark dataframe into the _bronze_covid.tbl_template_1_mask_usage_ table with [explicit schema defined](https://github.com/daipe-ai/daipe-demo-databricks/blob/master/src/daipedemo/bronze/covid/tbl_template_1_mask_usage/schema.py). Keep in mind that any new rows inserted into the table are validated against the schema. For more details visit the ["Managing datalake" documentation section](https://docs.daipe.ai/data-pipelines-workflow/managing-datalake/).
 
 # COMMAND ----------
 
 
-@transformation(read_csv_mask_usage, display=True)
-def add_column_insert_ts(df: DataFrame, logger: Logger):
-    logger.info("Adding Insert timestamp")
-    return df.withColumn("INSERT_TS", f.lit(datetime.now()))
-
-
-# COMMAND ----------
-
-# MAGIC %md
-# MAGIC
-# MAGIC #### Saving results to fresh table
-# MAGIC
-# MAGIC In Daipe it is recommended to **work with Hive tables rather than datalake paths**. Hive table has explicit schema which is validated when new rows are inserted into table.
-# MAGIC
-# MAGIC In the following function, the `bronze_covid.tbl_template_1_mask_usage` table gets (re)created using schema defined in the associated *schema.py* file.
-
-# COMMAND ----------
-
-
-@data_frame_saver(add_column_insert_ts)
-def save_table_bronze_covid_tbl_template_1_mask_usage(df: DataFrame, logger: Logger, table_manager: TableManager):
-    # Recreate = remove table and create again
-    table_manager.recreate("bronze_covid.tbl_template_1_mask_usage")
-
-    output_table_name = table_manager.get_name("bronze_covid.tbl_template_1_mask_usage")
-
-    logger.info(f"Saving data to table: {output_table_name}")
-
-    (
-        df.select("COUNTYFP", "NEVER", "RARELY", "SOMETIMES", "FREQUENTLY", "ALWAYS", "INSERT_TS")
-        .write.option("partitionOverwriteMode", "dynamic")
-        .insertInto(output_table_name)
-    )
-
-    logger.info(f"Data successfully saved to: {output_table_name}")
+@transformation(add_something)
+@table_overwrite("bronze_covid.tbl_template_1_mask_usage")
+def add_current_timestamp_and_save(df: DataFrame):
+    return df

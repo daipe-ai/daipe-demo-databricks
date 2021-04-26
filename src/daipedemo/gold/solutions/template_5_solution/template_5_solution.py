@@ -8,20 +8,15 @@
 
 # COMMAND ----------
 
-from logging import Logger
-from pyspark.sql import SparkSession
 from pyspark.sql.dataframe import DataFrame
-from datalakebundle.notebook.decorators import data_frame_loader, notebook_function
-from datalakebundle.table.TableManager import TableManager
+from datalakebundle.notebook.decorators import transformation, notebook_function, read_table
 
 # COMMAND ----------
 
 
-@data_frame_loader(display=False)
-def read_bronze_covid_tbl_template_2_confirmed_case(spark: SparkSession, logger: Logger, table_manager: TableManager):
-    return spark.read.table(table_manager.get_name("bronze_covid.tbl_template_2_confirmed_cases")).select(
-        "countyFIPS", "County_Name", "State", "stateFIPS"
-    )
+@transformation(read_table("bronze_covid.tbl_template_2_confirmed_cases"), display=False)
+def read_bronze_covid_tbl_template_2_confirmed_case(df: DataFrame):
+    return df.select("countyFIPS", "County_Name", "State", "stateFIPS")
 
 
 # COMMAND ----------
