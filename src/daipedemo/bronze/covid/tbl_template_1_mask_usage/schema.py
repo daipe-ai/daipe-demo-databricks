@@ -11,7 +11,7 @@ def get_schema():
             t.StructField("SOMETIMES", t.DoubleType(), True),
             t.StructField("FREQUENTLY", t.DoubleType(), True),
             t.StructField("ALWAYS", t.DoubleType(), True),
-            t.StructField("INSERT_TS", t.TimestampType(), True),
+            t.StructField("INSERT_TS", t.TimestampType(), False),
         ],
         primary_key="COUNTYFP",
     )
