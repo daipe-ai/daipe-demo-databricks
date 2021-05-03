@@ -1,8 +1,6 @@
 # overrides default bundle settings defined in site-packages/datalakebundle/_config/config.yaml
 parameters:
   datalakebundle:
-    notebook:
-      module_template: '%daipe.root_module.name%.{layer}.{domain}.{table_identifier}.{table_identifier}'
     table:
       name_template: '%kernel.environment%_{identifier}'
       defaults:

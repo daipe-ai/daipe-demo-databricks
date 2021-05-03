@@ -2,20 +2,5 @@ parameters:
   datalake:
     base_path: '/%kernel.environment%'
 
-  covid:
-    confirmed_csv_path: 'dbfs:/databricks-datasets/COVID/USAFacts/covid_confirmed_usafacts.csv'
-
-  datalakebundle:
-    tables:
-      # bronze ------------------------------------------
-      bronze_covid.tbl_template_1_mask_usage:
-
-      bronze_covid.tbl_template_2_confirmed_cases:
-
-      # silver ------------------------------------------
-      silver_covid.tbl_template_3_mask_usage:
-
-      # gold --------------------------------------------
-      gold_reporting.tbl_template_4_mask_usage_per_county:
-
-      gold_solutions.template_5_solution:
+  loans:
+    repayments_csv_path: 'dbfs:/RepaymentsData.csv'
