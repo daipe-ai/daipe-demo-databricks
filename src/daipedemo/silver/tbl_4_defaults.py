@@ -85,7 +85,7 @@ class tbl_4_defaults:  # noqa: N801
 
 
 @transformation(add_defaulted_column, display=True)
-@table_overwrite(tbl_4_defaults)
+@table_overwrite(tbl_4_defaults, recreate_table=True)
 def select_columns_and_save(df: DataFrame):
     return df.select("LoanID", "Rating", "Country", "Defaulted", f.year("DefaultDate").alias("Year"), f.month("DefaultDate").alias("Month"))
 

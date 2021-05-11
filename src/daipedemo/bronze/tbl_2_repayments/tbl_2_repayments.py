@@ -84,7 +84,14 @@ class tbl_2_repayments:  # noqa: N801
 )
 @table_overwrite(tbl_2_repayments)
 def load_csv_modify_columns_and_save(df: DataFrame):
-    return df.select(field_names(tbl_2_repayments))
+    return df.select(
+        f.to_date(f.col("ReportAsOfEOD"), "yyyy-MM-dd").alias("ReportAsOfEOD"),
+        "LOANID",
+        f.to_date(f.col("Date"), "yyyy-MM-dd").alias("Date"),
+        "PrincipalRepayment",
+        "InterestRepayment",
+        "LateFeesRepayment",
+    ).withColumnRenamed("LOANID", "LoanID")
 
 
 # COMMAND ----------
