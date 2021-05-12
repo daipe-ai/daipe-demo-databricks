@@ -1,6 +1,6 @@
 # Databricks notebook source
 # MAGIC %md
-# MAGIC # Sample notebook #3: Function based notebooks
+# MAGIC # Sample notebook #5: Joining tables
 # MAGIC
 # MAGIC In this example notebook you will how and **why** to write function-based notebooks.
 
@@ -10,9 +10,11 @@
 
 # COMMAND ----------
 
-from pyspark.sql import functions as f, types as t
 from pyspark.sql.dataframe import DataFrame
 from datalakebundle.imports import *
+
+from daipedemo.silver.tbl_3_loans import tbl_loans
+from daipedemo.silver.tbl_4_repayments.tbl_4_repayments import tbl_repayments
 
 # COMMAND ----------
 
@@ -50,38 +52,28 @@ from datalakebundle.imports import *
 # COMMAND ----------
 
 
-class tbl_3_joined_loans_and_repayments:  # noqa: N801
+class tbl_joined_loans_and_repayments:  # noqa N801
     db = "silver"
-    fields = [
-        t.StructField("LoanID", t.StringType(), True),
-        t.StructField("UserName", t.StringType(), True),
-        t.StructField("Amount", t.DoubleType(), True),
-        t.StructField("Interest", t.DoubleType(), True),
-        t.StructField("Education", t.IntegerType(), True),
-        t.StructField("Gender", t.IntegerType(), True),
-        t.StructField("Rating", t.StringType(), True),
-        t.StructField("DefaultDate", t.DateType(), True),
-        t.StructField("Country", t.StringType(), True),
-        t.StructField("ReportAsOfEOD", t.DateType(), True),
-        t.StructField("Date", t.DateType(), True),
-        t.StructField("PrincipalRepayment", t.DoubleType(), True),
-        t.StructField("InterestRepayment", t.DoubleType(), True),
-        t.StructField("LateFeesRepayment", t.DoubleType(), True),
-        t.StructField("ID", t.LongType(), False),
-    ]
-    primary_key = "ID"
 
+    # Schema is a sum of columns of both tables
+    fields = tbl_loans.fields + tbl_repayments.fields
+
+    primary_key = "RepaymentID"
+
+
+# "LoanID" column is duplicated therefore it has to be removed once
+tbl_joined_loans_and_repayments.fields.remove(t.StructField("LoanID", t.StringType(), True))
 
 # COMMAND ----------
 
 
-@transformation(read_table("bronze.tbl_1_loans"), read_table("bronze.tbl_2_repayments"), display=True)
-@table_overwrite(tbl_3_joined_loans_and_repayments, recreate_table=True)
+@transformation(read_table("silver.tbl_loans"), read_table("silver.tbl_repayments"), display=True)
+@table_overwrite(tbl_joined_loans_and_repayments)
 def join_loans_and_repayments(df1: DataFrame, df2: DataFrame):
-    return df1.join(df2, "LOANID").withColumn("ID", f.monotonically_increasing_id())
+    return df1.join(df2, "LoanID")
 
 
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ### Let's continue to the following <a href="$./tbl_4_defaults">notebook</a>
+# MAGIC ### Let's continue to the following <a href="$./tbl_6_defaults">notebook</a>

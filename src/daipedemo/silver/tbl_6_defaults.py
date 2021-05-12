@@ -1,6 +1,6 @@
 # Databricks notebook source
 # MAGIC %md
-# MAGIC # Sample notebook #4: Widgets
+# MAGIC # Sample notebook #6: Widgets
 
 # COMMAND ----------
 
@@ -42,7 +42,7 @@ def create_input_widgets(dbutils: DBUtils):
 # COMMAND ----------
 
 
-@transformation(read_table("bronze.tbl_1_loans"), display=True)
+@transformation(read_table("silver.tbl_loans"), display=True)
 def read_table_bronze_loans_tbl_loans(df: DataFrame, logger: Logger, dbutils: DBUtils):
     base_year = dbutils.widgets.get("base_year")
 
@@ -67,7 +67,7 @@ def add_defaulted_column(df: DataFrame):
 # COMMAND ----------
 
 
-class tbl_4_defaults:  # noqa: N801
+class tbl_defaults:  # noqa: N801
     db = "silver"
     fields = [
         t.StructField("LoanID", t.StringType(), True),
@@ -85,7 +85,7 @@ class tbl_4_defaults:  # noqa: N801
 
 
 @transformation(add_defaulted_column, display=True)
-@table_overwrite(tbl_4_defaults, recreate_table=True)
+@table_overwrite(tbl_defaults)
 def select_columns_and_save(df: DataFrame):
     return df.select("LoanID", "Rating", "Country", "Defaulted", f.year("DefaultDate").alias("Year"), f.month("DefaultDate").alias("Month"))
 
@@ -101,4 +101,4 @@ def select_columns_and_save(df: DataFrame):
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ### Let's move on to <a href="$../gold/tbl_5_most_valuable_users">simple reporting</a>
+# MAGIC ### Let's move on to <a href="$../gold/tbl_7_most_valuable_users">simple reporting</a>

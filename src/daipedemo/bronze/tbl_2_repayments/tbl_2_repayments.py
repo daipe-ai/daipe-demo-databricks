@@ -1,7 +1,7 @@
 # Databricks notebook source
 # MAGIC %md
 # MAGIC
-# MAGIC # Sample notebook #2: Configuration and fixed schema
+# MAGIC # Sample notebook #2: Configuration
 # MAGIC
 # MAGIC In this notebook, we will take a look at how to **use and change configuration parameters**.
 
@@ -12,7 +12,6 @@
 # COMMAND ----------
 
 from pyspark.sql.dataframe import DataFrame
-from pyspark.sql import functions as f, types as t
 from datalakebundle.imports import *
 from daipedemo.bronze.tbl_2_repayments.csv_schema import get_schema as get_csv_schema
 
@@ -41,23 +40,6 @@ from daipedemo.bronze.tbl_2_repayments.csv_schema import get_schema as get_csv_s
 
 # COMMAND ----------
 
-
-class tbl_2_repayments:  # noqa: N801
-    db = "bronze"
-    fields = [
-        t.StructField("ReportAsOfEOD", t.DateType(), True),
-        t.StructField("LoanID", t.StringType(), True),
-        t.StructField("Date", t.DateType(), True),
-        t.StructField("PrincipalRepayment", t.DoubleType(), True),
-        t.StructField("InterestRepayment", t.DoubleType(), True),
-        t.StructField("LateFeesRepayment", t.DoubleType(), True),
-    ]
-    primary_key = "LoanID"
-    # partition_by = "Date" #---takes a very long time
-
-
-# COMMAND ----------
-
 # MAGIC %md
 # MAGIC #### Using the schema class as a console argument
 # MAGIC `console datalake:table:create daipedemo.bronze.tbl_2_repayments.tbl_2_repayments`
@@ -82,16 +64,9 @@ class tbl_2_repayments:  # noqa: N801
 @transformation(
     read_csv("%loans.repayments_csv_path%", schema=get_csv_schema(), options=dict(header=True)),
 )
-@table_overwrite(tbl_2_repayments)
-def load_csv_modify_columns_and_save(df: DataFrame):
-    return df.select(
-        f.to_date(f.col("ReportAsOfEOD"), "yyyy-MM-dd").alias("ReportAsOfEOD"),
-        "LOANID",
-        f.to_date(f.col("Date"), "yyyy-MM-dd").alias("Date"),
-        "PrincipalRepayment",
-        "InterestRepayment",
-        "LateFeesRepayment",
-    ).withColumnRenamed("LOANID", "LoanID")
+@table_overwrite("bronze.tbl_repayments")
+def load_csv_and_save(df: DataFrame):
+    return df
 
 
 # COMMAND ----------
@@ -107,4 +82,4 @@ def load_csv_modify_columns_and_save(df: DataFrame):
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC #### Now that we have our data loaded, let's move to the following <a href="$../../silver/tbl_3_joined_loans_and_repayments"> notebook</a>
+# MAGIC #### Now that we have our data loaded, let's move to the following <a href="$../../silver/tbl_3_loans"> notebook</a>

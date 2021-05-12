@@ -233,7 +233,7 @@ sql = ["pandas (>=0.23.2)", "pyarrow (>=0.15.1)"]
 
 [[package]]
 name = "datalake-bundle"
-version = "0.7.0a8"
+version = "0.7.0a11"
 description = "DataLake tables management bundle for the Daipe Framework"
 category = "main"
 optional = false
@@ -1096,7 +1096,7 @@ testing = ["pytest (>=3.5,!=3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.7.1,<4.0.0"
-content-hash = "8af7e728ea877c6204668069d3280406baac3d9a78bed2eeb872119c7678ba71"
+content-hash = "c082222da5e296357fbeb5f4962bd0580354a5835e7adddb18f201d314e90a87"
 
 [metadata.files]
 appdirs = [
@@ -1210,8 +1210,8 @@ databricks-connect = [
     {file = "databricks-connect-7.3.7.tar.gz", hash = "sha256:35ead50a0550e65a7d6fd78e2c8e54095b53514fba85180768a2dbcdd3f2cf0b"},
 ]
 datalake-bundle = [
-    {file = "datalake-bundle-0.7.0a8.tar.gz", hash = "sha256:cbb4579a5dec66b36d3ddde2ccf6fa805dfdddad8ca188ac393ab3701ac6c8ca"},
-    {file = "datalake_bundle-0.7.0a8-py3-none-any.whl", hash = "sha256:3b968698e1b93680e6d01d22715d15df59cff1da8a503cad9ced1a59cc83420b"},
+    {file = "datalake-bundle-0.7.0a11.tar.gz", hash = "sha256:c9e8e103dc2c3fd0fffc5734f317af0347753ef33547ebf15835e500756c5ac1"},
+    {file = "datalake_bundle-0.7.0a11-py3-none-any.whl", hash = "sha256:bd85fc247242b4e32600188d657cd1234b41053e69969cdf887ea16f8c89b638"},
 ]
 dbx-deploy = [
     {file = "dbx_deploy-0.14.2-py3-none-any.whl", hash = "sha256:91091be69d550de4c2525f55e2ab6fa537a9723074d6bcc1271816a2d35fbf9a"},
