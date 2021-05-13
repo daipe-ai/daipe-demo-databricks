@@ -10,11 +10,11 @@
 
 # COMMAND ----------
 
+import pyspark.sql.types as t
 from pyspark.sql.dataframe import DataFrame
 from datalakebundle.imports import *
-
-from daipedemo.silver.tbl_3_loans import tbl_loans
-from daipedemo.silver.tbl_4_repayments.tbl_4_repayments import tbl_repayments
+from daipedemo.silver.tbl_3_loans import table_schema as tbl_loans_schema
+from daipedemo.silver.tbl_4_repayments.tbl_4_repayments import table_schema as tbl_repayments_schema
 
 # COMMAND ----------
 
@@ -52,23 +52,20 @@ from daipedemo.silver.tbl_4_repayments.tbl_4_repayments import tbl_repayments
 # COMMAND ----------
 
 
-class tbl_joined_loans_and_repayments:  # noqa N801
-    db = "silver"
-
-    # Schema is a sum of columns of both tables
-    fields = tbl_loans.fields + tbl_repayments.fields
-
-    primary_key = "RepaymentID"
-
+table_schema = TableSchema(
+    "silver.tbl_joined_loans_and_repayments",
+    tbl_loans_schema.fields + tbl_repayments_schema.fields, # Schema is a union of columns of both tables
+    "RepaymentID"
+)
 
 # "LoanID" column is duplicated therefore it has to be removed once
-tbl_joined_loans_and_repayments.fields.remove(t.StructField("LoanID", t.StringType(), True))
+table_schema.fields.remove(t.StructField("LoanID", t.StringType(), True))
 
 # COMMAND ----------
 
 
 @transformation(read_table("silver.tbl_loans"), read_table("silver.tbl_repayments"), display=True)
-@table_overwrite(tbl_joined_loans_and_repayments)
+@table_overwrite(table_schema)
 def join_loans_and_repayments(df1: DataFrame, df2: DataFrame):
     return df1.join(df2, "LoanID")
 

@@ -11,7 +11,7 @@
 from pyspark.sql import functions as f
 from pyspark.sql.dataframe import DataFrame
 from datalakebundle.imports import *
-from daipedemo.silver.tbl_4_repayments.schema import tbl_repayments
+from daipedemo.silver.tbl_4_repayments.schema import table_schema
 
 # COMMAND ----------
 
@@ -22,9 +22,9 @@ from daipedemo.silver.tbl_4_repayments.schema import tbl_repayments
 
 # MAGIC %md
 # MAGIC ```python
-# MAGIC class tbl_repayments:  # noqa: N801
-# MAGIC     db = "silver"
-# MAGIC     fields = [
+# MAGIC table_schema = TableSchema(
+# MAGIC     "silver.tbl_repayments",
+# MAGIC     [
 # MAGIC         t.StructField("RepaymentID", t.LongType(), True),
 # MAGIC         t.StructField("ReportAsOfEOD", t.DateType(), True),
 # MAGIC         t.StructField("LoanID", t.StringType(), True),
@@ -32,10 +32,10 @@ from daipedemo.silver.tbl_4_repayments.schema import tbl_repayments
 # MAGIC         t.StructField("PrincipalRepayment", t.DoubleType(), True),
 # MAGIC         t.StructField("InterestRepayment", t.DoubleType(), True),
 # MAGIC         t.StructField("LateFeesRepayment", t.DoubleType(), True),
-# MAGIC     ]
-# MAGIC     primary_key = "RepaymentID"
+# MAGIC     ],
+# MAGIC     "RepaymentID", # primary key
 # MAGIC     # partition_by = "Date" #---takes a very long time
-# MAGIC
+# MAGIC )
 # MAGIC ```
 
 # COMMAND ----------
@@ -52,7 +52,7 @@ from daipedemo.silver.tbl_4_repayments.schema import tbl_repayments
 
 
 @transformation(read_table("bronze.tbl_repayments"), display=True)
-@table_upsert(tbl_repayments)
+@table_upsert(table_schema)
 def apply_schema_and_save(df: DataFrame):
     return (
         df.withColumn("ReportAsOfEOD", f.to_date("ReportAsOfEOD"))

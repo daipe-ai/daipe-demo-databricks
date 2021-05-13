@@ -25,9 +25,9 @@ from datalakebundle.imports import *
 # COMMAND ----------
 
 
-class tbl_loans:  # noqa N801
-    db = "silver"
-    fields = [
+table_schema = TableSchema(
+    "silver.tbl_loans",
+    [
         t.StructField("LoanReportAsOfEOD", t.DateType(), nullable=True),
         t.StructField("LoanId", t.StringType(), nullable=True),
         t.StructField("LoanNumber", t.IntegerType(), nullable=True),
@@ -140,16 +140,16 @@ class tbl_loans:  # noqa N801
         t.StructField("PrincipalDebtServicingCost", t.DoubleType(), nullable=True),
         t.StructField("InterestAndPenaltyDebtServicingCost", t.DoubleType(), nullable=True),
         t.StructField("ActiveLateLastPaymentCategory", t.StringType(), nullable=True),
-    ]
-    primary_key = "LoanId"  # INSERT PRIMARY KEY(s) HERE (MANDATORY)
-    # partition_by = "" # INSERT PARTITIONS KEY(s) HERE (OPTIONAL)
+    ],
+    "LoanId"
+)
 
 
 # COMMAND ----------
 
 
 @transformation(read_table("bronze.tbl_loans"), display=True)
-@table_overwrite(tbl_loans)
+@table_overwrite(table_schema)
 def convert_columns_and_save(df: DataFrame):
     date_cols = [c for c in df.columns if "Date" in c and "Till" not in c]
     date_cols.append("ReportAsOfEOD")

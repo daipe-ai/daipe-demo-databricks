@@ -67,25 +67,25 @@ def add_defaulted_column(df: DataFrame):
 # COMMAND ----------
 
 
-class tbl_defaults:  # noqa: N801
-    db = "silver"
-    fields = [
+table_schema = TableSchema(
+    "silver.tbl_defaults",
+    [
         t.StructField("LoanID", t.StringType(), True),
         t.StructField("Rating", t.StringType(), True),
         t.StructField("Country", t.StringType(), True),
         t.StructField("Defaulted", t.BooleanType(), False),
         t.StructField("Year", t.IntegerType(), True),
         t.StructField("Month", t.IntegerType(), True),
-    ]
-    primary_key = "LoanID"
-    partition_by = "Year"
-
+    ],
+    "LoanID",
+    partition_by="Year"
+)
 
 # COMMAND ----------
 
 
 @transformation(add_defaulted_column, display=True)
-@table_overwrite(tbl_defaults)
+@table_overwrite(table_schema)
 def select_columns_and_save(df: DataFrame):
     return df.select("LoanID", "Rating", "Country", "Defaulted", f.year("DefaultDate").alias("Year"), f.month("DefaultDate").alias("Month"))
 
