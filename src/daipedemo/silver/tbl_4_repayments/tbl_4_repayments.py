@@ -11,17 +11,19 @@
 from pyspark.sql import functions as f
 from pyspark.sql.dataframe import DataFrame
 from datalakebundle.imports import *
-from daipedemo.silver.tbl_4_repayments.schema import table_schema
-
-# COMMAND ----------
-
-# MAGIC %md Schema can be loaded from an external file in this case `daipedemo.silver.tbl_4_repayments.schema`.
-# MAGIC The schema looks like as follows
+from daipedemo.silver.tbl_4_repayments.schema import table_schema as tbl_repayments_schema
 
 # COMMAND ----------
 
 # MAGIC %md
+# MAGIC Schema definition **can be also loaded from an external file**. In this case we will load it from the `daipedemo.silver.tbl_4_repayments.schema` python module which contains the following code:
+# MAGIC
+# MAGIC
 # MAGIC ```python
+# MAGIC from datalakebundle.table.schema.TableSchema import TableSchema
+# MAGIC from pyspark.sql import types as t
+# MAGIC
+# MAGIC
 # MAGIC table_schema = TableSchema(
 # MAGIC     "silver.tbl_repayments",
 # MAGIC     [
@@ -41,18 +43,13 @@ from daipedemo.silver.tbl_4_repayments.schema import table_schema
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC It can be copied out into the code if changes are necessary without access to the local project.
-
-# COMMAND ----------
-
-# MAGIC %md
-# MAGIC ### Apply schema and save table
+# MAGIC ### Applying schema and saving table
 
 # COMMAND ----------
 
 
 @transformation(read_table("bronze.tbl_repayments"), display=True)
-@table_upsert(table_schema)
+@table_upsert(tbl_repayments_schema)
 def apply_schema_and_save(df: DataFrame):
     return (
         df.withColumn("ReportAsOfEOD", f.to_date("ReportAsOfEOD"))
@@ -64,4 +61,4 @@ def apply_schema_and_save(df: DataFrame):
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ### Let's move on to the following <a href="$../tbl_5_joined_loans_and_repayments">notebook</a>
+# MAGIC ### Continue to the <a href="$../tbl_5_joined_loans_and_repayments">sample notebook #5</a>

@@ -1,6 +1,6 @@
 # Databricks notebook source
 # MAGIC %md
-# MAGIC # Sample notebook #6: Pandas, Widgets and Plotting
+# MAGIC # Sample notebook #8: Pandas, Widgets and Plotting
 # MAGIC
 # MAGIC In this notebook it all comes together. We are going to aggregate data and display it while using widgets for filtering.
 
@@ -74,7 +74,9 @@ def ratings(df: DataFrame):
 
 
 @notebook_function(min_and_max_year, countries, ratings)
-def create_input_widgets(years: DataFrame, countries: DataFrame, ratings: DataFrame, dbutils: DBUtils):
+def create_input_widgets(
+    years: DataFrame, countries: DataFrame, ratings: DataFrame, dbutils: DBUtils
+):  # TODO: not sure if it is a good idea to use same names for both functions and df variables
     min_year = years.toPandas().values[0][0]
     max_year = years.toPandas().values[0][1]
     country_list = list(map(lambda x: x[0], countries.toPandas().values.tolist()))

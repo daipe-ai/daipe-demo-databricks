@@ -18,7 +18,7 @@ from logging import Logger
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC #### Load table and perform aggregations
+# MAGIC #### Loading table and performing aggregations
 
 # COMMAND ----------
 
@@ -39,10 +39,9 @@ def most_valuable_users(df: DataFrame):
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC #### Save table for future use
+# MAGIC #### Saving table for future use
 
 # COMMAND ----------
-
 
 table_schema = TableSchema(
     "gold.tbl_most_valuable_users",
@@ -52,9 +51,8 @@ table_schema = TableSchema(
         t.StructField("TotalInterestRepayment", t.DoubleType(), True),
         t.StructField("TotalLateFeesRepayment", t.DoubleType(), True),
     ],
-    "UserName"
+    "UserName",
 )
-
 
 # COMMAND ----------
 
@@ -70,4 +68,4 @@ def save(df: DataFrame, logger: Logger):
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ### Let's continue to the following <a href="$./vw_8_defaults_reporting">notebook</a>
+# MAGIC ### Continue to the <a href="$./vw_8_defaults_reporting">sample notebook #8</a>

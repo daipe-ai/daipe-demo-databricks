@@ -31,9 +31,9 @@ from logging import Logger
 # MAGIC
 # MAGIC #### Reading a CSV file
 # MAGIC
-# MAGIC Since this is a **bronze** notebook, we are going to be loading the raw data in CSV format into a Delta table.
+# MAGIC Since this is a **bronze** notebook, we are going to be loading the raw CSV into a Delta table.
 # MAGIC
-# MAGIC Use the `read_csv()` function inside the `@transformation` decorator to load the CSV file into Spark dataframe. Use `display=True` to display the DataFrame.
+# MAGIC Use the `read_csv()` function inside the `@transformation` decorator to load the CSV file into Spark dataframe. Use `display=True` to display it.
 
 # COMMAND ----------
 
@@ -45,7 +45,7 @@ from logging import Logger
 # MAGIC
 # MAGIC #### Schema or no schema?
 # MAGIC
-# MAGIC It is very much recommended to use a fixed schema in production environment, though in developement it is possible to use just the table name in our case `bronze.tbl_1_loans`. The input DataFrame schema will be used for table creation. This behavior raises a **warning** in the logs and suggests a schema to be copied into code.
+# MAGIC When prototyping your data transformation logic, write your dataframe to table simply by providing the table name (`bronze.tbl_1_loans` in this case). Once you are satisfied with you code, provide fixed schema to let Daipe check the dataframe against this it. The "fixed schema" approach is recommended especially in the production environments.
 # MAGIC
 # MAGIC We will look at how to define a schema in the following notebook.
 
@@ -65,7 +65,7 @@ def save(df: DataFrame, logger: Logger):
 # MAGIC
 # MAGIC #### Reading data from a table
 # MAGIC
-# MAGIC To check that the data is in the table, let's use the `read_table()` function inside the `@transformation` decorator to load the data from our table.
+# MAGIC To check if the data has really been stored in the `bronze.tbl_loans` table, use the `read_table()` function inside the `@transformation` decorator.
 
 # COMMAND ----------
 
@@ -78,4 +78,4 @@ def read_table_tbl_loans(df: DataFrame):
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ### Let's move on to the second <a href="$./tbl_2_repayments/tbl_2_repayments">notebook</a>
+# MAGIC ### Continue to the <a href="$./tbl_2_repayments/tbl_2_repayments">sample notebook #2</a>

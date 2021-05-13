@@ -20,10 +20,9 @@ from datalakebundle.imports import *
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ### Apply schema and save table
+# MAGIC ### Applying schema and saving table
 
 # COMMAND ----------
-
 
 table_schema = TableSchema(
     "silver.tbl_loans",
@@ -141,9 +140,8 @@ table_schema = TableSchema(
         t.StructField("InterestAndPenaltyDebtServicingCost", t.DoubleType(), nullable=True),
         t.StructField("ActiveLateLastPaymentCategory", t.StringType(), nullable=True),
     ],
-    "LoanId"
+    "LoanId",
 )
-
 
 # COMMAND ----------
 
@@ -166,4 +164,4 @@ def convert_columns_and_save(df: DataFrame):
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ### Let's move on to the following <a href="$../silver/tbl_4_repayments/tbl_4_repayments">notebook</a>
+# MAGIC ### Continue to the <a href="$../silver/tbl_4_repayments/tbl_4_repayments">sample notebook #4</a>

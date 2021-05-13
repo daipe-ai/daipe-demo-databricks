@@ -19,9 +19,12 @@ from daipedemo.bronze.tbl_2_repayments.csv_schema import get_schema as get_csv_s
 
 # MAGIC %md
 # MAGIC ### Recommended project structure
-# MAGIC As you must have noticed from the notebook filenames. We recommend using the `[db_name]/[domain]/[table_name]` directory structure. For table names it translates to `[db_name]_[domain].[table_name]`.
 # MAGIC
-# MAGIC Each notebook corresponds to one table e.g. this notebook in path `bronze/loans/tbl_2_repayments/tbl_2_repayments.py` manipulates with the table `bronze_loans.tbl_2_repayments`
+# MAGIC `# TODO: tady je to zmatečný, protože notebooky se jmenujou jinak, než tabulky.`
+# MAGIC
+# MAGIC As you must have noticed from the notebook filenames, we recommend using the `[db_name]/[table_name].py` notebooks directory structure and `[db_name].[table_name]` database structure.
+# MAGIC
+# MAGIC Each notebook corresponds to one table e.g. the current notebook `bronze/tbl_2_repayments/tbl_2_repayments.py` processes data to be written into the `bronze.tbl_repayments` table.
 # MAGIC
 # MAGIC For further information read [here](https://docs.daipe.ai/data-pipelines-workflow/managing-datalake/#2-recommended-notebooks-structure)
 
@@ -30,33 +33,27 @@ from daipedemo.bronze.tbl_2_repayments.csv_schema import get_schema as get_csv_s
 # MAGIC %md
 # MAGIC ### Schema
 # MAGIC
-# MAGIC A schema is defined in a class of the same name which expects parameters:
-# MAGIC  - `db` => string
-# MAGIC  - `fields` => a list of StructField
-# MAGIC  - `primary_key` => string/list of string
-# MAGIC  - `partition_by` => string/list of string (optional)
+# MAGIC An explicit schema should be defined as:
 # MAGIC
-# MAGIC The class name is then passed as an argument to for example the `table_[overwrite]` function.
-
-# COMMAND ----------
-
-# MAGIC %md
-# MAGIC #### Using the schema class as a console argument
-# MAGIC `console datalake:table:create daipedemo.bronze.tbl_2_repayments.tbl_2_repayments`
+# MAGIC ```python
+# MAGIC table_schema = TableSchema(full_table_identifier: str, fields: List[t.StructField], primary_key: Union[str, list], partition_by: Union[str, list] = None)
+# MAGIC ```
+# MAGIC
+# MAGIC The `table_schema` variable must be passed as an argument into the `@table_*` output decorator.
 
 # COMMAND ----------
 
 # MAGIC %md
 # MAGIC
-# MAGIC #### Passing configuration to notebook function (optional)
+# MAGIC #### Passing configuration to notebook functions (optional)
 # MAGIC
 # MAGIC The following function uses the `"%loans.confirmed_csv_path%"` config parameter. To change it:
 # MAGIC
 # MAGIC 1. [Setup your local development environment](https://docs.daipe.ai/data-pipelines-workflow/daipe-demo-project/)
 # MAGIC 1. Edit the `src/daipedemo/_config/config.yaml` file on your local machine
-# MAGIC 1. Deploy changes back to Databricks by using the `console dbx:deploy` command.
+# MAGIC 1. Deploy changes back to Databricks by using the `console dbx:deploy-master-package` command.
 # MAGIC
-# MAGIC Reading paths from configuration makes the code **cleaner** than hard-coded paths.
+# MAGIC Reading paths from configuration makes the code **cleaner** compared to hard-coded paths.
 
 # COMMAND ----------
 
@@ -77,9 +74,9 @@ def load_csv_and_save(df: DataFrame):
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC As you can see the real table name is `dev_bronze.tbl_2_repayments` where the prefix `dev` corresponds to the chosen environment `env=dev`. In `prod` environment the `prod_bronze.tbl_2_repayments` will be used.
+# MAGIC As you can see the real table name is `dev_bronze.tbl_2_repayments` where the prefix `dev` corresponds to the current `dev` environment. In `prod` environment the `prod_bronze.tbl_2_repayments` will be used.
 
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC #### Now that we have our data loaded, let's move to the following <a href="$../../silver/tbl_3_loans"> notebook</a>
+# MAGIC ### Continue to the <a href="$../../silver/tbl_3_loans">sample notebook #3</a>

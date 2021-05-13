@@ -82,4 +82,4 @@ def init(spark: SparkSession):
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ### Let's move on to the first actual <a href="$./tbl_1_loans">notebook</a>
+# MAGIC ### Continue to the <a href="$./tbl_1_loans">sample notebook #1</a>

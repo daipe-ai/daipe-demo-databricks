@@ -2,7 +2,9 @@
 # MAGIC %md
 # MAGIC # Sample notebook #5: Joining tables
 # MAGIC
-# MAGIC In this example notebook you will how and **why** to write function-based notebooks.
+# MAGIC This notebook will help you understand how and **why** to write function-based notebooks.
+# MAGIC
+# MAGIC `TODO: tohle moc nedává smysl, ještě doladit`
 
 # COMMAND ----------
 
@@ -51,11 +53,10 @@ from daipedemo.silver.tbl_4_repayments.tbl_4_repayments import table_schema as t
 
 # COMMAND ----------
 
-
 table_schema = TableSchema(
     "silver.tbl_joined_loans_and_repayments",
-    tbl_loans_schema.fields + tbl_repayments_schema.fields, # Schema is a union of columns of both tables
-    "RepaymentID"
+    tbl_loans_schema.fields + tbl_repayments_schema.fields,  # Schema is a union of columns of both tables
+    "RepaymentID",
 )
 
 # "LoanID" column is duplicated therefore it has to be removed once
@@ -73,4 +74,4 @@ def join_loans_and_repayments(df1: DataFrame, df2: DataFrame):
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ### Let's continue to the following <a href="$./tbl_6_defaults">notebook</a>
+# MAGIC ### Continue to the <a href="$./tbl_6_defaults">sample notebook #6</a>

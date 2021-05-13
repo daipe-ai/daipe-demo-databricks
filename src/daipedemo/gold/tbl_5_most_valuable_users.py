@@ -43,7 +43,6 @@ def most_valuable_users(df: DataFrame):
 
 # COMMAND ----------
 
-
 table_schema = TableSchema(
     "gold.tbl_5_most_valuable_users",
     [
@@ -52,9 +51,8 @@ table_schema = TableSchema(
         t.StructField("TotalInterestRepayment", t.DoubleType(), True),
         t.StructField("TotalLateFeesRepayment", t.DoubleType(), True),
     ],
-    "UserName"
+    "UserName",
 )
-
 
 # COMMAND ----------
 
