@@ -1,11 +1,12 @@
 # Databricks notebook source
 # MAGIC %md
-# MAGIC # Sample notebook #3: Applying schema to loans table
+# MAGIC # #3 Applying schema to loans table
+# MAGIC Go to <a href="$../_index">index</a>
 
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC In this notebook a schema is applied to the raw data creating a silver level table.
+# MAGIC In this notebook a schema is applied to the __bronze__ level data - creating a __silver__ level table.
 
 # COMMAND ----------
 
@@ -20,13 +21,21 @@ from datalakebundle.imports import *
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ### Applying schema and saving table
+# MAGIC ### Schema
+# MAGIC
+# MAGIC An explicit schema should be defined as:
+# MAGIC
+# MAGIC ```python
+# MAGIC table_schema = TableSchema(full_table_identifier: str, fields: List[t.StructField], primary_key: Union[str, list], partition_by: Union[str, list] = None)
+# MAGIC ```
+# MAGIC
+# MAGIC The `table_schema` variable must be passed as an argument into the `@table_*` output decorator.
 
 # COMMAND ----------
 
 table_schema = TableSchema(
-    "silver.tbl_loans",
-    [
+    "silver.tbl_loans",  # Full table identifier
+    [  # Fields
         t.StructField("LoanReportAsOfEOD", t.DateType(), nullable=True),
         t.StructField("LoanId", t.StringType(), nullable=True),
         t.StructField("LoanNumber", t.IntegerType(), nullable=True),
@@ -140,8 +149,13 @@ table_schema = TableSchema(
         t.StructField("InterestAndPenaltyDebtServicingCost", t.DoubleType(), nullable=True),
         t.StructField("ActiveLateLastPaymentCategory", t.StringType(), nullable=True),
     ],
-    "LoanId",
+    "LoanId",  # Primary key
 )
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ### Applying schema and saving table
 
 # COMMAND ----------
 
@@ -164,4 +178,4 @@ def convert_columns_and_save(df: DataFrame):
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ### Continue to the <a href="$../silver/tbl_4_repayments/tbl_4_repayments">sample notebook #4</a>
+# MAGIC ### Continue to the <a href="$../silver/tbl_repayments/tbl_repayments">sample notebook #4</a>

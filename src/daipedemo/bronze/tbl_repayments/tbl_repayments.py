@@ -1,7 +1,8 @@
 # Databricks notebook source
 # MAGIC %md
 # MAGIC
-# MAGIC # Sample notebook #2: Configuration
+# MAGIC # #2 Configuration
+# MAGIC Go to <a href="$../../_index">index</a>
 # MAGIC
 # MAGIC In this notebook, we will take a look at how to **use and change configuration parameters**.
 
@@ -13,33 +14,18 @@
 
 from pyspark.sql.dataframe import DataFrame
 from datalakebundle.imports import *
-from daipedemo.bronze.tbl_2_repayments.csv_schema import get_schema as get_csv_schema
+from daipedemo.bronze.tbl_repayments.csv_schema import get_schema as get_csv_schema
 
 # COMMAND ----------
 
 # MAGIC %md
 # MAGIC ### Recommended project structure
 # MAGIC
-# MAGIC `# TODO: tady je to zmatečný, protože notebooky se jmenujou jinak, než tabulky.`
+# MAGIC As you must have noticed from the notebook filenames. We recommend using the `[db_name]/[domain]/[table_name]` directory structure. For table names it translates to `[db_name]_[domain].[table_name]`.
 # MAGIC
-# MAGIC As you must have noticed from the notebook filenames, we recommend using the `[db_name]/[table_name].py` notebooks directory structure and `[db_name].[table_name]` database structure.
-# MAGIC
-# MAGIC Each notebook corresponds to one table e.g. the current notebook `bronze/tbl_2_repayments/tbl_2_repayments.py` processes data to be written into the `bronze.tbl_repayments` table.
+# MAGIC Each notebook should correspond to one table e.g. the current notebook `bronze/tbl_repayments/tbl_repayments.py` processes data to be written into the `bronze.tbl_repayments` table.
 # MAGIC
 # MAGIC For further information read [here](https://docs.daipe.ai/data-pipelines-workflow/managing-datalake/#2-recommended-notebooks-structure)
-
-# COMMAND ----------
-
-# MAGIC %md
-# MAGIC ### Schema
-# MAGIC
-# MAGIC An explicit schema should be defined as:
-# MAGIC
-# MAGIC ```python
-# MAGIC table_schema = TableSchema(full_table_identifier: str, fields: List[t.StructField], primary_key: Union[str, list], partition_by: Union[str, list] = None)
-# MAGIC ```
-# MAGIC
-# MAGIC The `table_schema` variable must be passed as an argument into the `@table_*` output decorator.
 
 # COMMAND ----------
 
@@ -74,9 +60,9 @@ def load_csv_and_save(df: DataFrame):
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC As you can see the real table name is `dev_bronze.tbl_2_repayments` where the prefix `dev` corresponds to the current `dev` environment. In `prod` environment the `prod_bronze.tbl_2_repayments` will be used.
+# MAGIC As you can see the real table name is `dev_bronze.tbl_repayments` where the prefix `dev` corresponds to the current `dev` environment. In `prod` environment the `prod_bronze.tbl_repayments` will be used.
 
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ### Continue to the <a href="$../../silver/tbl_3_loans">sample notebook #3</a>
+# MAGIC ### Continue to the <a href="$../../silver/tbl_loans">sample notebook #3</a>

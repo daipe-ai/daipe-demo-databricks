@@ -1,6 +1,8 @@
 # Databricks notebook source
 # MAGIC %md
-# MAGIC # Sample notebook #8: Pandas, Widgets and Plotting
+# MAGIC # #8 Comprehensive reporting
+# MAGIC
+# MAGIC Go to <a href="$../_index">index</a>
 # MAGIC
 # MAGIC In this notebook it all comes together. We are going to aggregate data and display it while using widgets for filtering.
 
@@ -58,7 +60,7 @@ def min_and_max_year(df: DataFrame):
 
 
 @transformation(read_silver_loans_tbl_defaults)
-def countries(df: DataFrame):
+def get_countries(df: DataFrame):
     return df.select("Country").dropDuplicates()
 
 
@@ -66,17 +68,15 @@ def countries(df: DataFrame):
 
 
 @transformation(read_silver_loans_tbl_defaults)
-def ratings(df: DataFrame):
+def get_ratings(df: DataFrame):
     return df.select("Rating").dropDuplicates()
 
 
 # COMMAND ----------
 
 
-@notebook_function(min_and_max_year, countries, ratings)
-def create_input_widgets(
-    years: DataFrame, countries: DataFrame, ratings: DataFrame, dbutils: DBUtils
-):  # TODO: not sure if it is a good idea to use same names for both functions and df variables
+@notebook_function(min_and_max_year, get_countries, get_ratings)
+def create_input_widgets(years: DataFrame, countries: DataFrame, ratings: DataFrame, dbutils: DBUtils):
     min_year = years.toPandas().values[0][0]
     max_year = years.toPandas().values[0][1]
     country_list = list(map(lambda x: x[0], countries.toPandas().values.tolist()))
@@ -146,6 +146,9 @@ def plot_defaults_per_month(df: DataFrame):
     country = dbutils.widgets.get("country")  # noqa: F821
     rating = dbutils.widgets.get("rating")  # noqa: F821
 
+    if len(df.head(1)) == 0:
+        return
+
     ax = sns.barplot(x="Month", y="Defaults", data=df.toPandas())
     ax.set_title(f"Defaults per Month in {year} in {country} of {rating} rating")
     return display(ax)  # noqa: F821
@@ -158,6 +161,9 @@ def plot_defaults_per_month(df: DataFrame):
 def plot_defaults_per_country(df: DataFrame):
     year = dbutils.widgets.get("year")  # noqa: F821
     rating = dbutils.widgets.get("rating")  # noqa: F821
+
+    if len(df.head(1)) == 0:
+        return
 
     ax = sns.barplot(x="Country", y="Defaults", data=df.toPandas())
     ax.set_title(f"Defaults per Country of {rating} rating during {year}")

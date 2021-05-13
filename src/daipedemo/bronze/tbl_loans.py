@@ -1,6 +1,7 @@
 # Databricks notebook source
 # MAGIC %md
-# MAGIC # Sample notebook #1: Create a new table from CSV
+# MAGIC # #1 Create a new table from CSV
+# MAGIC Go to <a href="$../_index">index</a>
 
 # COMMAND ----------
 
@@ -33,7 +34,8 @@ from logging import Logger
 # MAGIC
 # MAGIC Since this is a **bronze** notebook, we are going to be loading the raw CSV into a Delta table.
 # MAGIC
-# MAGIC Use the `read_csv()` function inside the `@transformation` decorator to load the CSV file into Spark dataframe. Use `display=True` to display it.
+# MAGIC Use the `read_csv()` function inside the `@transformation` decorator to load the CSV file into Spark dataframe.
+# MAGIC Use `display=True` to display it.
 
 # COMMAND ----------
 
@@ -45,14 +47,14 @@ from logging import Logger
 # MAGIC
 # MAGIC #### Schema or no schema?
 # MAGIC
-# MAGIC When prototyping your data transformation logic, write your dataframe to table simply by providing the table name (`bronze.tbl_1_loans` in this case). Once you are satisfied with you code, provide fixed schema to let Daipe check the dataframe against this it. The "fixed schema" approach is recommended especially in the production environments.
+# MAGIC When prototyping your data transformation logic, write your dataframe to table simply by providing the table name (`bronze.tbl_1_loans` in this case). Once you are satisfied with you code, provide fixed schema to let Daipe check the dataframe against it. The __fixed schema__ approach is recommended especially in the production environments.
 # MAGIC
-# MAGIC We will look at how to define a schema in the following notebook.
+# MAGIC We will look at how to define a schema in a later notebook.
 
 # COMMAND ----------
 
 
-@transformation(read_csv("/LoanData.csv", options=dict(header=True, inferSchema=True)), display=True)
+@transformation(read_csv("/LoanData.csv", options=dict(header=True, inferSchema=True)))
 @table_overwrite("bronze.tbl_loans")
 def save(df: DataFrame, logger: Logger):
     logger.info(f"Saving {df.count()} records")
@@ -78,4 +80,4 @@ def read_table_tbl_loans(df: DataFrame):
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ### Continue to the <a href="$./tbl_2_repayments/tbl_2_repayments">sample notebook #2</a>
+# MAGIC ### Continue to the <a href="$./tbl_repayments/tbl_repayments">sample notebook #2</a>

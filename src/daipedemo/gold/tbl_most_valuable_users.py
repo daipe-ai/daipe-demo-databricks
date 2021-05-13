@@ -1,6 +1,7 @@
 # Databricks notebook source
 # MAGIC %md
-# MAGIC # Sample notebook #7: Simple aggregation
+# MAGIC # #7 Simple aggregation
+# MAGIC Go to <a href="$../_index">index</a>
 # MAGIC
 # MAGIC In this notebook you will see how to create a simple table of aggregations for reporting using the **Daipe** framework.
 
@@ -28,7 +29,7 @@ def most_valuable_users(df: DataFrame):
     return (
         df.groupBy("UserName")
         .agg(
-            f.count("LoanID").alias("Loans"),
+            f.countDistinct("LoanID").alias("Loans"),
             f.sum("InterestRepayment").alias("TotalInterestRepayment"),
             f.sum("LateFeesRepayment").alias("TotalLateFeesRepayment"),
         )
@@ -68,4 +69,4 @@ def save(df: DataFrame, logger: Logger):
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ### Continue to the <a href="$./vw_8_defaults_reporting">sample notebook #8</a>
+# MAGIC ### Continue to the <a href="$./defaults_reporting">sample notebook #8</a>

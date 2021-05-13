@@ -1,10 +1,11 @@
 # Databricks notebook source
 # MAGIC %md
-# MAGIC # Sample notebook #5: Joining tables
+# MAGIC # #5 Joining tables
+# MAGIC Go to <a href="$../_index">index</a>
 # MAGIC
-# MAGIC This notebook will help you understand how and **why** to write function-based notebooks.
+# MAGIC This notebook shows how simple it is to join tables and define a schema for the joined table
+# MAGIC using the Daipe framework
 # MAGIC
-# MAGIC `TODO: tohle moc nedává smysl, ještě doladit`
 
 # COMMAND ----------
 
@@ -15,8 +16,8 @@
 import pyspark.sql.types as t
 from pyspark.sql.dataframe import DataFrame
 from datalakebundle.imports import *
-from daipedemo.silver.tbl_3_loans import table_schema as tbl_loans_schema
-from daipedemo.silver.tbl_4_repayments.tbl_4_repayments import table_schema as tbl_repayments_schema
+from daipedemo.silver.tbl_loans import table_schema as tbl_loans_schema
+from daipedemo.silver.tbl_repayments.schema import table_schema as tbl_repayments_schema
 
 # COMMAND ----------
 
@@ -56,7 +57,7 @@ from daipedemo.silver.tbl_4_repayments.tbl_4_repayments import table_schema as t
 table_schema = TableSchema(
     "silver.tbl_joined_loans_and_repayments",
     tbl_loans_schema.fields + tbl_repayments_schema.fields,  # Schema is a union of columns of both tables
-    "RepaymentID",
+    ["LoanID", "Date"],
 )
 
 # "LoanID" column is duplicated therefore it has to be removed once
@@ -74,4 +75,4 @@ def join_loans_and_repayments(df1: DataFrame, df2: DataFrame):
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ### Continue to the <a href="$./tbl_6_defaults">sample notebook #6</a>
+# MAGIC ### Continue to the <a href="$./tbl_defaults">sample notebook #6</a>

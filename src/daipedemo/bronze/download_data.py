@@ -1,6 +1,11 @@
 # Databricks notebook source
 # MAGIC %md
-# MAGIC # Sample notebook 0: Download the data
+# MAGIC # Sample notebook 0: Download data
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC Go to <a href="$./_index">index</a>
 
 # COMMAND ----------
 
@@ -82,4 +87,4 @@ def init(spark: SparkSession):
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ### Continue to the <a href="$./tbl_1_loans">sample notebook #1</a>
+# MAGIC ### Continue to the <a href="$./tbl_loans">sample notebook #1</a>

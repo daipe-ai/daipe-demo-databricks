@@ -1,6 +1,7 @@
 # Databricks notebook source
 # MAGIC %md
-# MAGIC # Sample notebook #6: Widgets
+# MAGIC # #6 Widgets
+# MAGIC Go to <a href="$../_index">index</a>
 
 # COMMAND ----------
 
@@ -100,4 +101,4 @@ def select_columns_and_save(df: DataFrame):
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ### Continue to the <a href="$../gold/tbl_7_most_valuable_users">sample notebook #7</a>
+# MAGIC ### Continue to the <a href="$../gold/tbl_most_valuable_users">sample notebook #7</a>
