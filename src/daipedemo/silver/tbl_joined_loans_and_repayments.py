@@ -16,8 +16,6 @@
 import pyspark.sql.types as t
 from pyspark.sql.dataframe import DataFrame
 from datalakebundle.imports import *
-from daipedemo.silver.tbl_loans import table_schema as tbl_loans_schema
-from daipedemo.silver.tbl_repayments.schema import table_schema as tbl_repayments_schema
 
 # COMMAND ----------
 
@@ -54,20 +52,27 @@ from daipedemo.silver.tbl_repayments.schema import table_schema as tbl_repayment
 
 # COMMAND ----------
 
-table_schema = TableSchema(
-    "silver.tbl_joined_loans_and_repayments",
-    tbl_loans_schema.fields + tbl_repayments_schema.fields,  # Schema is a union of columns of both tables
-    ["LoanID", "Date"],
-)
+from daipedemo.silver.tbl_loans import get_schema as get_loans_schema
+from daipedemo.silver.tbl_repayments.schema import get_schema as get_repayments_schema
 
-# "LoanID" column is duplicated therefore it has to be removed once
-table_schema.fields.remove(t.StructField("LoanID", t.StringType(), True))
+
+def get_joined_schema():
+    schema = TableSchema(
+        get_loans_schema().fields + get_repayments_schema().fields,  # Schema is a composed of columns from both tables
+        primary_key=["LoanID", "Date"],
+    )
+
+    # "LoanID" column is duplicated therefore it has to be removed once
+    schema.fields.remove(t.StructField("LoanID", t.StringType(), True))
+
+    return schema
+
 
 # COMMAND ----------
 
 
 @transformation(read_table("silver.tbl_loans"), read_table("silver.tbl_repayments"), display=True)
-@table_overwrite(table_schema)
+@table_overwrite("silver.tbl_joined_loans_and_repayments", get_joined_schema())
 def join_loans_and_repayments(df1: DataFrame, df2: DataFrame):
     return df1.join(df2, "LoanID")
 

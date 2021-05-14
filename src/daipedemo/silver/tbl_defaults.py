@@ -67,25 +67,27 @@ def add_defaulted_column(df: DataFrame):
 
 # COMMAND ----------
 
-table_schema = TableSchema(
-    "silver.tbl_defaults",
-    [
-        t.StructField("LoanID", t.StringType(), True),
-        t.StructField("Rating", t.StringType(), True),
-        t.StructField("Country", t.StringType(), True),
-        t.StructField("Defaulted", t.BooleanType(), False),
-        t.StructField("Year", t.IntegerType(), True),
-        t.StructField("Month", t.IntegerType(), True),
-    ],
-    "LoanID",
-    partition_by="Year",
-)
+
+def get_schema():
+    return TableSchema(
+        [
+            t.StructField("LoanID", t.StringType(), True),
+            t.StructField("Rating", t.StringType(), True),
+            t.StructField("Country", t.StringType(), True),
+            t.StructField("Defaulted", t.BooleanType(), False),
+            t.StructField("Year", t.IntegerType(), True),
+            t.StructField("Month", t.IntegerType(), True),
+        ],
+        primary_key="LoanID",
+        partition_by="Year",
+    )
+
 
 # COMMAND ----------
 
 
 @transformation(add_defaulted_column, display=True)
-@table_overwrite(table_schema)
+@table_overwrite("silver.tbl_defaults", get_schema())
 def select_columns_and_save(df: DataFrame):
     return df.select("LoanID", "Rating", "Country", "Defaulted", f.year("DefaultDate").alias("Year"), f.month("DefaultDate").alias("Month"))
 

@@ -44,22 +44,24 @@ def most_valuable_users(df: DataFrame):
 
 # COMMAND ----------
 
-table_schema = TableSchema(
-    "gold.tbl_most_valuable_users",
-    [
-        t.StructField("UserName", t.StringType(), True),
-        t.StructField("Loans", t.LongType(), False),
-        t.StructField("TotalInterestRepayment", t.DoubleType(), True),
-        t.StructField("TotalLateFeesRepayment", t.DoubleType(), True),
-    ],
-    "UserName",
-)
+
+def get_schema():
+    return TableSchema(
+        [
+            t.StructField("UserName", t.StringType(), True),
+            t.StructField("Loans", t.LongType(), False),
+            t.StructField("TotalInterestRepayment", t.DoubleType(), True),
+            t.StructField("TotalLateFeesRepayment", t.DoubleType(), True),
+        ],
+        primary_key="UserName",
+    )
+
 
 # COMMAND ----------
 
 
 @transformation(most_valuable_users, display=True)
-@table_overwrite(table_schema)
+@table_overwrite("gold.tbl_most_valuable_users")
 def save(df: DataFrame, logger: Logger):
     logger.info(f"Saving {df.count()} records")
     number_of_mvu = 10

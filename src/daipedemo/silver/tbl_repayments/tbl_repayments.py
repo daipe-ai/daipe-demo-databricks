@@ -12,7 +12,6 @@
 from pyspark.sql import functions as f
 from pyspark.sql.dataframe import DataFrame
 from datalakebundle.imports import *
-from daipedemo.silver.tbl_repayments.schema import table_schema as tbl_repayments_schema
 
 # COMMAND ----------
 
@@ -49,9 +48,11 @@ from daipedemo.silver.tbl_repayments.schema import table_schema as tbl_repayment
 
 # COMMAND ----------
 
+from daipedemo.silver.tbl_repayments.schema import get_schema
+
 
 @transformation(read_table("bronze.tbl_repayments"), display=True)
-@table_upsert(tbl_repayments_schema)
+@table_upsert("silver.tbl_repayments", get_schema())
 def apply_schema_and_save(df: DataFrame):
     return df.withColumn("ReportAsOfEOD", f.to_date("ReportAsOfEOD")).withColumn("Date", f.to_date("Date"))
 
