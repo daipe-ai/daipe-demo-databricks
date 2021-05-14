@@ -1,7 +1,7 @@
 # Databricks notebook source
 # MAGIC %md
 # MAGIC # #1 Create a new table from CSV
-# MAGIC Go to <a href="$../_index">index</a>
+# MAGIC Return to <a href="$../_index">index page</a>
 
 # COMMAND ----------
 

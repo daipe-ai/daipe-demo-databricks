@@ -1,7 +1,7 @@
 # Databricks notebook source
 # MAGIC %md
 # MAGIC # #6 Widgets
-# MAGIC Go to <a href="$../_index">index</a>
+# MAGIC Return to <a href="$../_index">index page</a>
 
 # COMMAND ----------
 

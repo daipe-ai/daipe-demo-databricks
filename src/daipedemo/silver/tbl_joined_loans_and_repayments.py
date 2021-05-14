@@ -1,7 +1,7 @@
 # Databricks notebook source
 # MAGIC %md
 # MAGIC # #5 Joining tables
-# MAGIC Go to <a href="$../_index">index</a>
+# MAGIC Return to <a href="$../_index">index page</a>
 # MAGIC
 # MAGIC This notebook shows how simple it is to join tables and define a schema for the joined table
 # MAGIC using the Daipe framework

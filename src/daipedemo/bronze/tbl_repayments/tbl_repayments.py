@@ -2,7 +2,7 @@
 # MAGIC %md
 # MAGIC
 # MAGIC # #2 Configuration
-# MAGIC Go to <a href="$../../_index">index</a>
+# MAGIC Return to <a href="$../../_index">index page</a>
 # MAGIC
 # MAGIC In this notebook, we will take a look at how to **use and change configuration parameters**.
 

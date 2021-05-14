@@ -2,7 +2,7 @@
 # MAGIC %md
 # MAGIC # #8 Comprehensive reporting
 # MAGIC
-# MAGIC Go to <a href="$../_index">index</a>
+# MAGIC Return to <a href="$../_index">index page</a>
 # MAGIC
 # MAGIC In this notebook it all comes together. We are going to aggregate data and display it while using widgets for filtering.
 

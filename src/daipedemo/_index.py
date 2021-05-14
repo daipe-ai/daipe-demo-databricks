@@ -5,7 +5,7 @@
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC <a href="$./download_data">Initialize the project</a>
+# MAGIC <a href="$./bronze/download_data">Initialize the project</a>
 # MAGIC
 # MAGIC 0. <a href="$./bronze/tbl_loans">Create table from CSV</a>
 # MAGIC 0. <a href="$./bronze/tbl_repayments/tbl_repayments">Use configuration</a>
