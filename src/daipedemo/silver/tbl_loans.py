@@ -1,12 +1,17 @@
 # Databricks notebook source
 # MAGIC %md
 # MAGIC # #3 Applying schema to loans table
+# MAGIC ## Silver layer
 # MAGIC Return to <a href="$../_index">index page</a>
 
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC In this notebook a schema is applied to the __bronze__ level data - creating a __silver__ level table.
+# MAGIC In this notebook a schema is applied to the __bronze__ level data - creating a __silver__ level table. We are following the bronze, silver, gold workflow. Now we need to parse the raw data according to our defined schema.
+# MAGIC
+# MAGIC ### Why use schema?
+# MAGIC
+# MAGIC Having a well defined schema helps check that the data has the correct format in production. For prototyping it is not necessary although __highly recommended__.
 
 # COMMAND ----------
 
@@ -26,10 +31,8 @@ from datalakebundle.imports import *
 # MAGIC An explicit schema should be defined as:
 # MAGIC
 # MAGIC ```python
-# MAGIC table_schema = TableSchema(full_table_identifier: str, fields: List[t.StructField], primary_key: Union[str, list], partition_by: Union[str, list] = None)
+# MAGIC table_schema = TableSchema(full_table_identifier: str, fields: List[t.StructField], primary_key: Union[str, list], partition_by: Union[str, list] = None, tbl_properties: dict = None)
 # MAGIC ```
-# MAGIC
-# MAGIC The `table_schema` variable must be passed as an argument into the `@table_*` output decorator.
 
 # COMMAND ----------
 
@@ -158,6 +161,7 @@ def get_schema():
 
 # MAGIC %md
 # MAGIC ### Applying schema and saving table
+# MAGIC The `get_schema()` functin should be passed as a second argument into the `@table_overwrite`, `@table_upsert` or `@table_append` decorators.
 
 # COMMAND ----------
 

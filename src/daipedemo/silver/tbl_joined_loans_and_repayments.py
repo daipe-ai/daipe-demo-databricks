@@ -1,6 +1,7 @@
 # Databricks notebook source
 # MAGIC %md
 # MAGIC # #5 Joining tables
+# MAGIC ## Silver level
 # MAGIC Return to <a href="$../_index">index page</a>
 # MAGIC
 # MAGIC This notebook shows how simple it is to join tables and define a schema for the joined table
@@ -20,35 +21,7 @@ from datalakebundle.imports import *
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ### Advantages of function-based notebooks
-# MAGIC  1. Create and publish auto-generated documentation and lineage of notebooks and pipelines (Daipe Enterprise)
-# MAGIC  2. Write much cleaner notebooks with properly named code blocks
-# MAGIC  3. Test specific notebook functions with ease
-# MAGIC  4. Use YAML to configure your notebooks for given environment (dev/test/prod/...)
-# MAGIC  5. Utilize pre-configured objects to automate repetitive tasks
-
-# COMMAND ----------
-
-# MAGIC %md
-# MAGIC ### Decorators
-# MAGIC  - `@notebook_function()`
-# MAGIC  - `@transformation()`
-# MAGIC    - read_csv()
-# MAGIC    - read_table()
-# MAGIC  - `@table_{overwrite/append/upsert}`
-# MAGIC
-# MAGIC  For further information read [here](https://docs.daipe.ai/data-pipelines-workflow/managing-datalake/#4-writing-function-based-notebooks)
-
-# COMMAND ----------
-
-# MAGIC %md #### Joining tables
-
-# COMMAND ----------
-
-# MAGIC %md
-# MAGIC Joining two tables is so simple that it takes only **four** lines of code.
-# MAGIC
-# MAGIC It takes the function names two `read_table` functions as arguments. The resulting DataFrames are the arguments of the `join_loans_and_repayments` function which simply returns the joined DataFrame. This DataFrame is then saved to a table using the `@table_overwrite` decorator according to the following **schema**.
+# MAGIC #### Joined schema
 
 # COMMAND ----------
 
@@ -67,6 +40,57 @@ def get_joined_schema():
 
     return schema
 
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ### Joining tables
+# MAGIC There are multiple different ways how to join two tables using Daipe. We are going to demonstrate __two__ of them.
+# MAGIC #### Option 1) Chaning workflow
+# MAGIC The __power__ of Daipe comes from being able to __chain__ decorated functions - creating a pipeline.
+
+# COMMAND ----------
+
+
+@transformation(read_table("silver.tbl_loans"))
+def read_tbl_loans(df: DataFrame):
+    return df
+
+
+# COMMAND ----------
+
+
+@transformation(read_table("silver.tbl_repayments"))
+def read_tbl_repayments(df: DataFrame):
+    return df
+
+
+# COMMAND ----------
+
+
+@transformation(read_tbl_loans, read_tbl_repayments)
+def join_loans_and_repayments(df1: DataFrame, df2: DataFrame):
+    return df1.join(df2, "LoanID")
+
+
+# COMMAND ----------
+
+
+@transformation(join_loans_and_repayments)
+@table_overwrite("silver.tbl_joined_loans_and_repayments", get_joined_schema())
+def join_loans_and_repayments(df: DataFrame):
+    return df
+
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ### Joining tables
+# MAGIC #### Option 2) Combining workflow
+# MAGIC
+# MAGIC The entire sequence of joining two tables can be written using only **four** lines of code.
+# MAGIC
+# MAGIC We incorporate the `read_table` functions as inputs, join the DataFrames inside the decorated function and apply `@table_overwrite()` to save the result.
 
 # COMMAND ----------
 

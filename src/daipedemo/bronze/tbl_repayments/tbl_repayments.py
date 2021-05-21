@@ -2,9 +2,26 @@
 # MAGIC %md
 # MAGIC
 # MAGIC # #2 Configuration
+# MAGIC
+# MAGIC ## Bronze layer
 # MAGIC Return to <a href="$../../_index">index page</a>
 # MAGIC
-# MAGIC In this notebook, we will take a look at how to **use and change configuration parameters**.
+# MAGIC In this notebook, we will take a look at how to **use and change configuration parameters**. Configuration helps to keep code clean in production environments as well as it keeps unchanging constants ready to be used everywhere. This is __not necessary__ in prototyping workflows.
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ### Decorators
+# MAGIC Here are the most important decorators
+# MAGIC  - `@transformation()` - for manipulating with DataFrames
+# MAGIC    - read_csv()
+# MAGIC    - read_table()
+# MAGIC  - `@notebook_function()`  - for anything other than manipulationg with DataFrames
+# MAGIC  - `@table_overwrite`
+# MAGIC  - `@table_upsert`
+# MAGIC  - `@table_append`
+# MAGIC
+# MAGIC  For further information read [here](https://docs.daipe.ai/data-pipelines-workflow/managing-datalake/#4-writing-function-based-notebooks)
 
 # COMMAND ----------
 
@@ -19,19 +36,8 @@ from daipedemo.bronze.tbl_repayments.csv_schema import get_schema as get_csv_sch
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ### Recommended project structure
 # MAGIC
-# MAGIC As you must have noticed from the notebook filenames. We recommend using the `[db_name]/[domain]/[table_name]` directory structure. For table names it translates to `[db_name]_[domain].[table_name]`.
-# MAGIC
-# MAGIC Each notebook should correspond to one table e.g. the current notebook `bronze/tbl_repayments/tbl_repayments.py` processes data to be written into the `bronze.tbl_repayments` table.
-# MAGIC
-# MAGIC For further information read [here](https://docs.daipe.ai/data-pipelines-workflow/managing-datalake/#2-recommended-notebooks-structure)
-
-# COMMAND ----------
-
-# MAGIC %md
-# MAGIC
-# MAGIC #### Passing configuration to notebook functions (optional)
+# MAGIC #### Passing configuration to notebook functions (advanced)
 # MAGIC
 # MAGIC The following function uses the `"%loans.confirmed_csv_path%"` config parameter. To change it:
 # MAGIC
@@ -39,7 +45,9 @@ from daipedemo.bronze.tbl_repayments.csv_schema import get_schema as get_csv_sch
 # MAGIC 1. Edit the `src/daipedemo/_config/config.yaml` file on your local machine
 # MAGIC 1. Deploy changes back to Databricks by using the `console dbx:deploy-master-package` command.
 # MAGIC
-# MAGIC Reading paths from configuration makes the code **cleaner** compared to hard-coded paths.
+# MAGIC #### Hidden files
+# MAGIC
+# MAGIC It is also possible to use hidden files for longer reusable parts of code such as schemas. The `daipedemo.bronze.tbl_repayments.csv_schema.py` is used here as an example. Creating these files requires the local developement environment as they are __not visible__ from Databricks.
 
 # COMMAND ----------
 
@@ -51,16 +59,6 @@ from daipedemo.bronze.tbl_repayments.csv_schema import get_schema as get_csv_sch
 def load_csv_and_save(df: DataFrame):
     return df
 
-
-# COMMAND ----------
-
-# MAGIC %md
-# MAGIC #### The real table name
-
-# COMMAND ----------
-
-# MAGIC %md
-# MAGIC As you can see the real table name is `dev_bronze.tbl_repayments` where the prefix `dev` corresponds to the current `dev` environment. In `prod` environment the `prod_bronze.tbl_repayments` will be used.
 
 # COMMAND ----------
 

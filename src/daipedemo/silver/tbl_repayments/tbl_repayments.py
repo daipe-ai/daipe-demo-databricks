@@ -1,7 +1,10 @@
 # Databricks notebook source
 # MAGIC %md
 # MAGIC # #4 Schema in external file
+# MAGIC ## Silver level
 # MAGIC Return to <a href="$../../_index">index page</a>
+# MAGIC
+# MAGIC As it was already mentioned in the bronze level table a schema can defined in a __hidden external file__.
 
 # COMMAND ----------
 
@@ -16,27 +19,27 @@ from datalakebundle.imports import *
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC Schema definition **can be also loaded from an external file**. In this case we will load it from the `daipedemo.silver.tbl_4_repayments.schema` python module which contains the following code:
-# MAGIC
+# MAGIC In this case we will load it from the `daipedemo.silver.tbl_repayments.schema` python module which contains the following code:
 # MAGIC
 # MAGIC ```python
 # MAGIC from datalakebundle.table.schema.TableSchema import TableSchema
 # MAGIC from pyspark.sql import types as t
 # MAGIC
 # MAGIC
-# MAGIC table_schema = TableSchema(
-# MAGIC     "silver.tbl_repayments",
-# MAGIC     [
-# MAGIC         t.StructField("ReportAsOfEOD", t.DateType(), True),
-# MAGIC         t.StructField("LoanID", t.StringType(), True),
-# MAGIC         t.StructField("Date", t.DateType(), True),
-# MAGIC         t.StructField("PrincipalRepayment", t.DoubleType(), True),
-# MAGIC         t.StructField("InterestRepayment", t.DoubleType(), True),
-# MAGIC         t.StructField("LateFeesRepayment", t.DoubleType(), True),
-# MAGIC     ],
-# MAGIC     ["LoanID", "Date"],
-# MAGIC     # partition_by = "Date" #---takes a very long time
-# MAGIC )
+# MAGIC def get_schema():
+# MAGIC     return TableSchema(
+# MAGIC         [
+# MAGIC             t.StructField("ReportAsOfEOD", t.DateType(), True),
+# MAGIC             t.StructField("LoanID", t.StringType(), True),
+# MAGIC             t.StructField("Date", t.DateType(), True),
+# MAGIC             t.StructField("PrincipalRepayment", t.DoubleType(), True),
+# MAGIC             t.StructField("InterestRepayment", t.DoubleType(), True),
+# MAGIC             t.StructField("LateFeesRepayment", t.DoubleType(), True),
+# MAGIC         ],
+# MAGIC         primary_key=["LoanID", "Date"],
+# MAGIC         # partition_by = "Date" #---takes a very long time
+# MAGIC     )
+# MAGIC
 # MAGIC ```
 
 # COMMAND ----------

@@ -1,6 +1,7 @@
 # Databricks notebook source
 # MAGIC %md
 # MAGIC # #7 Simple aggregation
+# MAGIC ## Gold layer
 # MAGIC Return to <a href="$../_index">index page</a>
 # MAGIC
 # MAGIC In this notebook you will see how to create a simple table of aggregations for reporting using the **Daipe** framework.
@@ -61,7 +62,7 @@ def get_schema():
 
 
 @transformation(most_valuable_users, display=True)
-@table_overwrite("gold.tbl_most_valuable_users")
+@table_overwrite("gold.tbl_most_valuable_users", get_schema())
 def save(df: DataFrame, logger: Logger):
     logger.info(f"Saving {df.count()} records")
     number_of_mvu = 10

@@ -1,6 +1,7 @@
 # Databricks notebook source
 # MAGIC %md
 # MAGIC # #8 Comprehensive reporting
+# MAGIC ## Gold layer
 # MAGIC
 # MAGIC Return to <a href="$../_index">index page</a>
 # MAGIC

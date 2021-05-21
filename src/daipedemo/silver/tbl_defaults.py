@@ -80,6 +80,7 @@ def get_schema():
         ],
         primary_key="LoanID",
         partition_by="Year",
+        tbl_properties={"test": "test"},
     )
 
 
@@ -87,7 +88,7 @@ def get_schema():
 
 
 @transformation(add_defaulted_column, display=True)
-@table_overwrite("silver.tbl_defaults", get_schema())
+@table_overwrite("silver.tbl_defaults", get_schema(), recreate_table=True)
 def select_columns_and_save(df: DataFrame):
     return df.select("LoanID", "Rating", "Country", "Defaulted", f.year("DefaultDate").alias("Year"), f.month("DefaultDate").alias("Month"))
 
