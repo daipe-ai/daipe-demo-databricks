@@ -97,7 +97,7 @@ def join_loans_and_repayments(df: DataFrame):
 
 @transformation(read_table("silver.tbl_loans"), read_table("silver.tbl_repayments"), display=True)
 @table_overwrite("silver.tbl_joined_loans_and_repayments", get_joined_schema())
-def join_loans_and_repayments(df1: DataFrame, df2: DataFrame):
+def join_loans_and_repayments_combined(df1: DataFrame, df2: DataFrame):
     return df1.join(df2, "LoanID")
 
 

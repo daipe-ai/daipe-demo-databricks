@@ -33,7 +33,7 @@ from datalakebundle.imports import *
 # MAGIC The philosophy of the Daipe framework is built upon __decorated function based notebooks__. Each cell in a notebook contains __exactly one__ decorated function. The decorator runs the enclosed function without the need to call it. This allows a __prototype__ code to be used in __production__ with minimal changes necessary.
 # MAGIC
 # MAGIC ### Advantages of Daipe function-based notebooks
-# MAGIC  0. Create and publish __auto-generated documentation__ and __lineage__ of notebooks and pipelines (Daipe Enterprise) - Big seeling point for a customer
+# MAGIC  0. Create and publish __auto-generated documentation__ and __lineage__ of notebooks and pipelines - Big seeling point for a customer
 # MAGIC  0. Daipe integrates __best practices__, which greatly simplify project structuring on all levels allowing you to write __simple and clean notebooks__ with ease
 # MAGIC  0. Daipe automatically __injects pre-configured objects__ into functions without the need for any boilerplate code
 # MAGIC  0. Using functions allows you to write __Unit tests__ with ease, by contrast simply writing code in a cell makes it almost impossible to test

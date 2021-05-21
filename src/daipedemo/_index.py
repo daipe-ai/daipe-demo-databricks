@@ -19,5 +19,3 @@
 # MAGIC 0. <a href="$./silver/tbl_defaults">Widgets</a> -./silver/tbl_defaults
 # MAGIC 0. <a href="$./gold/tbl_most_valuable_users">Simple reporting</a> -./gold/tbl_most_valuable_users
 # MAGIC 0. <a href="$./gold/defaults_reporting">Comprehensive reporting</a> -./gold/defaults_reporting
-
-# COMMAND ----------

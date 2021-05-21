@@ -59,10 +59,6 @@ from datalakebundle.imports import *
 
 # COMMAND ----------
 
-from pyspark.sql import SparkSession
-
-spark = SparkSession.builder.appName("No Daipe example").getOrCreate()
-
 df = spark.read.csv("/LoanData.csv", header=True, inferSchema=True)
 df = df.limit(1000).orderBy("LoanDate")  # Limit 1000 so it is fast
 df.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable("dev_bronze.tbl_loans_no_daipe")

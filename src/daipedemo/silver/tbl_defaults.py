@@ -79,8 +79,8 @@ def get_schema():
             t.StructField("Month", t.IntegerType(), True),
         ],
         primary_key="LoanID",
-        partition_by="Year",
-        tbl_properties={"test": "test"},
+        partition_by=["Month", "Rating"],
+        tbl_properties={},
     )
 
 
@@ -88,8 +88,8 @@ def get_schema():
 
 
 @transformation(add_defaulted_column, display=True)
-@table_overwrite("silver.tbl_defaults", get_schema(), recreate_table=True)
-def select_columns_and_save(df: DataFrame):
+@table_overwrite("silver.tbl_defaults", get_schema())
+def select_columns_and_save(df: DataFrame, recreate_table=True):
     return df.select("LoanID", "Rating", "Country", "Defaulted", f.year("DefaultDate").alias("Year"), f.month("DefaultDate").alias("Month"))
 
 

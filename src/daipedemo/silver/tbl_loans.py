@@ -154,6 +154,10 @@ def get_schema():
             t.StructField("ActiveLateLastPaymentCategory", t.StringType(), nullable=True),
         ],
         primary_key="LoanId",
+        partition_by=["LoanDate"],  # "Education"],
+        tbl_properties={
+            "test": "test",
+        },
     )
 
 
@@ -178,6 +182,7 @@ def convert_columns_and_save(df: DataFrame):
         .withColumn("BiddingStartedOn", f.to_timestamp("BiddingStartedOn"))
         .withColumn("StageActiveSince", f.to_timestamp("StageActiveSince"))
         .withColumnRenamed("ReportAsOfEOD", "LoanReportAsOfEOD")
+        .limit(100)
     )
 
 
