@@ -160,7 +160,7 @@ six = "*"
 
 [[package]]
 name = "daipe-core"
-version = "0.8.0b3"
+version = "0.8.0b4"
 description = "Daipe framework core"
 category = "main"
 optional = false
@@ -233,7 +233,7 @@ sql = ["pandas (>=0.23.2)", "pyarrow (>=0.15.1)"]
 
 [[package]]
 name = "datalake-bundle"
-version = "0.7.0a22"
+version = "0.7.0b1"
 description = "DataLake tables management bundle for the Daipe Framework"
 category = "main"
 optional = false
@@ -241,7 +241,7 @@ python-versions = ">=3.7,<4.0"
 
 [package.dependencies]
 console-bundle = ">=0.4.0,<0.5.0"
-daipe-core = ">=0.8.0b3,<0.9.0"
+daipe-core = ">=0.8.0b4,<0.9.0"
 deepdiff = ">=5,<6"
 injecta = ">=0.10.0,<0.11.0"
 pyfony-bundles = ">=0.4.0,<0.5.0"
@@ -1096,7 +1096,7 @@ testing = ["pytest (>=3.5,!=3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.7.1,<4.0.0"
-content-hash = "eea726affadbaddab3abc726dd2850002644ebedbbf59c9d7ab7dcf215754d8e"
+content-hash = "3c58d8f626d032e35e9bdb1b2a9c7b1f9b20a925e3731e781f1ac2f72f6420fa"
 
 [metadata.files]
 appdirs = [
@@ -1193,7 +1193,7 @@ cycler = [
     {file = "cycler-0.10.0.tar.gz", hash = "sha256:cd7b2d1018258d7247a71425e9f26463dfb444d411c39569972f4ce586b0c9d8"},
 ]
 daipe-core = [
-    {file = "daipe_core-0.8.0b3-py3-none-any.whl", hash = "sha256:c5db0c5993ef056aa0bd5eb2ab59a30eeeeaf6ee78f90c12ac9ecb53be5b3b74"},
+    {file = "daipe_core-0.8.0b4-py3-none-any.whl", hash = "sha256:fd08aa4e283ae5387e29023da1d3789ba7cc7b96f9bba6c57b55902548bf3c72"},
 ]
 databricks-api = [
     {file = "databricks_api-0.6.0-py2.py3-none-any.whl", hash = "sha256:5ed697f59c6c3c09bd649f8cfaa1345d5e273de093b968b2542d9f7c8ef348de"},
@@ -1210,8 +1210,7 @@ databricks-connect = [
     {file = "databricks-connect-7.3.7.tar.gz", hash = "sha256:35ead50a0550e65a7d6fd78e2c8e54095b53514fba85180768a2dbcdd3f2cf0b"},
 ]
 datalake-bundle = [
-    {file = "datalake-bundle-0.7.0a22.tar.gz", hash = "sha256:b8cce5b1382b417432b132cdf12b38e66a579cd925b07e93d801d3ccaf2536aa"},
-    {file = "datalake_bundle-0.7.0a22-py3-none-any.whl", hash = "sha256:ed42fbe361f29190c862a972808159d6701af60365d675f3a48821d3cf6704d4"},
+    {file = "datalake_bundle-0.7.0b1-py3-none-any.whl", hash = "sha256:60665fef9c84d6656d7fa901c8bd68d91865f4d145346410e248f83961c634f5"},
 ]
 dbx-deploy = [
     {file = "dbx_deploy-0.14.2-py3-none-any.whl", hash = "sha256:91091be69d550de4c2525f55e2ab6fa537a9723074d6bcc1271816a2d35fbf9a"},
