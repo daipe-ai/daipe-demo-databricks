@@ -7,7 +7,7 @@ parameters:
       workspace:
         base_dir: '%databricks.workspace.base_dir%'
       package:
-        offline_install: True
+        offline_install: False
     databricks:
       host: '%databricks.address%'
       token: '%env(DBX_TOKEN)%'
