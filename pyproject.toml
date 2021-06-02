@@ -28,7 +28,7 @@ matplotlib = "^3.2.2"
 seaborn = "0.10.0"
 injecta = "0.10.*"
 databricks-bundle = "0.9.0b5"
-datalake-bundle = "0.7.0b1"
+datalake-bundle = "0.7.0b2"
 
 [tool.poetry.dev-dependencies]
 databricks-connect = "^7.3"
