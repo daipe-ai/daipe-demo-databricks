@@ -19,5 +19,4 @@ parameters:
       defaults:
         base_path: '%datalake.base_path%' # from config.yaml
         layer: !expr 'db_identifier[:db_identifier.find("_")]' # bronze/silver/gold
-        domain: !expr 'db_identifier[db_identifier.find("_") + 1:]' # covid
-        target_path: !expr 'base_path + "/" + layer + "/" + domain + "/" + table_identifier + ".delta"'
+        target_path: !expr 'base_path + "/" + layer + "/" + table_identifier + ".delta"'
