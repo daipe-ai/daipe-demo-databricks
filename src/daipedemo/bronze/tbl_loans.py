@@ -82,6 +82,8 @@ display(df)
 # MAGIC - simpler, cleaner, follows best-practices
 # MAGIC - self-documenting
 # MAGIC - testable
+# MAGIC - using a standard Logger
+# MAGIC - checking if your schema fits
 # MAGIC - production-ready (-ish)
 
 # COMMAND ----------
