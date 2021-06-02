@@ -47,6 +47,8 @@ from datalakebundle.imports import *
 # MAGIC For dataset format and explanation visit [here](https://www.bondora.com/en/public-reports#dataset-file-format)
 # MAGIC
 # MAGIC In this use-case we introduce the `@notebook_function()` decorator. This decorator is used when writing functions which do __anything other__ than transforming DataFrames e.g. downloading and unziping data or creating empty databases.
+# MAGIC
+# MAGIC More about `@notebook_function()` decorator can be found in [technical documentation](https://docs.daipe.ai/data-pipelines-workflow/technical-docs/#notebook_function).
 
 # COMMAND ----------
 
@@ -106,7 +108,7 @@ def move_to_dbfs():
 
 @notebook_function()
 def show_env():
-    print(f"We are currently in {os.environ['APP_ENV']} environment")
+    print(f"We are currently in the {os.environ['APP_ENV']} environment")
 
 
 # COMMAND ----------
@@ -120,8 +122,11 @@ def show_env():
 
 @notebook_function()
 def init(spark: SparkSession):
+    print(f"create database if not exists {os.environ['APP_ENV']}_bronze;")
     spark.sql(f"create database if not exists {os.environ['APP_ENV']}_bronze;")  # noqa: F821
+    print(f"create database if not exists {os.environ['APP_ENV']}_silver;")
     spark.sql(f"create database if not exists {os.environ['APP_ENV']}_silver;")  # noqa: F821
+    print(f"create database if not exists {os.environ['APP_ENV']}_gold;")
     spark.sql(f"create database if not exists {os.environ['APP_ENV']}_gold;")  # noqa: F821
 
 
