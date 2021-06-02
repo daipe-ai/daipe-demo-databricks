@@ -2,21 +2,21 @@ parameters:
   datalake:
     base_path: '/%kernel.environment%'
 
+  loans:
+    repayments_csv_path: 'dbfs:/RepaymentsData.csv'
+
+  # overrides default bundle settings defined in site-packages/databricksbundle/_config/config.yaml
+  databricksbundle:
+    databricks_connect:
+      connection:
+        address: '%databricks.address%'
+        cluster_id: '%databricks.cluster_id%'
+
+  # overrides default bundle settings defined in site-packages/datalakebundle/_config/config.yaml
   datalakebundle:
-    tables:
-      # bronze ------------------------------------------
-      bronze_covid.tbl_template_1_mask_usage:
-        params:
-          source_csv_path: 'dbfs:/databricks-datasets/COVID/covid-19-data/mask-use/mask-use-by-county.csv'
-
-      bronze_covid.tbl_template_2_confirmed_cases:
-        params:
-          source_csv_path: 'dbfs:/databricks-datasets/COVID/USAFacts/covid_confirmed_usafacts.csv'
-
-      # silver ------------------------------------------
-      silver_covid.tbl_template_3_mask_usage:
-
-      # gold --------------------------------------------
-      gold_reporting.tbl_template_4_mask_usage_per_county:
-
-      gold_solutions.template_5_solution:
+    table:
+      name_template: '%kernel.environment%_{identifier}'
+      defaults:
+        base_path: '%datalake.base_path%' # from config.yaml
+        layer: !expr 'db_identifier[:db_identifier.find("_")]' # bronze/silver/gold
+        target_path: !expr 'base_path + "/" + layer + "/" + table_identifier + ".delta"'
