@@ -160,7 +160,7 @@ six = "*"
 
 [[package]]
 name = "daipe-core"
-version = "0.8.0b4"
+version = "1.0.0"
 description = "Daipe framework core"
 category = "main"
 optional = false
@@ -184,7 +184,7 @@ databricks-cli = ">=0.12.0,<0.13.0"
 
 [[package]]
 name = "databricks-bundle"
-version = "0.9.0b5"
+version = "1.0.0"
 description = "Databricks runtime support for the Daipe framework"
 category = "main"
 optional = false
@@ -192,12 +192,12 @@ python-versions = ">=3.7,<4.0"
 
 [package.dependencies]
 console-bundle = ">=0.4.0,<0.5.0"
-daipe-core = ">=0.8.0b3,<0.9.0"
+daipe-core = ">=1.0,<2.0"
 injecta = ">=0.10.0,<0.11.0"
 logger-bundle = ">=0.7.0,<0.8.0"
 pyfony-bundles = ">=0.4.0,<0.5.0"
 pyfony-core = ">=0.8.0,<0.9.0"
-pyspark-bundle = ">=0.8.0b1,<0.9.0"
+pyspark-bundle = ">=1.0,<2.0"
 
 [[package]]
 name = "databricks-cli"
@@ -233,7 +233,7 @@ sql = ["pandas (>=0.23.2)", "pyarrow (>=0.15.1)"]
 
 [[package]]
 name = "datalake-bundle"
-version = "0.7.0b2"
+version = "1.0.0"
 description = "DataLake tables management bundle for the Daipe Framework"
 category = "main"
 optional = false
@@ -241,16 +241,16 @@ python-versions = ">=3.7,<4.0"
 
 [package.dependencies]
 console-bundle = ">=0.4.0,<0.5.0"
-daipe-core = ">=0.8.0b4,<0.9.0"
+daipe-core = ">=1.0,<2.0"
 deepdiff = ">=5,<6"
 injecta = ">=0.10.0,<0.11.0"
 pyfony-bundles = ">=0.4.0,<0.5.0"
-pyspark-bundle = ">=0.8.0b1,<0.9.0"
+pyspark-bundle = ">=1.0,<2.0"
 simpleeval = ">=0.9.10,<1.0.0"
 
 [[package]]
 name = "dbx-deploy"
-version = "0.14.2"
+version = "1.0.0"
 description = "Databricks Deployment Tool"
 category = "dev"
 optional = false
@@ -835,14 +835,14 @@ python-versions = ">=3.5"
 
 [[package]]
 name = "pyspark-bundle"
-version = "0.8.0b1"
+version = "1.0.0"
 description = "PySpark bundle for the Daipe Framework"
 category = "main"
 optional = false
 python-versions = ">=3.7,<4.0"
 
 [package.dependencies]
-daipe-core = ">=0.8.0b1,<0.9.0"
+daipe-core = ">=1.0,<2.0"
 injecta = ">=0.10.0,<0.11.0"
 pyfony-bundles = ">=0.4.0,<0.5.0"
 
@@ -889,7 +889,7 @@ python-versions = "*"
 
 [[package]]
 name = "pywin32"
-version = "300"
+version = "227"
 description = "Python for Window Extensions"
 category = "dev"
 optional = false
@@ -1096,7 +1096,7 @@ testing = ["pytest (>=3.5,!=3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.7.1,<4.0.0"
-content-hash = "85747075192576bdf9dd19cf9eefedb5fd06e297ee88f45237972fbaefe873d7"
+content-hash = "519f129b7ee7c1eca18a61084308edf621c81705e00a992055eb390a9ceeb726"
 
 [metadata.files]
 appdirs = [
@@ -1193,14 +1193,14 @@ cycler = [
     {file = "cycler-0.10.0.tar.gz", hash = "sha256:cd7b2d1018258d7247a71425e9f26463dfb444d411c39569972f4ce586b0c9d8"},
 ]
 daipe-core = [
-    {file = "daipe_core-0.8.0b4-py3-none-any.whl", hash = "sha256:fd08aa4e283ae5387e29023da1d3789ba7cc7b96f9bba6c57b55902548bf3c72"},
+    {file = "daipe_core-1.0.0-py3-none-any.whl", hash = "sha256:157cdf48add2906584770f898b7473732e730e542d240e68abbde75a1ce1ba3a"},
 ]
 databricks-api = [
     {file = "databricks_api-0.6.0-py2.py3-none-any.whl", hash = "sha256:5ed697f59c6c3c09bd649f8cfaa1345d5e273de093b968b2542d9f7c8ef348de"},
     {file = "databricks_api-0.6.0.tar.gz", hash = "sha256:4b11c544755e714c6e5d4d18ebe3e936e41eb15b7d6374a49c3102d92ee847ea"},
 ]
 databricks-bundle = [
-    {file = "databricks_bundle-0.9.0b5-py3-none-any.whl", hash = "sha256:25fe0b795e04d599a9578788091c4474dcc4b817fb7a2adaaec94007e2a83d98"},
+    {file = "databricks_bundle-1.0.0-py3-none-any.whl", hash = "sha256:d23acbebfa300561e8f56040c73ea28aab314b5e2542e8b08023add06044b961"},
 ]
 databricks-cli = [
     {file = "databricks-cli-0.12.2.tar.gz", hash = "sha256:e0772c96c1e3274a239c9cfdd07da19c84804f54eb4f0d32f59fa75b0dce42ae"},
@@ -1210,11 +1210,10 @@ databricks-connect = [
     {file = "databricks-connect-7.3.7.tar.gz", hash = "sha256:35ead50a0550e65a7d6fd78e2c8e54095b53514fba85180768a2dbcdd3f2cf0b"},
 ]
 datalake-bundle = [
-    {file = "datalake-bundle-0.7.0b2.tar.gz", hash = "sha256:83f5f140bb0680d4af953ed1f0e8d873f5c15bc31387c07d074125f0a229399a"},
-    {file = "datalake_bundle-0.7.0b2-py3-none-any.whl", hash = "sha256:3244118c3f7fe1e0503ccc6476004c689cea107dfa670972005dadf2f5b4bd24"},
+    {file = "datalake_bundle-1.0.0-py3-none-any.whl", hash = "sha256:bb7aca9c38c18895b0917cd5d720257f7463a44ffbb56a224e44df19f0cad65c"},
 ]
 dbx-deploy = [
-    {file = "dbx_deploy-0.14.2-py3-none-any.whl", hash = "sha256:91091be69d550de4c2525f55e2ab6fa537a9723074d6bcc1271816a2d35fbf9a"},
+    {file = "dbx_deploy-1.0.0-py3-none-any.whl", hash = "sha256:ee8c05469b487eef0d6602e9a71c8a403aa81026d0ca4c2473e60ca156d5b3d8"},
 ]
 dbx-notebook-exporter = [
     {file = "dbx-notebook-exporter-0.4.0.tar.gz", hash = "sha256:e3fd919ef3acabbd82ef1188633f1f9f8cfa6f7a08676f1a6833f912a91fab7b"},
@@ -1599,7 +1598,7 @@ pyrsistent = [
     {file = "pyrsistent-0.17.3.tar.gz", hash = "sha256:2e636185d9eb976a18a8a8e96efce62f2905fea90041958d8cc2a189756ebf3e"},
 ]
 pyspark-bundle = [
-    {file = "pyspark_bundle-0.8.0b1-py3-none-any.whl", hash = "sha256:b89b917785293ed2a8087368ec34ffe9010af141f293204edde35932ea1f37b8"},
+    {file = "pyspark_bundle-1.0.0-py3-none-any.whl", hash = "sha256:193b4370c09efe849a9447a5184fb7223f9b8ecb1ffb8217c426fa61a7eb6487"},
 ]
 python-box = [
     {file = "python-box-3.4.6.tar.gz", hash = "sha256:694a7555e3ff9fbbce734bbaef3aad92b8e4ed0659d3ed04d56b6a0a0eff26a9"},
@@ -1618,16 +1617,18 @@ pytz = [
     {file = "pytz-2020.5.tar.gz", hash = "sha256:180befebb1927b16f6b57101720075a984c019ac16b1b7575673bea42c6c3da5"},
 ]
 pywin32 = [
-    {file = "pywin32-300-cp35-cp35m-win32.whl", hash = "sha256:1c204a81daed2089e55d11eefa4826c05e604d27fe2be40b6bf8db7b6a39da63"},
-    {file = "pywin32-300-cp35-cp35m-win_amd64.whl", hash = "sha256:350c5644775736351b77ba68da09a39c760d75d2467ecec37bd3c36a94fbed64"},
-    {file = "pywin32-300-cp36-cp36m-win32.whl", hash = "sha256:a3b4c48c852d4107e8a8ec980b76c94ce596ea66d60f7a697582ea9dce7e0db7"},
-    {file = "pywin32-300-cp36-cp36m-win_amd64.whl", hash = "sha256:27a30b887afbf05a9cbb05e3ffd43104a9b71ce292f64a635389dbad0ed1cd85"},
-    {file = "pywin32-300-cp37-cp37m-win32.whl", hash = "sha256:d7e8c7efc221f10d6400c19c32a031add1c4a58733298c09216f57b4fde110dc"},
-    {file = "pywin32-300-cp37-cp37m-win_amd64.whl", hash = "sha256:8151e4d7a19262d6694162d6da85d99a16f8b908949797fd99c83a0bfaf5807d"},
-    {file = "pywin32-300-cp38-cp38-win32.whl", hash = "sha256:fbb3b1b0fbd0b4fc2a3d1d81fe0783e30062c1abed1d17c32b7879d55858cfae"},
-    {file = "pywin32-300-cp38-cp38-win_amd64.whl", hash = "sha256:60a8fa361091b2eea27f15718f8eb7f9297e8d51b54dbc4f55f3d238093d5190"},
-    {file = "pywin32-300-cp39-cp39-win32.whl", hash = "sha256:638b68eea5cfc8def537e43e9554747f8dee786b090e47ead94bfdafdb0f2f50"},
-    {file = "pywin32-300-cp39-cp39-win_amd64.whl", hash = "sha256:b1609ce9bd5c411b81f941b246d683d6508992093203d4eb7f278f4ed1085c3f"},
+    {file = "pywin32-227-cp27-cp27m-win32.whl", hash = "sha256:371fcc39416d736401f0274dd64c2302728c9e034808e37381b5e1b22be4a6b0"},
+    {file = "pywin32-227-cp27-cp27m-win_amd64.whl", hash = "sha256:4cdad3e84191194ea6d0dd1b1b9bdda574ff563177d2adf2b4efec2a244fa116"},
+    {file = "pywin32-227-cp35-cp35m-win32.whl", hash = "sha256:f4c5be1a293bae0076d93c88f37ee8da68136744588bc5e2be2f299a34ceb7aa"},
+    {file = "pywin32-227-cp35-cp35m-win_amd64.whl", hash = "sha256:a929a4af626e530383a579431b70e512e736e9588106715215bf685a3ea508d4"},
+    {file = "pywin32-227-cp36-cp36m-win32.whl", hash = "sha256:300a2db938e98c3e7e2093e4491439e62287d0d493fe07cce110db070b54c0be"},
+    {file = "pywin32-227-cp36-cp36m-win_amd64.whl", hash = "sha256:9b31e009564fb95db160f154e2aa195ed66bcc4c058ed72850d047141b36f3a2"},
+    {file = "pywin32-227-cp37-cp37m-win32.whl", hash = "sha256:47a3c7551376a865dd8d095a98deba954a98f326c6fe3c72d8726ca6e6b15507"},
+    {file = "pywin32-227-cp37-cp37m-win_amd64.whl", hash = "sha256:31f88a89139cb2adc40f8f0e65ee56a8c585f629974f9e07622ba80199057511"},
+    {file = "pywin32-227-cp38-cp38-win32.whl", hash = "sha256:7f18199fbf29ca99dff10e1f09451582ae9e372a892ff03a28528a24d55875bc"},
+    {file = "pywin32-227-cp38-cp38-win_amd64.whl", hash = "sha256:7c1ae32c489dc012930787f06244426f8356e129184a02c25aef163917ce158e"},
+    {file = "pywin32-227-cp39-cp39-win32.whl", hash = "sha256:c054c52ba46e7eb6b7d7dfae4dbd987a1bb48ee86debe3f245a2884ece46e295"},
+    {file = "pywin32-227-cp39-cp39-win_amd64.whl", hash = "sha256:f27cec5e7f588c3d1051651830ecc00294f90728d19c3bf6916e6dba93ea357c"},
 ]
 pyyaml = [
     {file = "PyYAML-5.4.1-cp27-cp27m-macosx_10_9_x86_64.whl", hash = "sha256:3b2b1824fe7112845700f815ff6a489360226a5609b96ec2190a45e62a9fc922"},
