@@ -179,3 +179,8 @@ def plot_defaults_per_country(df: DataFrame):
 # COMMAND ----------
 
 # dbutils.widgets.removeAll()
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ### Continue to the <a href="$./tbl_target_features">sample notebook #9</a>
