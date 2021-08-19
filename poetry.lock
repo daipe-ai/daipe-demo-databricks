@@ -160,13 +160,14 @@ six = "*"
 
 [[package]]
 name = "daipe-core"
-version = "1.0.0"
+version = "1.1.0"
 description = "Daipe framework core"
 category = "main"
 optional = false
 python-versions = ">=3.7,<4.0"
 
 [package.dependencies]
+console-bundle = ">=0.4.0"
 injecta = ">=0.10.0,<0.11.0"
 logger-bundle = ">=0.7.0,<0.8.0"
 pyfony-bundles = ">=0.4.0,<0.5.0"
@@ -184,7 +185,7 @@ databricks-cli = ">=0.12.0,<0.13.0"
 
 [[package]]
 name = "databricks-bundle"
-version = "1.0.0"
+version = "1.1.1"
 description = "Databricks runtime support for the Daipe framework"
 category = "main"
 optional = false
@@ -192,7 +193,7 @@ python-versions = ">=3.7,<4.0"
 
 [package.dependencies]
 console-bundle = ">=0.4.0,<0.5.0"
-daipe-core = ">=1.0,<2.0"
+daipe-core = ">=1.1,<2.0"
 injecta = ">=0.10.0,<0.11.0"
 logger-bundle = ">=0.7.0,<0.8.0"
 pyfony-bundles = ">=0.4.0,<0.5.0"
@@ -1193,14 +1194,14 @@ cycler = [
     {file = "cycler-0.10.0.tar.gz", hash = "sha256:cd7b2d1018258d7247a71425e9f26463dfb444d411c39569972f4ce586b0c9d8"},
 ]
 daipe-core = [
-    {file = "daipe_core-1.0.0-py3-none-any.whl", hash = "sha256:157cdf48add2906584770f898b7473732e730e542d240e68abbde75a1ce1ba3a"},
+    {file = "daipe_core-1.1.0-py3-none-any.whl", hash = "sha256:d3bb3ea459bd9b2a5257fc9265f25306ee72f95ef04f1898edaf4290f917e844"},
 ]
 databricks-api = [
     {file = "databricks_api-0.6.0-py2.py3-none-any.whl", hash = "sha256:5ed697f59c6c3c09bd649f8cfaa1345d5e273de093b968b2542d9f7c8ef348de"},
     {file = "databricks_api-0.6.0.tar.gz", hash = "sha256:4b11c544755e714c6e5d4d18ebe3e936e41eb15b7d6374a49c3102d92ee847ea"},
 ]
 databricks-bundle = [
-    {file = "databricks_bundle-1.0.0-py3-none-any.whl", hash = "sha256:d23acbebfa300561e8f56040c73ea28aab314b5e2542e8b08023add06044b961"},
+    {file = "databricks_bundle-1.1.1-py3-none-any.whl", hash = "sha256:c1d16532e438573ada7358f580bc4e91404302b2b097d8e15d4e03153015ff3a"},
 ]
 databricks-cli = [
     {file = "databricks-cli-0.12.2.tar.gz", hash = "sha256:e0772c96c1e3274a239c9cfdd07da19c84804f54eb4f0d32f59fa75b0dce42ae"},
