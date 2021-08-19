@@ -15,9 +15,9 @@
 
 from pyspark.sql import functions as f
 from pyspark.sql.dataframe import DataFrame
-from pyspark.dbutils import DBUtils  # enables to use Databricks dbutils within functions
 from datalakebundle.imports import *
 from logging import Logger
+from daipecore.widgets.Widgets import Widgets
 
 import seaborn as sns
 
@@ -77,18 +77,18 @@ def get_ratings(df: DataFrame):
 
 
 @notebook_function(min_and_max_year, get_countries, get_ratings)
-def create_input_widgets(years: DataFrame, countries: DataFrame, ratings: DataFrame, dbutils: DBUtils):
-    min_year = years.toPandas().values[0][0]
-    max_year = years.toPandas().values[0][1]
+def create_input_widgets(years: DataFrame, countries: DataFrame, ratings: DataFrame, widgets: Widgets):
+    min_year = years.collect()[0][0]
+    max_year = years.collect()[0][1]
     country_list = list(map(lambda x: x[0], countries.toPandas().values.tolist()))
     rating_list = list(map(lambda x: x[0], ratings.toPandas().values.tolist()))
     # country_list.append("All")
     rating_list.remove(None)
     rating_list.sort()
 
-    dbutils.widgets.dropdown("year", str(min_year), list(map(str, range(min_year, max_year + 1))), "Select year")
-    dbutils.widgets.dropdown("country", country_list[0], country_list, "Select country")
-    dbutils.widgets.dropdown("rating", "C", rating_list, "Select rating")
+    widgets.add_select("year", list(map(str, range(min_year, max_year + 1))), str(min_year), "Select year")
+    widgets.add_select("country", country_list, country_list[0], "Select country")
+    widgets.add_select("rating", rating_list, "C", "Select rating")
 
 
 # COMMAND ----------
@@ -142,10 +142,10 @@ def defaults_per_country(df: DataFrame):
 
 
 @notebook_function(defaults_per_month)
-def plot_defaults_per_month(df: DataFrame):
-    year = dbutils.widgets.get("year")  # noqa: F821
-    country = dbutils.widgets.get("country")  # noqa: F821
-    rating = dbutils.widgets.get("rating")  # noqa: F821
+def plot_defaults_per_month(df: DataFrame, widgets: Widgets):
+    year = widgets.get_value("year")  # noqa: F821
+    country = widgets.get_value("country")  # noqa: F821
+    rating = widgets.get_value("rating")  # noqa: F821
 
     if len(df.head(1)) == 0:
         return
@@ -159,9 +159,9 @@ def plot_defaults_per_month(df: DataFrame):
 
 
 @notebook_function(defaults_per_country)
-def plot_defaults_per_country(df: DataFrame):
-    year = dbutils.widgets.get("year")  # noqa: F821
-    rating = dbutils.widgets.get("rating")  # noqa: F821
+def plot_defaults_per_country(df: DataFrame, widgets: Widgets):
+    year = widgets.get_value("year")  # noqa: F821
+    rating = widgets.get_value("rating")  # noqa: F821
 
     if len(df.head(1)) == 0:
         return

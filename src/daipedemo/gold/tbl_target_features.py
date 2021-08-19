@@ -15,10 +15,10 @@
 
 import numpy as np
 
-from pyspark.dbutils import DBUtils
 from pyspark.ml.feature import Bucketizer
 from pyspark.sql import DataFrame, functions as f, Window, types as t
 from datalakebundle.imports import *
+from daipecore.widgets.Widgets import Widgets
 
 # COMMAND ----------
 
@@ -29,10 +29,10 @@ from datalakebundle.imports import *
 
 
 @notebook_function()
-def create_input_widgets(dbutils: DBUtils):
-    dbutils.widgets.text("observation_period", "90", "Observation year")
-    dbutils.widgets.text("default_days", "90", "Default days")
-    dbutils.widgets.text("default_prediction", "365", "Default prediction")
+def create_input_widgets(widgets: Widgets):
+    widgets.add_text("observation_period", "90", "Observation year")
+    widgets.add_text("default_days", "90", "Default days")
+    widgets.add_text("default_prediction", "365", "Default prediction")
 
 
 # COMMAND ----------
@@ -42,14 +42,21 @@ def create_input_widgets(dbutils: DBUtils):
 
 # COMMAND ----------
 
-observation_period = int(dbutils.widgets.get("observation_period"))
-default_days = int(dbutils.widgets.get("default_days"))
-default_prediction = int(dbutils.widgets.get("default_prediction"))
+
+@notebook_function()
+def get_widgets_values(widgets: Widgets):
+    global observation_period
+    global default_days
+    global default_prediction
+    observation_period = int(widgets.get_value("observation_period"))
+    default_days = int(widgets.get_value("default_days"))
+    default_prediction = int(widgets.get_value("default_prediction"))
+
 
 # COMMAND ----------
 
 
-@transformation(read_table("silver.tbl_joined_loans_and_repayments"), display=True)
+@transformation(read_table("silver.tbl_joined_loans_and_repayments"), display=False)
 def read_joined_loans_and_repayments(df: DataFrame):
     return df
 
