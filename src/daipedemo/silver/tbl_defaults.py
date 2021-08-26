@@ -99,7 +99,9 @@ def select_columns_and_save(df: DataFrame):
 
 # COMMAND ----------
 
-# dbutils.widgets.removeAll()
+# @notebook_function()
+# def remove_widgets(widgets: Widgets):
+#     widgets.remove_all()
 
 # COMMAND ----------
 
