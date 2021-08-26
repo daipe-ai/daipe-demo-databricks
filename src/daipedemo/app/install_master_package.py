@@ -11,3 +11,18 @@ import os
 
 if "APP_ENV" not in os.environ:
     os.environ["APP_ENV"] = "dev"
+
+# COMMAND ----------
+
+# %flake8_setup
+import IPython  # noqa E402
+
+IPython.get_ipython().run_line_magic("pip", "install flake8==3.7.9 pycodestyle_magic==0.5")
+
+# COMMAND ----------
+
+import IPython  # noqa E402
+
+ipy = IPython.get_ipython()
+ipy.run_line_magic("load_ext", "pycodestyle_magic")
+ipy.run_line_magic("flake8_on", "--ignore E501,F403,F405,W503")

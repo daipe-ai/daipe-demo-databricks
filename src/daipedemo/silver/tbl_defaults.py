@@ -19,9 +19,9 @@
 
 from pyspark.sql import functions as f, types as t
 from logging import Logger
-from pyspark.dbutils import DBUtils  # enables to use Databricks dbutils within functions
 from pyspark.sql.dataframe import DataFrame
 from datalakebundle.imports import *
+from daipecore.widgets.Widgets import Widgets
 
 # COMMAND ----------
 
@@ -31,8 +31,8 @@ from datalakebundle.imports import *
 
 
 @notebook_function()
-def create_input_widgets(dbutils: DBUtils):
-    dbutils.widgets.dropdown("base_year", "2015", list(map(str, range(2009, 2022))), "Base year")
+def create_input_widgets(widgets: Widgets):
+    widgets.add_select("base_year", list(map(str, range(2009, 2022))), "2015", "Base year")
 
 
 # COMMAND ----------
@@ -44,8 +44,8 @@ def create_input_widgets(dbutils: DBUtils):
 
 
 @transformation(read_table("silver.tbl_loans"), display=True)
-def read_table_bronze_loans_tbl_loans(df: DataFrame, logger: Logger, dbutils: DBUtils):
-    base_year = dbutils.widgets.get("base_year")
+def read_table_bronze_loans_tbl_loans(df: DataFrame, logger: Logger, widgets: Widgets):
+    base_year = widgets.get_value("base_year")
 
     logger.info(f"Using base year: {base_year}")
 
@@ -99,7 +99,9 @@ def select_columns_and_save(df: DataFrame):
 
 # COMMAND ----------
 
-# dbutils.widgets.removeAll()
+# @notebook_function()
+# def remove_widgets(widgets: Widgets):
+#     widgets.remove_all()
 
 # COMMAND ----------
 
