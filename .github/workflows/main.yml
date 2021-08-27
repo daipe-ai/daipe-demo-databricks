@@ -32,14 +32,16 @@ jobs:
         with:
           miniconda-version: 'py38_4.8.3'
       - name: setup
-        run: |
-          export SHELL=$SHELL # for python to be able to access the bash version
-          ./env-init.sh -y --verbose
-      - name: set url
         env:
           DBX_URL: ${{ secrets.DBX_URL }}
+          PROJECT_NAME: ${{ ls $PWD/src }}
+          DBX_TOKEN: ${{ secrets.DBX_TOKEN }}
         run: |
+          cp .env.dist .env
+          sed -i "s,DBX_TOKEN=,DBX_TOKEN=$DBX_TOKEN,g" .env
           sed -i "s,\[Your DEV cluster address\],$DBX_URL,g" $PWD/src/daipedemo/_config/config_dev.yaml
+          export SHELL=$SHELL # for python to be able to access the bash version
+          ./env-init.sh -y --verbose
       - name: release
         env:
           DBX_TOKEN: ${{ secrets.DBX_TOKEN }}
