@@ -55,6 +55,7 @@ jobs:
           sed -i "s,\[Your DEV cluster address\],$DBX_URL,g" src/$(ls src)/_config/config_dev.yaml
       - name: setup
         if: steps.cache-venv.outputs.cache-hit != 'true'
+        run: |
           export SHELL=$SHELL # for python to be able to access the bash version
           ./env-init.sh -y --verbose
       - name: release
