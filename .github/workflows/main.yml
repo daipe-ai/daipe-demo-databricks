@@ -9,6 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
       - uses: conda-incubator/setup-miniconda@v2.0.0
         with:
           miniconda-version: 'py38_4.8.3'
@@ -19,7 +21,7 @@ jobs:
           ./env-init.sh -y --verbose
       - name: cache venv
         id: cache-venv
-      - uses: actions/cache@v2
+        uses: actions/cache@v2
         with:
           path: .venv
           key: ${{ runner.os }}-venv-${{ hashFiles('**/poetry.lock') }}
@@ -37,12 +39,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
       - uses: conda-incubator/setup-miniconda@v2.0.0
         with:
           miniconda-version: 'py38_4.8.3'
       - name: cache venv
         id: cache-venv
-      - uses: actions/cache@v2
+        uses: actions/cache@v2
         with:
           path: .venv
           key: ${{ runner.os }}-venv-${{ hashFiles('**/poetry.lock') }}
