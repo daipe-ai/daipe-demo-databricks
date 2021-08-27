@@ -13,15 +13,17 @@ jobs:
         with:
           miniconda-version: 'py38_4.8.3'
       - name: setup
+        if: steps.cache-venv.outputs.cache-hit != 'true'
         run: |
           export SHELL=$SHELL # for python to be able to access the bash version
           ./env-init.sh -y --verbose
       - uses: actions/cache@v2
         with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/poetry.lock') }}
+          id: cache-venv
+          path: .venv
+          key: ${{ runner.os }}-venv-${{ hashFiles('**/poetry.lock') }}
           restore-keys: |
-            ${{ runner.os }}-pip-
+            ${{ runner.os }}-venv-
       - name: linting
         run: |
           eval "$(conda shell.bash hook)"
@@ -39,11 +41,11 @@ jobs:
           miniconda-version: 'py38_4.8.3'
       - uses: actions/cache@v2
         with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/poetry.lock') }}
+          path: .venv
+          key: ${{ runner.os }}-venv-${{ hashFiles('**/poetry.lock') }}
           restore-keys: |
-            ${{ runner.os }}-pip-
-      - name: setup
+            ${{ runner.os }}-venv-
+      - name: setup variables
         env:
           DBX_URL: ${{ secrets.DBX_URL }}
           DBX_TOKEN: ${{ secrets.DBX_TOKEN }}
@@ -51,6 +53,8 @@ jobs:
           cp .env.dist .env
           sed -i "s,DBX_TOKEN=,DBX_TOKEN=$DBX_TOKEN,g" .env
           sed -i "s,\[Your DEV cluster address\],$DBX_URL,g" src/$(ls src)/_config/config_dev.yaml
+      - name: setup
+        if: steps.cache-venv.outputs.cache-hit != 'true'
           export SHELL=$SHELL # for python to be able to access the bash version
           ./env-init.sh -y --verbose
       - name: release
