@@ -35,6 +35,11 @@ jobs:
         run: |
           export SHELL=$SHELL # for python to be able to access the bash version
           ./env-init.sh -y --verbose
+      - name: set url
+        env:
+          DBX_URL: ${{ secrets.DBX_URL }}
+        run: |
+          sed -i "s,\[Your DEV cluster address\],$DBX_URL,g" $PWD/src/daipedemo/_config/config_dev.yaml
       - name: release
         env:
           DBX_TOKEN: ${{ secrets.DBX_TOKEN }}
