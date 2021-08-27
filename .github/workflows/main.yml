@@ -11,13 +11,11 @@ jobs:
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.ref }}
+
       - uses: conda-incubator/setup-miniconda@v2.0.0
         with:
           miniconda-version: 'py38_4.8.3'
-      - name: setup
-        run: |
-          export SHELL=$SHELL # for python to be able to access the bash version
-          ./env-init.sh -y --verbose
+
       - name: cache venv
         id: cache-venv
         uses: actions/cache@v2
@@ -28,6 +26,12 @@ jobs:
           key: ${{ runner.os }}-venv-${{ hashFiles('**/poetry.lock') }}
           restore-keys: |
             ${{ runner.os }}-venv-
+
+      - name: setup
+        run: |
+          export SHELL=$SHELL # for python to be able to access the bash version
+          ./env-init.sh -y --verbose
+
       - name: linting
         run: |
           eval "$(conda shell.bash hook)"
@@ -42,9 +46,11 @@ jobs:
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.ref }}
+
       - uses: conda-incubator/setup-miniconda@v2.0.0
         with:
           miniconda-version: 'py38_4.8.3'
+
       - name: cache venv
         id: cache-venv
         uses: actions/cache@v2
@@ -55,6 +61,7 @@ jobs:
           key: ${{ runner.os }}-venv-${{ hashFiles('**/poetry.lock') }}
           restore-keys: |
             ${{ runner.os }}-venv-
+
       - name: setup variables
         env:
           DBX_URL: ${{ secrets.DBX_URL }}
@@ -63,10 +70,12 @@ jobs:
           cp .env.dist .env
           sed -i "s,DBX_TOKEN=,DBX_TOKEN=$DBX_TOKEN,g" .env
           sed -i "s,\[Your DEV cluster address\],$DBX_URL,g" src/$(ls src)/_config/config_dev.yaml
+
       - name: setup
         run: |
           export SHELL=$SHELL # for python to be able to access the bash version
           ./env-init.sh -y --verbose
+
       - name: release
         run: |
           eval "$(conda shell.bash hook)"
