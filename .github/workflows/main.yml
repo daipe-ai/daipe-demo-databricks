@@ -14,8 +14,6 @@ jobs:
           miniconda-version: 'py38_4.8.3'
       - name: setup
         run: |
-          cp .env.dist .env
-          sed -i 's/DBX_TOKEN=/DBX_TOKEN=abcdefgh123456789/g' .env # remove DBX_TOKEN env var from .env
           export SHELL=$SHELL # for python to be able to access the bash version
           ./env-init.sh -y --verbose
       - name: linting
@@ -25,12 +23,36 @@ jobs:
           source ~/.poetry/env
           poe black-check
           poe flake8
-      - name: containerChecks
+      - name: crlf
+        run: |
+          eval "$(conda shell.bash hook)"
+          conda activate $PWD/.venv
+          ./check-crlf.sh
+      - name: tests
+        run: |
+          eval "$(conda shell.bash hook)"
+          conda activate $PWD/.venv
+          ./run_tests.sh
+  release:
+    needs: pipeline
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: conda-incubator/setup-miniconda@v2.0.0
+        with:
+          miniconda-version: 'py38_4.8.3'
+      - name: setup
+        run: |
+          export SHELL=$SHELL # for python to be able to access the bash version
+          ./env-init.sh -y --verbose
+      - name: release
+        env:
+          DBX_TOKEN: ${{ secrets.DBX_TOKEN }}
         run: |
           eval "$(conda shell.bash hook)"
           conda activate $PWD/.venv
           source ~/.poetry/env
-          ~/.poetry/bin/poetry install --no-root --no-dev # remove all dev dependencies
-          pip install databricks-connect==7.3.7 # pyspark is still needed
-          pip install poethepoet
-          poe container-check
+          poetry install --no-root
+          echo "token here"
+          echo $DBX_TOKEN
+          daipe dbx deploy --env=dev
