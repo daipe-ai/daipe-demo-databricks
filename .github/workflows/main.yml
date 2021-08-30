@@ -5,7 +5,7 @@ on:
     - cron: "0 6 * * *"
 
 jobs:
-  pipeline:
+  build_test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -39,8 +39,8 @@ jobs:
           source ~/.poetry/env
           poe black-check
           poe flake8
-  release:
-    needs: pipeline
+  deploy:
+    needs: build_test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -62,7 +62,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-venv-
 
-      - name: setup variables
+      - name: setup secrets
         env:
           DBX_URL: ${{ secrets.DBX_URL }}
           DBX_TOKEN: ${{ secrets.DBX_TOKEN }}
@@ -76,12 +76,10 @@ jobs:
           export SHELL=$SHELL # for python to be able to access the bash version
           ./env-init.sh -y --verbose
 
-      - name: release
+      - name: deploy
         run: |
           eval "$(conda shell.bash hook)"
           conda activate $PWD/.venv
           source ~/.poetry/env
           poetry install --no-root
-          echo "token here"
-          echo $DBX_TOKEN
           daipe dbx deploy --env=dev
