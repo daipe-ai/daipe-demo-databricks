@@ -5,4 +5,4 @@ parameters:
   databricks:
     address: https://westeurope.azuredatabricks.net
     workspace:
-      base_dir: '/daipedemo/{currentBranch}'
+      base_dir: '/daipedemo/{current_branch}'
