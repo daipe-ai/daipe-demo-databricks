@@ -3,6 +3,6 @@ imports:
 
 parameters:
   databricks:
-    address: 'https://adb-8328309645514519.19.azuredatabricks.net/'
+    address: '[Your DEV cluster address]'
     workspace:
       base_dir: '/daipedemo/{current_branch}'
