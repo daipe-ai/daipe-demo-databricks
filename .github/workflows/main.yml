@@ -39,6 +39,26 @@ jobs:
           source ~/.poetry/env
           poe black-check
           poe flake8
+
+      - name: setup secrets
+        env:
+          DBX_URL: ${{ secrets.DBX_URL }}
+          DBX_TOKEN: ${{ secrets.DBX_TOKEN }}
+        run: |
+          cp .env.dist .env
+          sed -i "s,DBX_TOKEN=,DBX_TOKEN=$DBX_TOKEN,g" .env
+          sed -i "s,\[Your DEV cluster address\],$DBX_URL,g" src/$(ls src)/_config/config_dev.yaml
+
+      - name: containerChecks
+        run: |
+          eval "$(conda shell.bash hook)"
+          conda activate $PWD/.venv
+          source ~/.poetry/env
+          ~/.poetry/bin/poetry install --no-root --no-dev # remove all dev dependencies
+          pip install databricks-connect==7.3.7 # pyspark is still needed
+          pip install poethepoet
+          poe container-check
+
   deploy:
     needs: build_test
     runs-on: ubuntu-latest
@@ -82,4 +102,15 @@ jobs:
           conda activate $PWD/.venv
           source ~/.poetry/env
           poetry install --no-root
-          daipe dbx deploy --env=dev
+          daipe dbx deploy --dev
+
+      - name: test dbx workspace export
+        run: |
+          cp -R . /tmp/original
+          eval "$(conda shell.bash hook)"
+          conda activate $PWD/.venv
+          source ~/.poetry/env
+          poetry install --no-root
+          daipe dbx workspace export
+          echo "Diff"
+          diff -r /tmp/original .
