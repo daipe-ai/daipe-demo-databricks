@@ -1,12 +1,5 @@
-# Daipe Framework project template
+# Daipe Framework DEMO project
 
-This is a Daipe project skeleton covering our **best practices for Databricks projects**. Daipe is focused on the following paradigms:
+Welcome to [Daipe framework](https://daipe.ai/) DEMO project based on [Bondora P2P loans dataset](https://www.bondora.com/en/public-reports).
 
-* anyone with basic python skills can create pipelines and improve the business logic
-* developing a standard DataLake project requires almost no engineers
-* one code for all environments (your favorite IDE + Databricks UI)
-* pursue consistency as the project grows
-
-## Resources
-
-* [Documentation](https://docs.daipe.ai/data-pipelines-workflow/)
+See [documentation](https://docs.daipe.ai/clone-demo-project/) to understand how to use this repository. 
