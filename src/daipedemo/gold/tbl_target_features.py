@@ -19,6 +19,7 @@ from pyspark.ml.feature import Bucketizer
 from pyspark.sql import DataFrame, functions as f, Window, types as t
 from datalakebundle.imports import *
 from daipecore.widgets.Widgets import Widgets
+from daipecore.widgets.get_widget_value import get_widget_value
 
 # COMMAND ----------
 
@@ -30,7 +31,7 @@ from daipecore.widgets.Widgets import Widgets
 
 @notebook_function()
 def create_input_widgets(widgets: Widgets):
-    widgets.add_text("observation_period", "90", "Observation year")
+    widgets.add_text("observation_period", "90", "Observation period")
     widgets.add_text("default_days", "90", "Default days")
     widgets.add_text("default_prediction", "365", "Default prediction")
 
@@ -39,19 +40,6 @@ def create_input_widgets(widgets: Widgets):
 
 # MAGIC %md
 # MAGIC ### Define lengths of time windows
-
-# COMMAND ----------
-
-
-@notebook_function()
-def get_widgets_values(widgets: Widgets):
-    global observation_period
-    global default_days
-    global default_prediction
-    observation_period = int(widgets.get_value("observation_period"))
-    default_days = int(widgets.get_value("default_days"))
-    default_prediction = int(widgets.get_value("default_prediction"))
-
 
 # COMMAND ----------
 
@@ -206,8 +194,10 @@ def get_new_features(df: DataFrame):
 # nextPaymentDiff - how many days was between two payments, if more than default_days, then we cansider this loan as defaulted
 # DaysFromStart - we want to concentrate only on new loans and investigate its probability of dafault within default_prediction length
 # FeaturesForPrediction - as our features, we want to consider only informations which we learn about a client in the observation_period
-@transformation(get_new_features)
-def get_target(df: DataFrame):
+@transformation(
+    get_new_features, get_widget_value("default_days"), get_widget_value("default_prediction"), get_widget_value("observation_period")
+)
+def get_target(df: DataFrame, default_days, default_prediction, observation_period):
     w = Window.partitionBy("LoanID").orderBy("Date")
     return (
         df.withColumn("nextPaymentDiff", f.datediff("Date", f.lag("Date").over(w)))
@@ -227,8 +217,8 @@ def get_target(df: DataFrame):
 # COMMAND ----------
 
 
-@transformation(get_target)
-def get_loans_with_immediate_default(df: DataFrame):
+@transformation(get_target, get_widget_value("observation_period"))
+def get_loans_with_immediate_default(df: DataFrame, observation_period):
     return df.filter(f.col("label") == 1).filter(f.col("DaysFromStart") < observation_period).select("LoanID").distinct()
 
 

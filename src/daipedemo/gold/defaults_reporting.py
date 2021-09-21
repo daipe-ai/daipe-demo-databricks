@@ -18,6 +18,7 @@ from pyspark.sql.dataframe import DataFrame
 from datalakebundle.imports import *
 from logging import Logger
 from daipecore.widgets.Widgets import Widgets
+from daipecore.widgets.get_widget_value import get_widget_value
 
 import seaborn as sns
 
@@ -141,12 +142,8 @@ def defaults_per_country(df: DataFrame):
 # COMMAND ----------
 
 
-@notebook_function(defaults_per_month)
-def plot_defaults_per_month(df: DataFrame, widgets: Widgets):
-    year = widgets.get_value("year")  # noqa: F821
-    country = widgets.get_value("country")  # noqa: F821
-    rating = widgets.get_value("rating")  # noqa: F821
-
+@notebook_function(defaults_per_month, get_widget_value("year"), get_widget_value("country"), get_widget_value("rating"))
+def plot_defaults_per_month(df: DataFrame, year, country, rating, widgets: Widgets):
     if len(df.head(1)) == 0:
         return
 
@@ -158,11 +155,8 @@ def plot_defaults_per_month(df: DataFrame, widgets: Widgets):
 # COMMAND ----------
 
 
-@notebook_function(defaults_per_country)
-def plot_defaults_per_country(df: DataFrame, widgets: Widgets):
-    year = widgets.get_value("year")  # noqa: F821
-    rating = widgets.get_value("rating")  # noqa: F821
-
+@notebook_function(defaults_per_country, get_widget_value("year"), get_widget_value("rating"))
+def plot_defaults_per_country(df: DataFrame, year, rating, widgets: Widgets):
     if len(df.head(1)) == 0:
         return
 

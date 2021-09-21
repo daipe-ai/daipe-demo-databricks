@@ -22,6 +22,7 @@ from logging import Logger
 from pyspark.sql.dataframe import DataFrame
 from datalakebundle.imports import *
 from daipecore.widgets.Widgets import Widgets
+from daipecore.widgets.get_widget_value import get_widget_value
 
 # COMMAND ----------
 
@@ -43,10 +44,8 @@ def create_input_widgets(widgets: Widgets):
 # COMMAND ----------
 
 
-@transformation(read_table("silver.tbl_loans"), display=True)
-def read_table_bronze_loans_tbl_loans(df: DataFrame, logger: Logger, widgets: Widgets):
-    base_year = widgets.get_value("base_year")
-
+@transformation(read_table("silver.tbl_loans"), get_widget_value("base_year"), display=True)
+def read_table_bronze_loans_tbl_loans(df: DataFrame, base_year, logger: Logger):
     logger.info(f"Using base year: {base_year}")
 
     return df.filter(f.col("DefaultDate") >= base_year)
