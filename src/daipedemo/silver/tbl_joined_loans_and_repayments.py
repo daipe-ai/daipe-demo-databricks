@@ -77,8 +77,8 @@ def join_loans_and_repayments(df1: DataFrame, df2: DataFrame):
 
 
 @transformation(join_loans_and_repayments)
-@table_overwrite("silver.tbl_joined_loans_and_repayments", get_joined_schema())
-def join_loans_and_repayments(df: DataFrame):
+# @table_overwrite("silver.tbl_joined_loans_and_repayments", get_joined_schema())
+def save_joined_loans_and_repayments(df: DataFrame):
     return df
 
 
