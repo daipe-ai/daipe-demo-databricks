@@ -1,6 +1,6 @@
 name: daipedemo
 channels:
-  - defaults
+  - conda-forge
 dependencies:
   - python=3.7.3
   - pip=21.2.*
