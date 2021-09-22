@@ -29,8 +29,8 @@
 
 # COMMAND ----------
 
+import datalakebundle.imports as dl
 from pyspark.sql.dataframe import DataFrame
-from datalakebundle.imports import *
 from daipedemo.bronze.tbl_repayments.csv_schema import get_schema as get_csv_schema
 
 # COMMAND ----------
@@ -52,10 +52,10 @@ from daipedemo.bronze.tbl_repayments.csv_schema import get_schema as get_csv_sch
 # COMMAND ----------
 
 
-@transformation(
-    read_csv("%loans.repayments_csv_path%", schema=get_csv_schema(), options=dict(header=True)),
+@dl.transformation(
+    dl.read_csv("%loans.repayments_csv_path%", schema=get_csv_schema(), options=dict(header=True)),
 )
-@table_overwrite("bronze.tbl_repayments")
+@dl.table_overwrite("bronze.tbl_repayments")
 def load_csv_and_save(df: DataFrame):
     return df
 

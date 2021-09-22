@@ -13,14 +13,14 @@
 
 # COMMAND ----------
 
+import datalakebundle.imports as dl
+import seaborn as sns
+
 from pyspark.sql import functions as f
 from pyspark.sql.dataframe import DataFrame
-from datalakebundle.imports import *
 from logging import Logger
 from daipecore.widgets.Widgets import Widgets
 from daipecore.widgets.get_widget_value import get_widget_value
-
-import seaborn as sns
 
 # COMMAND ----------
 
@@ -39,7 +39,7 @@ import seaborn as sns
 # COMMAND ----------
 
 
-@transformation(read_table("silver.tbl_defaults"), display=True)
+@dl.transformation(dl.read_table("silver.tbl_defaults"), display=True)
 def read_silver_loans_tbl_defaults(df: DataFrame, logger: Logger):
     logger.info(df.count())
     return df
@@ -53,7 +53,7 @@ def read_silver_loans_tbl_defaults(df: DataFrame, logger: Logger):
 # COMMAND ----------
 
 
-@transformation(read_silver_loans_tbl_defaults, display=True)
+@dl.transformation(read_silver_loans_tbl_defaults, display=True)
 def min_and_max_year(df: DataFrame):
     return df.select("Year").agg(f.min("Year").alias("min"), f.max("Year").alias("max"))
 
@@ -61,7 +61,7 @@ def min_and_max_year(df: DataFrame):
 # COMMAND ----------
 
 
-@transformation(read_silver_loans_tbl_defaults)
+@dl.transformation(read_silver_loans_tbl_defaults)
 def get_countries(df: DataFrame):
     return df.select("Country").dropDuplicates()
 
@@ -69,7 +69,7 @@ def get_countries(df: DataFrame):
 # COMMAND ----------
 
 
-@transformation(read_silver_loans_tbl_defaults)
+@dl.transformation(read_silver_loans_tbl_defaults)
 def get_ratings(df: DataFrame):
     return df.select("Rating").dropDuplicates()
 
@@ -77,7 +77,7 @@ def get_ratings(df: DataFrame):
 # COMMAND ----------
 
 
-@notebook_function(min_and_max_year, get_countries, get_ratings)
+@dl.notebook_function(min_and_max_year, get_countries, get_ratings)
 def create_input_widgets(years: DataFrame, countries: DataFrame, ratings: DataFrame, widgets: Widgets):
     min_year = years.collect()[0][0]
     max_year = years.collect()[0][1]
@@ -100,7 +100,7 @@ def create_input_widgets(years: DataFrame, countries: DataFrame, ratings: DataFr
 # COMMAND ----------
 
 
-@notebook_function(read_silver_loans_tbl_defaults)
+@dl.notebook_function(read_silver_loans_tbl_defaults)
 def defaults_per_month(df: DataFrame):
     year = dbutils.widgets.get("year")  # noqa: F821
     country = dbutils.widgets.get("country")  # noqa: F821
@@ -119,7 +119,7 @@ def defaults_per_month(df: DataFrame):
 # COMMAND ----------
 
 
-@notebook_function(read_silver_loans_tbl_defaults)
+@dl.notebook_function(read_silver_loans_tbl_defaults)
 def defaults_per_country(df: DataFrame):
     year = dbutils.widgets.get("year")  # noqa: F821
     rating = dbutils.widgets.get("rating")  # noqa: F821
@@ -142,7 +142,7 @@ def defaults_per_country(df: DataFrame):
 # COMMAND ----------
 
 
-@notebook_function(defaults_per_month, get_widget_value("year"), get_widget_value("country"), get_widget_value("rating"))
+@dl.notebook_function(defaults_per_month, get_widget_value("year"), get_widget_value("country"), get_widget_value("rating"))
 def plot_defaults_per_month(df: DataFrame, year, country, rating, widgets: Widgets):
     if len(df.head(1)) == 0:
         return
@@ -155,7 +155,7 @@ def plot_defaults_per_month(df: DataFrame, year, country, rating, widgets: Widge
 # COMMAND ----------
 
 
-@notebook_function(defaults_per_country, get_widget_value("year"), get_widget_value("rating"))
+@dl.notebook_function(defaults_per_country, get_widget_value("year"), get_widget_value("rating"))
 def plot_defaults_per_country(df: DataFrame, year, rating, widgets: Widgets):
     if len(df.head(1)) == 0:
         return

@@ -12,9 +12,9 @@
 
 # COMMAND ----------
 
+import datalakebundle.imports as dl
 from pyspark.sql import functions as f, types as t
 from pyspark.sql.dataframe import DataFrame
-from datalakebundle.imports import *
 from logging import Logger
 
 # COMMAND ----------
@@ -25,7 +25,7 @@ from logging import Logger
 # COMMAND ----------
 
 
-@transformation(read_table("silver.tbl_joined_loans_and_repayments"), display=True)
+@dl.transformation(dl.read_table("silver.tbl_joined_loans_and_repayments"), display=True)
 def most_valuable_users(df: DataFrame):
     return (
         df.groupBy("UserName")
@@ -47,7 +47,7 @@ def most_valuable_users(df: DataFrame):
 
 
 def get_schema():
-    return TableSchema(
+    return dl.TableSchema(
         [
             t.StructField("UserName", t.StringType(), True),
             t.StructField("Loans", t.LongType(), False),
@@ -61,8 +61,8 @@ def get_schema():
 # COMMAND ----------
 
 
-@transformation(most_valuable_users, display=True)
-@table_overwrite("gold.tbl_most_valuable_users", get_schema())
+@dl.transformation(most_valuable_users, display=True)
+@dl.table_overwrite("gold.tbl_most_valuable_users", get_schema())
 def save(df: DataFrame, logger: Logger):
     logger.info(f"Saving {df.count()} records")
     number_of_mvu = 10

@@ -14,9 +14,9 @@
 
 # COMMAND ----------
 
+import datalakebundle.imports as dl
 import pyspark.sql.types as t
 from pyspark.sql.dataframe import DataFrame
-from datalakebundle.imports import *
 
 # COMMAND ----------
 
@@ -30,7 +30,7 @@ from daipedemo.silver.tbl_repayments.schema import get_schema as get_repayments_
 
 
 def get_joined_schema():
-    schema = TableSchema(
+    schema = dl.TableSchema(
         get_loans_schema().fields + get_repayments_schema().fields,  # Schema is a composed of columns from both tables
         primary_key=["LoanID", "Date"],
     )
@@ -52,7 +52,7 @@ def get_joined_schema():
 # COMMAND ----------
 
 
-@transformation(read_table("silver.tbl_loans"))
+@dl.transformation(dl.read_table("silver.tbl_loans"))
 def read_tbl_loans(df: DataFrame):
     return df
 
@@ -60,7 +60,7 @@ def read_tbl_loans(df: DataFrame):
 # COMMAND ----------
 
 
-@transformation(read_table("silver.tbl_repayments"))
+@dl.transformation(dl.read_table("silver.tbl_repayments"))
 def read_tbl_repayments(df: DataFrame):
     return df
 
@@ -68,7 +68,7 @@ def read_tbl_repayments(df: DataFrame):
 # COMMAND ----------
 
 
-@transformation(read_tbl_loans, read_tbl_repayments)
+@dl.transformation(read_tbl_loans, read_tbl_repayments)
 def join_loans_and_repayments(df1: DataFrame, df2: DataFrame):
     return df1.join(df2, "LoanID")
 
@@ -76,8 +76,8 @@ def join_loans_and_repayments(df1: DataFrame, df2: DataFrame):
 # COMMAND ----------
 
 
-@transformation(join_loans_and_repayments)
-# @table_overwrite("silver.tbl_joined_loans_and_repayments", get_joined_schema())
+@dl.transformation(join_loans_and_repayments)
+# @dl.table_overwrite("silver.tbl_joined_loans_and_repayments", get_joined_schema())
 def save_joined_loans_and_repayments(df: DataFrame):
     return df
 
@@ -95,8 +95,8 @@ def save_joined_loans_and_repayments(df: DataFrame):
 # COMMAND ----------
 
 
-@transformation(read_table("silver.tbl_loans"), read_table("silver.tbl_repayments"), display=True)
-@table_overwrite("silver.tbl_joined_loans_and_repayments", get_joined_schema())
+@dl.transformation(dl.read_table("silver.tbl_loans"), dl.read_table("silver.tbl_repayments"), display=True)
+@dl.table_overwrite("silver.tbl_joined_loans_and_repayments", get_joined_schema())
 def join_loans_and_repayments_combined(df1: DataFrame, df2: DataFrame):
     return df1.join(df2, "LoanID")
 
