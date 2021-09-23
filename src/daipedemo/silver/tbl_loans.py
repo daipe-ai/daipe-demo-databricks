@@ -19,9 +19,9 @@
 
 # COMMAND ----------
 
-import datalakebundle.imports as dl
 from pyspark.sql import types as t, functions as f
 from pyspark.sql.dataframe import DataFrame
+from datalakebundle.imports import *
 
 # COMMAND ----------
 
@@ -38,7 +38,7 @@ from pyspark.sql.dataframe import DataFrame
 
 
 def get_schema():
-    return dl.TableSchema(
+    return TableSchema(
         [
             t.StructField("LoanReportAsOfEOD", t.DateType(), nullable=True),
             t.StructField("LoanId", t.StringType(), nullable=True),
@@ -168,8 +168,8 @@ def get_schema():
 # COMMAND ----------
 
 
-@dl.transformation(dl.read_table("bronze.tbl_loans"), display=True)
-@dl.table_overwrite("silver.tbl_loans", get_schema())
+@transformation(read_table("bronze.tbl_loans"), display=True)
+@table_overwrite("silver.tbl_loans", get_schema())
 def convert_columns_and_save(df: DataFrame):
     date_cols = [c for c in df.columns if "Date" in c and "Till" not in c]
     date_cols.append("ReportAsOfEOD")

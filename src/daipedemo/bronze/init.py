@@ -22,9 +22,9 @@
 
 import os
 import urllib.request
-import datalakebundle.imports as dl
 from zipfile import ZipFile
 from pyspark.sql import SparkSession
+from datalakebundle.imports import *
 
 # COMMAND ----------
 
@@ -53,7 +53,7 @@ from pyspark.sql import SparkSession
 # COMMAND ----------
 
 
-@dl.notebook_function()
+@notebook_function()
 def download_data():
     opener = urllib.request.URLopener()
     # Bondora server checks User-Agent and forbids the default User-Agent of urllib
@@ -74,7 +74,7 @@ def download_data():
 # COMMAND ----------
 
 
-@dl.notebook_function()
+@notebook_function()
 def unpack_data():
     with ZipFile("/loanData.zip", "r") as zip_obj:
         zip_obj.extractall("/")
@@ -91,7 +91,7 @@ def unpack_data():
 # COMMAND ----------
 
 
-@dl.notebook_function()
+@notebook_function()
 def move_to_dbfs():
     dbutils.fs.cp("file:/LoanData.csv", "dbfs:/")  # noqa: F821
     dbutils.fs.cp("file:/RepaymentsData.csv", "dbfs:/")  # noqa: F821
@@ -106,7 +106,7 @@ def move_to_dbfs():
 # COMMAND ----------
 
 
-@dl.notebook_function()
+@notebook_function()
 def show_env():
     print(f"We are currently in the {os.environ['APP_ENV']} environment")
 
@@ -120,7 +120,7 @@ def show_env():
 # COMMAND ----------
 
 
-@dl.notebook_function()
+@notebook_function()
 def init(spark: SparkSession):
     print(f"create database if not exists {os.environ['APP_ENV']}_bronze;")
     spark.sql(f"create database if not exists {os.environ['APP_ENV']}_bronze;")  # noqa: F821

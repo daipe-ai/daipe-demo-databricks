@@ -25,12 +25,12 @@
 
 # MAGIC %md
 # MAGIC ### Imports
-# MAGIC Everything the Daipe framework needs is imported using `import datalakebundle.imports as dl`
+# MAGIC Everything the Daipe framework needs is imported using `from datalakebundle.imports import *`
 
 # COMMAND ----------
 
-import datalakebundle.imports as dl
 from pyspark.sql.dataframe import DataFrame
+from datalakebundle.imports import *
 
 # COMMAND ----------
 
@@ -59,10 +59,10 @@ from pyspark.sql.dataframe import DataFrame
 
 # COMMAND ----------
 
-df = spark.read.csv("/LoanData.csv", header=True, inferSchema=True)  # noqa: F821
+df = spark.read.csv("/LoanData.csv", header=True, inferSchema=True)
 df = df.limit(1000).orderBy("LoanDate")  # Limit 1000 so it is fast
 df.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable("dev_bronze.tbl_loans_no_daipe")
-display(df)  # noqa: F821
+display(df)
 
 # COMMAND ----------
 
@@ -89,8 +89,8 @@ display(df)  # noqa: F821
 # COMMAND ----------
 
 
-@dl.transformation(dl.read_csv("/LoanData.csv", options=dict(header=True, inferSchema=True)), display=True)
-@dl.table_overwrite("bronze.tbl_loans")
+@transformation(read_csv("/LoanData.csv", options=dict(header=True, inferSchema=True)), display=True)
+@table_overwrite("bronze.tbl_loans")
 def save(df: DataFrame):
     return df.orderBy("LoanDate")
 
