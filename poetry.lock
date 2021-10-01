@@ -138,7 +138,7 @@ colorama = {version = "*", markers = "sys_platform == \"win32\""}
 
 [[package]]
 name = "console-bundle"
-version = "0.4.2"
+version = "0.5.1"
 description = "Console Bundle for the Pyfony Framework"
 category = "main"
 optional = false
@@ -188,14 +188,14 @@ databricks-cli = ">=0.12.0,<0.13.0"
 
 [[package]]
 name = "databricks-bundle"
-version = "1.1.2"
+version = "1.1.3"
 description = "Databricks runtime support for the Daipe framework"
 category = "main"
 optional = false
 python-versions = ">=3.7,<4.0"
 
 [package.dependencies]
-console-bundle = ">=0.4.0,<0.5.0"
+console-bundle = ">=0.5,<0.6"
 daipe-core = ">=1.1,<2.0"
 injecta = ">=0.10.0,<0.11.0"
 logger-bundle = ">=0.7.0,<0.8.0"
@@ -237,14 +237,14 @@ sql = ["pandas (>=0.23.2)", "pyarrow (>=0.15.1)"]
 
 [[package]]
 name = "datalake-bundle"
-version = "1.0.2"
+version = "1.0.3"
 description = "DataLake tables management bundle for the Daipe Framework"
 category = "main"
 optional = false
 python-versions = ">=3.7,<4.0"
 
 [package.dependencies]
-console-bundle = ">=0.4.0,<0.5.0"
+console-bundle = ">=0.5,<0.6"
 daipe-core = ">=1.0,<2.0"
 deepdiff = ">=5,<6"
 injecta = ">=0.10.0,<0.11.0"
@@ -254,17 +254,18 @@ simpleeval = ">=0.9.10,<1.0.0"
 
 [[package]]
 name = "dbx-deploy"
-version = "1.1.5"
+version = "1.1.10"
 description = "Databricks Deployment Tool"
 category = "dev"
 optional = false
 python-versions = ">=3.7,<4.0"
 
 [package.dependencies]
-console-bundle = ">=0.4.0,<0.5.0"
+console-bundle = ">=0.5,<0.6"
 databricks-api = ">=0.3.0,<1.0.0"
 dbx-notebook-exporter = ">=0.4.0,<0.5.0"
-nbconvert = ">=5.6"
+Jinja2 = ">=2.0.0,<3.0.0"
+nbconvert = ">=5.6.0,<6.0.0"
 pyfony-bundles = ">=0.4.0,<0.5.0"
 pyfony-core = ">=0.8.0,<0.9.0"
 pygit2 = ">=1.3,<2.0"
@@ -853,14 +854,14 @@ pyfony-bundles = ">=0.4.0,<0.5.0"
 
 [[package]]
 name = "pyfony-sqlalchemy-bundle"
-version = "1.0.0"
+version = "1.0.1"
 description = "SQL Alchemy bundle for the Pyfony framework"
 category = "dev"
 optional = false
 python-versions = ">=3.7,<4.0"
 
 [package.dependencies]
-console-bundle = ">=0.4.0,<0.5.0"
+console-bundle = ">=0.5,<0.6"
 pyfony-bundles = ">=0.4.0,<0.5.0"
 SQLAlchemy = ">=1.3,<2.0"
 Werkzeug = ">=2.0.1,<3.0.0"
@@ -1306,7 +1307,7 @@ colorlog = [
     {file = "colorlog-4.7.2.tar.gz", hash = "sha256:18d05b616438a75762d7d214b9ec3b05d274466c9f3ddd92807e755840c88251"},
 ]
 console-bundle = [
-    {file = "console_bundle-0.4.2-py3-none-any.whl", hash = "sha256:43ca929a623e9c36f9f98d7ec3937d9bcef259b95d7927b2d8a9cd1716665ed4"},
+    {file = "console_bundle-0.5.1-py3-none-any.whl", hash = "sha256:bf9ffa3bc530754111dc18b50a78d25d6532c763628cc19c028acb9e170ec3b0"},
 ]
 cycler = [
     {file = "cycler-0.10.0-py2.py3-none-any.whl", hash = "sha256:1d8a5ae1ff6c5cf9b93e8811e581232ad8920aeec647c37316ceac982b08cb2d"},
@@ -1320,7 +1321,7 @@ databricks-api = [
     {file = "databricks_api-0.6.0.tar.gz", hash = "sha256:4b11c544755e714c6e5d4d18ebe3e936e41eb15b7d6374a49c3102d92ee847ea"},
 ]
 databricks-bundle = [
-    {file = "databricks_bundle-1.1.2-py3-none-any.whl", hash = "sha256:bae6f0a6270810f6196c268f4d543dce1ed992e60ee27c44cd781766945023a7"},
+    {file = "databricks_bundle-1.1.3-py3-none-any.whl", hash = "sha256:433a4614f4aaede4e02ef8167b56784b1b61ea802bb755d178b31af9b8c1cb33"},
 ]
 databricks-cli = [
     {file = "databricks-cli-0.12.2.tar.gz", hash = "sha256:e0772c96c1e3274a239c9cfdd07da19c84804f54eb4f0d32f59fa75b0dce42ae"},
@@ -1330,10 +1331,10 @@ databricks-connect = [
     {file = "databricks-connect-7.3.7.tar.gz", hash = "sha256:35ead50a0550e65a7d6fd78e2c8e54095b53514fba85180768a2dbcdd3f2cf0b"},
 ]
 datalake-bundle = [
-    {file = "datalake_bundle-1.0.2-py3-none-any.whl", hash = "sha256:ff729fba804187cd9bf3ac2800c8461db8fb35c1cb56faf8a9f04381a567abbe"},
+    {file = "datalake_bundle-1.0.3-py3-none-any.whl", hash = "sha256:e30cad6b9c285c8f5de1b6f779efd350727d25d3a17926b56a4e76043b7f51b4"},
 ]
 dbx-deploy = [
-    {file = "dbx_deploy-1.1.5-py3-none-any.whl", hash = "sha256:02a4ee4d9a809942c95b6e27eafe024cc3d1f02ffb70a7f991ac1e037337fbec"},
+    {file = "dbx_deploy-1.1.10-py3-none-any.whl", hash = "sha256:df14c4a5f622b034680a8c6f1330e71567bbab9ae3b87faf67a47da886be5b64"},
 ]
 dbx-notebook-exporter = [
     {file = "dbx-notebook-exporter-0.4.1.tar.gz", hash = "sha256:45fc607bdbd919db425b5a03417a9b7b722c25c92c633c353dbbb510ec0d193d"},
@@ -1757,7 +1758,7 @@ pyfony-core = [
     {file = "pyfony_core-0.8.0-py3-none-any.whl", hash = "sha256:2f5f676a73d7ad8c1426272681c4958f64d4f627fef75865663f41c30ba8b2c9"},
 ]
 pyfony-sqlalchemy-bundle = [
-    {file = "pyfony_sqlalchemy_bundle-1.0.0-py3-none-any.whl", hash = "sha256:fe1d64ce79322eb21fc62eef5b10d9d1c024bb313adcfff4ccf6e180098cc2fc"},
+    {file = "pyfony_sqlalchemy_bundle-1.0.1-py3-none-any.whl", hash = "sha256:58d9557d4944aa9e8972bd02efa57be6cd2b7be5d13f4dcb66365fa0e3a828a8"},
 ]
 pygit2 = [
     {file = "pygit2-1.6.1-cp36-cp36m-macosx_10_9_x86_64.whl", hash = "sha256:547429774c11f5bc9d20a49aa86e4bd13c90a55140504ef05f55cf424470ee34"},
