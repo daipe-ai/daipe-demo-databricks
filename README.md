@@ -11,6 +11,6 @@ See [documentation](https://docs.daipe.ai/clone-demo-project/) to understand how
 
 Run
 ```bash
-daipe lineage publish html
+daipe lineage:publish:html
 ```
 and a folder `lineage` will be created in your project root.
