@@ -9,16 +9,20 @@
 
 # %flake8_setup
 import IPython  # noqa E402
+import os  # noqa E402
 
-IPython.get_ipython().run_line_magic("pip", "install flake8==3.7.9 pycodestyle_magic==0.5")
+if "MASTER_PACKAGE_INSTALLED" not in os.environ:
+    IPython.get_ipython().run_line_magic("pip", "install flake8==3.7.9 pycodestyle_magic==0.5")
 
 # COMMAND ----------
 
 import IPython  # noqa E402
+import os  # noqa E402
 
-ipy = IPython.get_ipython()
-ipy.run_line_magic("load_ext", "pycodestyle_magic")
-ipy.run_line_magic("flake8_on", "--ignore E501,F403,F405,W503")
+if "MASTER_PACKAGE_INSTALLED" not in os.environ:
+    ipy = IPython.get_ipython()
+    ipy.run_line_magic("load_ext", "pycodestyle_magic")
+    ipy.run_line_magic("flake8_on", "--ignore E501,F403,F405,W503")
 
 # COMMAND ----------
 
@@ -26,3 +30,6 @@ import os  # noqa E402
 
 if "APP_ENV" not in os.environ:
     os.environ["APP_ENV"] = "dev"
+
+if "MASTER_PACKAGE_INSTALLED" not in os.environ:
+    os.environ["MASTER_PACKAGE_INSTALLED"] = "True"
