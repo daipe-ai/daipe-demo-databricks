@@ -79,7 +79,7 @@ jobs:
           path: |
             .venv
             ~/.poetry/env
-          key: ${{ runner.os }}-venv-${{ hashFiles('**/poetry.lock') }}
+          key: ${{ runner.os }}-env-v2-${{ hashFiles('**/poetry.lock') }}
 
       - name: setup secrets
         env:
