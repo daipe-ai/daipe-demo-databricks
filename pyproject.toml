@@ -29,6 +29,7 @@ seaborn = "0.10.0"
 injecta = "0.10.*"
 databricks-bundle = "^1.0"
 datalake-bundle = "^1.0"
+feature-store-bundle = "^1.1.1-alpha.5"
 
 [tool.poetry.dev-dependencies]
 databricks-connect = "7.3.23"
@@ -40,6 +41,7 @@ pyfony-core = "0.8.*"
 pycodestyle_magic = "^0.5"
 dbx-deploy = "^1.0"
 lineage-bundle = "^1.0.2"
+mlflow = "^1.20.2"
 
 [pyfony.bootstrap]
 root_module_name = "daipedemo"
