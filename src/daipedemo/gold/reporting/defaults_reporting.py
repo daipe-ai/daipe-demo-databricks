@@ -83,7 +83,6 @@ def create_input_widgets(years: DataFrame, countries: DataFrame, ratings: DataFr
     max_year = years.collect()[0][1]
     country_list = list(map(lambda x: x[0], countries.toPandas().values.tolist()))
     rating_list = list(map(lambda x: x[0], ratings.toPandas().values.tolist()))
-    # country_list.append("All")
     rating_list.remove(None)
     rating_list.sort()
 
