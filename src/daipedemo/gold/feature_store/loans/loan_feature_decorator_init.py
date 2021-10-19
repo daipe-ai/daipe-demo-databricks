@@ -22,7 +22,7 @@ def set_widgets(widgets: Widgets):
 # COMMAND ----------
 
 entity = Entity(
-    name="loan",
+    name="loans",
     id_column="LoanId",
     id_column_type=t.StringType(),
     time_column="run_date",
@@ -41,9 +41,12 @@ def storage_type(widgets: Widgets):
 
 # first time initialization
 if "loan_feature" not in globals():
-    features_storage = FeaturesStorage(entity, storage_type=storage_type.result)
+    features_storage = FeaturesStorage(entity)
 
     @DecoratedDecorator
     class loan_feature(feature):  # noqa N081
         def __init__(self, *args, category=None):
             super().__init__(*args, entity=entity, category=category, features_storage=features_storage)
+
+
+# COMMAND ----------
