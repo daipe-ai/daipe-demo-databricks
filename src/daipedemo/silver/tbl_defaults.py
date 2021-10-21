@@ -13,7 +13,7 @@
 
 # COMMAND ----------
 
-# MAGIC %run ../app/install_master_package
+# MAGIC %run ../app/bootstrap
 
 # COMMAND ----------
 
@@ -30,11 +30,9 @@ from daipecore.widgets.get_widget_value import get_widget_value
 
 # COMMAND ----------
 
-
 @notebook_function()
 def create_input_widgets(widgets: Widgets):
     widgets.add_select("base_year", list(map(str, range(2009, 2022))), "2015", "Base year")
-
 
 # COMMAND ----------
 
@@ -43,21 +41,17 @@ def create_input_widgets(widgets: Widgets):
 
 # COMMAND ----------
 
-
 @transformation(read_table("silver.tbl_loans"), get_widget_value("base_year"), display=True)
 def read_table_bronze_loans_tbl_loans(df: DataFrame, base_year, logger: Logger):
     logger.info(f"Using base year: {base_year}")
 
     return df.filter(f.col("DefaultDate") >= base_year)
 
-
 # COMMAND ----------
-
 
 @transformation(read_table_bronze_loans_tbl_loans, display=True)
 def add_defaulted_column(df: DataFrame):
     return df.withColumn("Defaulted", f.col("DefaultDate").isNotNull()).where(f.col("Defaulted"))
-
 
 # COMMAND ----------
 
@@ -65,7 +59,6 @@ def add_defaulted_column(df: DataFrame):
 # MAGIC ### Defining schema and saving data into table
 
 # COMMAND ----------
-
 
 def get_schema():
     return TableSchema(
@@ -82,15 +75,12 @@ def get_schema():
         tbl_properties={"Test": "test"},
     )
 
-
 # COMMAND ----------
-
 
 @transformation(add_defaulted_column, display=True)
 @table_upsert("silver.tbl_defaults", get_schema())
 def select_columns_and_save(df: DataFrame):
     return df.select("LoanID", "Rating", "Country", "Defaulted", f.year("DefaultDate").alias("Year"), f.month("DefaultDate").alias("Month"))
-
 
 # COMMAND ----------
 

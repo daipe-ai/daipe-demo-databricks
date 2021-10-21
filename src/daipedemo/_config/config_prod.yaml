@@ -4,8 +4,6 @@ imports:
 parameters:
   databricks:
     address: https://westeurope.azuredatabricks.net
-    workspace:
-      base_dir: '/daipedemo'
 
   datalakebundle:
     notebook:
