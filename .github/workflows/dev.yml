@@ -1,0 +1,7 @@
+name: Dev pipeline
+on:
+  push:
+
+jobs:
+  call-build:
+    uses: daipe-ai/daipe-demo-databricks/.github/workflows/build.yml@master
