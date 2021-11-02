@@ -104,7 +104,7 @@ def select_columns(df: DataFrame):
     columns = [
         "LoanId",
         "LoanDate",
-        "UserName",
+        "PartyId",
         "NewCreditCustomer",
         "MaturityDate_Original",
         "MaturityDate_Last",
@@ -252,7 +252,7 @@ def get_unique_observations(df: DataFrame):
             "DaysToFirstPayment",
             "Date",
             "LoanDate",
-            "UserName",
+            "PartyId",
             "MaturityDate_Last",
             "DefaultDate",
         )

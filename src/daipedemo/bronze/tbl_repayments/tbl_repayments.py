@@ -52,9 +52,7 @@ from daipedemo.bronze.tbl_repayments.csv_schema import get_schema as get_csv_sch
 # COMMAND ----------
 
 
-@transformation(
-    read_csv("%loans.repayments_csv_path%", schema=get_csv_schema(), options=dict(header=True)),
-)
+@transformation(read_csv("%loans.repayments_csv_path%", schema=get_csv_schema(), options=dict(header=True)), display=True)
 @table_overwrite("bronze.tbl_repayments")
 def load_csv_and_save(df: DataFrame):
     return df
