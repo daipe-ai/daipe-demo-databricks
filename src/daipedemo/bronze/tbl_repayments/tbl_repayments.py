@@ -25,7 +25,7 @@
 
 # COMMAND ----------
 
-# MAGIC %run ../../app/install_master_package
+# MAGIC %run ../../app/bootstrap
 
 # COMMAND ----------
 
@@ -51,12 +51,12 @@ from daipedemo.bronze.tbl_repayments.csv_schema import get_schema as get_csv_sch
 
 # COMMAND ----------
 
-
-@transformation(read_csv("%loans.repayments_csv_path%", schema=get_csv_schema(), options=dict(header=True)), display=True)
+@transformation(
+    read_csv("%loans.repayments_csv_path%", schema=get_csv_schema(), options=dict(header=True)),
+)
 @table_overwrite("bronze.tbl_repayments")
 def load_csv_and_save(df: DataFrame):
     return df
-
 
 # COMMAND ----------
 

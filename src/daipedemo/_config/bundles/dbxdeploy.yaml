@@ -1,13 +1,5 @@
 parameters:
   dbxdeploy:
-    source:
-      notebooks:
-        base_dir: 'src/daipedemo'
-    target:
-      workspace:
-        base_dir: '%databricks.workspace.base_dir%'
-      package:
-        offline_install: False
     databricks:
       host: '%databricks.address%'
       token: '%env(DBX_TOKEN)%'
