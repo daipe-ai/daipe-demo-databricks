@@ -1,0 +1,26 @@
+name: promote_model
+on:
+  workflow_dispatch:
+
+jobs:
+  promote_model:
+    runs-on: ubuntu-latest
+    env:
+      DATABRICKS_TOKEN: ${{ secrets.DBX_TOKEN }}
+      DATABRICKS_HOST: ${{ secrets.DBX_URL }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
+
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: install_mlflow
+        run: |
+          pip install mlflow
+
+      - name: promote
+        run: |
+          python src/daipedemo/promote_model.py

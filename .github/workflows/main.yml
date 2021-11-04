@@ -14,7 +14,7 @@ jobs:
 
       - uses: conda-incubator/setup-miniconda@v2.1.1
         with:
-          miniconda-version: 'py39_4.10.3'
+          miniconda-version: 'py38_4.10.3'
       - run: |
           conda config --remove channels defaults
           conda config --append channels conda-forge
@@ -26,7 +26,7 @@ jobs:
           path: |
             .venv
             ~/.poetry/env
-          key: ${{ runner.os }}-env-${{ hashFiles('**/poetry.lock') }}
+          key: ${{ runner.os }}-env-v2-${{ hashFiles('**/poetry.lock') }}
 
       - name: setup
         run: |
@@ -69,7 +69,7 @@ jobs:
 
       - uses: conda-incubator/setup-miniconda@v2.0.0
         with:
-          miniconda-version: 'py38_4.8.3'
+          miniconda-version: 'py38_4.10.3'
 
       - name: cache venv
         id: cache-venv
@@ -78,7 +78,7 @@ jobs:
           path: |
             .venv
             ~/.poetry/env
-          key: ${{ runner.os }}-venv-${{ hashFiles('**/poetry.lock') }}
+          key: ${{ runner.os }}-env-v2-${{ hashFiles('**/poetry.lock') }}
 
       - name: setup secrets
         env:
