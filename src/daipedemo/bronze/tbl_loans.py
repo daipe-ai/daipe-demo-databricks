@@ -19,7 +19,7 @@
 
 # COMMAND ----------
 
-# MAGIC %run ../app/install_master_package
+# MAGIC %run ../app/bootstrap
 
 # COMMAND ----------
 
@@ -39,7 +39,6 @@ from datalakebundle.imports import *
 # MAGIC
 # MAGIC ![Bronze, silver, gold](https://databricks.com/wp-content/uploads/2019/08/Delta-Lake-Multi-Hop-Architecture-Overview.png)
 # MAGIC For further information read [here](https://databricks.com/blog/2019/08/14/productionizing-machine-learning-with-delta-lake.html)
-# MAGIC
 
 # COMMAND ----------
 
@@ -88,12 +87,10 @@ display(df)
 
 # COMMAND ----------
 
-
 @transformation(read_csv("/LoanData.csv", options=dict(header=True, inferSchema=True)), display=True)
 @table_overwrite("bronze.tbl_loans")
 def save(df: DataFrame):
     return df.orderBy("LoanDate")
-
 
 # COMMAND ----------
 

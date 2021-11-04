@@ -8,7 +8,7 @@
 
 # COMMAND ----------
 
-# MAGIC %run ../app/install_master_package
+# MAGIC %run ../app/bootstrap
 
 # COMMAND ----------
 
@@ -24,7 +24,6 @@ from logging import Logger
 
 # COMMAND ----------
 
-
 @transformation(read_table("silver.tbl_joined_loans_and_repayments"), display=True)
 def most_valuable_users(df: DataFrame):
     return (
@@ -37,14 +36,12 @@ def most_valuable_users(df: DataFrame):
         .orderBy("TotalInterestRepayment", ascending=False)
     )
 
-
 # COMMAND ----------
 
 # MAGIC %md
 # MAGIC #### Saving table for future use
 
 # COMMAND ----------
-
 
 def get_schema():
     return TableSchema(
@@ -57,9 +54,7 @@ def get_schema():
         primary_key="UserName",
     )
 
-
 # COMMAND ----------
-
 
 @transformation(most_valuable_users, display=True)
 @table_overwrite("gold.tbl_most_valuable_users", get_schema())
@@ -67,7 +62,6 @@ def save(df: DataFrame, logger: Logger):
     logger.info(f"Saving {df.count()} records")
     number_of_mvu = 10
     return df.limit(number_of_mvu)
-
 
 # COMMAND ----------
 

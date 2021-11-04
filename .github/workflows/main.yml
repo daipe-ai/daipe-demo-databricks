@@ -38,7 +38,6 @@ jobs:
           eval "$(conda shell.bash hook)"
           conda activate $PWD/.venv
           source ~/.poetry/env
-          poe black-check
           poe flake8
 
       - name: setup secrets
@@ -56,7 +55,7 @@ jobs:
           conda activate $PWD/.venv
           source ~/.poetry/env
           ~/.poetry/bin/poetry install --no-root --no-dev # remove all dev dependencies
-          pip install databricks-connect==9.1.0 # pyspark is still needed
+          pip install databricks-connect==9.1.2 # pyspark is still needed
           pip install poethepoet
           poe container-check
 
@@ -102,14 +101,3 @@ jobs:
           source ~/.poetry/env
           poetry install --no-root
           daipe dbx:deploy --dev
-
-      - name: test workspace export
-        run: |
-          cp -R . /tmp/original
-          eval "$(conda shell.bash hook)"
-          conda activate $PWD/.venv
-          source ~/.poetry/env
-          poetry install --no-root
-          daipe dbx:workspace:export
-          echo "Diff"
-          diff -r /tmp/original .

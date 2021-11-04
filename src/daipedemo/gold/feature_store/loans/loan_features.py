@@ -8,7 +8,7 @@
 
 # COMMAND ----------
 
-# MAGIC %run ../../../app/install_master_package
+# MAGIC %run ../app/bootstrap
 
 # COMMAND ----------
 
@@ -32,7 +32,6 @@ from pyspark.sql import DataFrame, functions as f, Window
 
 # COMMAND ----------
 
-
 @notebook_function()
 def create_input_widgets(widgets: Widgets):
     widgets.add_text("observation_period", "90", "Observation period")
@@ -40,7 +39,6 @@ def create_input_widgets(widgets: Widgets):
     widgets.add_text("default_prediction", "365", "Default prediction")
     widgets.add_text("run_date", dt.date.today().strftime("%Y-%m-%d"))
     widgets.add_select("storage_type", ["latest", "historized"], "latest")
-
 
 # COMMAND ----------
 
@@ -53,7 +51,6 @@ def create_input_widgets(widgets: Widgets):
 @transformation(read_table("silver.tbl_joined_loans_and_repayments"))
 def read_joined_loans_and_repayments(df: DataFrame):
     return df
-
 
 # COMMAND ----------
 
@@ -105,7 +102,6 @@ def select_columns(df: DataFrame):
         "AmountOfPreviousLoansBeforeLoan",
     )
 
-
 # COMMAND ----------
 
 # MAGIC %md
@@ -113,15 +109,12 @@ def select_columns(df: DataFrame):
 
 # COMMAND ----------
 
-
 @transformation(select_columns)
 def get_buckets(df: DataFrame):
     split_list = [float(i) for i in np.arange(0, 81, 5)]
     return Bucketizer(splits=split_list, inputCol="Age", outputCol="AgeGroup").transform(df).drop("Age")
 
-
 # COMMAND ----------
-
 
 @transformation(get_buckets)
 def get_new_features(df: DataFrame):
@@ -137,7 +130,6 @@ def get_new_features(df: DataFrame):
         .withColumn("DaysToFirstPayment", f.datediff("FirstPaymentDate", "LoanDate"))
         .drop("MaturityDate_Original", "AppliedAmount", "FirstPaymentDate")
     )
-
 
 # COMMAND ----------
 
@@ -171,7 +163,6 @@ def get_target(df: DataFrame, default_days, default_prediction, observation_peri
         .withColumn("FeaturesForPrediction", f.when(f.col("DaysFromStart") <= observation_period, 1).otherwise(0))
     )
 
-
 # COMMAND ----------
 
 # MAGIC %md
@@ -179,14 +170,11 @@ def get_target(df: DataFrame, default_days, default_prediction, observation_peri
 
 # COMMAND ----------
 
-
 @transformation(get_target, get_widget_value("observation_period"))
 def get_loans_with_immediate_default(df: DataFrame, observation_period):
     return df.filter(f.col("label") == 1).filter(f.col("DaysFromStart") < observation_period).select("LoanID").distinct()
 
-
 # COMMAND ----------
-
 
 @transformation(get_target, get_loans_with_immediate_default)
 def get_target_without_shortterm_default(df_target: DataFrame, df_loans_with_immediate_default: DataFrame):
@@ -195,7 +183,6 @@ def get_target_without_shortterm_default(df_target: DataFrame, df_loans_with_imm
         .withColumn("label", f.max("label").over(Window.partitionBy("LoanID")))
         .filter(f.col("FeaturesForPrediction") == 1)
     )
-
 
 # COMMAND ----------
 
@@ -250,7 +237,6 @@ def get_unique_observations(df: DataFrame):
         .withColumn("NewCreditCustomer", f.col("NewCreditCustomer").cast("int"))
         .withColumn("ActiveScheduleFirstPaymentReached", f.col("ActiveScheduleFirstPaymentReached").cast("int"))
     )
-
 
 # COMMAND ----------
 
@@ -343,7 +329,6 @@ def customer_personal_features(df: DataFrame):
         "HomeOwnershipType",
     )
 
-
 # COMMAND ----------
 
 
@@ -408,7 +393,6 @@ def customer_loan_features(df: DataFrame):
         "MaturityDateDelay",
         "label",
     )
-
 
 # COMMAND ----------
 

@@ -6,11 +6,10 @@
 # MAGIC
 # MAGIC This notebook shows how simple it is to join tables and define a schema for the joined table
 # MAGIC using the Daipe framework
-# MAGIC
 
 # COMMAND ----------
 
-# MAGIC %run ../app/install_master_package
+# MAGIC %run ../app/bootstrap
 
 # COMMAND ----------
 
@@ -25,7 +24,7 @@ from datalakebundle.imports import *
 
 # COMMAND ----------
 
-from daipedemo.silver.tbl_loans import get_schema as get_loans_schema
+from daipedemo.silver.tbl_loans_schema import get_schema as get_loans_schema
 from daipedemo.silver.tbl_repayments.schema import get_schema as get_repayments_schema
 
 
@@ -40,7 +39,6 @@ def get_joined_schema():
 
     return schema
 
-
 # COMMAND ----------
 
 # MAGIC %md
@@ -51,36 +49,28 @@ def get_joined_schema():
 
 # COMMAND ----------
 
-
 @transformation(read_table("silver.tbl_loans"))
 def read_tbl_loans(df: DataFrame):
     return df
 
-
 # COMMAND ----------
-
 
 @transformation(read_table("silver.tbl_repayments"))
 def read_tbl_repayments(df: DataFrame):
     return df
 
-
 # COMMAND ----------
-
 
 @transformation(read_tbl_loans, read_tbl_repayments)
 def join_loans_and_repayments(df1: DataFrame, df2: DataFrame):
     return df1.join(df2, "LoanID")
 
-
 # COMMAND ----------
-
 
 @transformation(join_loans_and_repayments)
 # @table_overwrite("silver.tbl_joined_loans_and_repayments", get_joined_schema())
 def save_joined_loans_and_repayments(df: DataFrame):
     return df
-
 
 # COMMAND ----------
 
@@ -94,12 +84,10 @@ def save_joined_loans_and_repayments(df: DataFrame):
 
 # COMMAND ----------
 
-
 @transformation(read_table("silver.tbl_loans"), read_table("silver.tbl_repayments"), display=True)
 @table_overwrite("silver.tbl_joined_loans_and_repayments", get_joined_schema())
 def join_loans_and_repayments_combined(df1: DataFrame, df2: DataFrame):
     return df1.join(df2, "LoanID")
-
 
 # COMMAND ----------
 
