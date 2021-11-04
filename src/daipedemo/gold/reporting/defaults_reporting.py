@@ -2,14 +2,14 @@
 # MAGIC %md
 # MAGIC # #8 Comprehensive reporting
 # MAGIC ## Gold layer
-# MAGIC
+# MAGIC 
 # MAGIC Return to <a href="$../_index">index page</a>
-# MAGIC
+# MAGIC 
 # MAGIC In this notebook it all comes together. We are going to aggregate data and display it while using widgets for filtering.
 
 # COMMAND ----------
 
-# MAGIC %run ../app/bootstrap
+# MAGIC %run ../../app/bootstrap
 
 # COMMAND ----------
 
@@ -158,4 +158,8 @@ def plot_defaults_per_country(df: DataFrame, year, rating, widgets: Widgets):
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ### Continue to the <a href="$./tbl_target_features">sample notebook #9</a>
+# MAGIC ### Continue to the <a href="$../feature_store/loans/loan_features">sample notebook #9</a>
+
+# COMMAND ----------
+
+

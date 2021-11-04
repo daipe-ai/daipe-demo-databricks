@@ -1,14 +1,14 @@
 # Databricks notebook source
 # MAGIC %md
 # MAGIC # Creating features for ML
-# MAGIC
+# MAGIC 
 # MAGIC Return to <a href="$../_index">index page</a>
-# MAGIC
+# MAGIC 
 # MAGIC In this notebook we preprocess the data for modelling purposes.
 
 # COMMAND ----------
 
-# MAGIC %run ../app/bootstrap
+# MAGIC %run ../../../app/bootstrap
 
 # COMMAND ----------
 
@@ -65,7 +65,7 @@ def select_columns(df: DataFrame):
     return df.select(
         "LoanId",
         "LoanDate",
-        "UserName",
+        "PartyId",
         "NewCreditCustomer",
         "MaturityDate_Original",
         "MaturityDate_Last",
@@ -202,7 +202,7 @@ def get_unique_observations(df: DataFrame):
             "DaysToFirstPayment",
             "Date",
             "LoanDate",
-            "UserName",
+            "PartyId",
             "MaturityDate_Last",
             "DefaultDate",
         )

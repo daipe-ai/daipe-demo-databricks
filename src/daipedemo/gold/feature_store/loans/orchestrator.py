@@ -4,7 +4,11 @@
 
 # COMMAND ----------
 
-# MAGIC %run ../../../app/install_master_package
+pip install feature-store-bundle==1.1.1a5
+
+# COMMAND ----------
+
+# MAGIC %run ../../../app/bootstrap
 
 # COMMAND ----------
 
@@ -43,3 +47,5 @@ def write_features(features_writer: FeatureStoreWriter):
 
 
 # COMMAND ----------
+
+
