@@ -20,4 +20,4 @@ if is_databricks_repo():
 
 # COMMAND ----------
 
-# MAGIC %install_master_package_whl
+# %install_master_package_whl

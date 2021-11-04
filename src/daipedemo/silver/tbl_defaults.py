@@ -8,7 +8,7 @@
 # MAGIC %md
 # MAGIC #### Widgets
 # MAGIC Many people love using [Databricks widgets](https://docs.databricks.com/notebooks/widgets.html) to parametrize notebooks. To use widgets in Daipe, you should put them into a `@notebook_function`.
-# MAGIC
+# MAGIC 
 # MAGIC Don't forget to check  or run command `dbutils.widgets.help()` to see options you have while working with widgets.
 
 # COMMAND ----------
@@ -95,4 +95,8 @@ def select_columns_and_save(df: DataFrame):
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ### Continue to the <a href="$../gold/tbl_most_valuable_users">sample notebook #7</a>
+# MAGIC ### Continue to the <a href="$../gold/reporting/tbl_most_valuable_users">sample notebook #7</a>
+
+# COMMAND ----------
+
+

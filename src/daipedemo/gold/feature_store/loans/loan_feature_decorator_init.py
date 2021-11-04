@@ -1,5 +1,5 @@
 # Databricks notebook source
-# MAGIC %run ../../../app/install_master_package
+# MAGIC %run ../../../app/bootstrap
 
 # COMMAND ----------
 
@@ -48,5 +48,3 @@ if "loan_feature" not in globals():
         def __init__(self, *args, category=None):
             super().__init__(*args, entity=entity, category=category, features_storage=features_storage)
 
-
-# COMMAND ----------
