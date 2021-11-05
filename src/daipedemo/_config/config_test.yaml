@@ -3,6 +3,6 @@ imports:
 
 parameters:
   databricks:
-    address: https://westeurope.azuredatabricks.net
+    address: '[Your workspace address]'
     workspace:
       base_dir: '/daipedemo/{current_branch}'
