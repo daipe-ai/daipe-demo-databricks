@@ -1,0 +1,5 @@
+parameters:
+  dbxdeploy:
+    databricks:
+      host: '%databricks.address%'
+      token: '%env(DBX_TOKEN)%'
