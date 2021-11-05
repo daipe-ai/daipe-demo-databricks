@@ -9,7 +9,7 @@
 
 # COMMAND ----------
 
-# MAGIC %run ../app/install_master_package
+# MAGIC %run ../app/bootstrap
 
 # COMMAND ----------
 
@@ -28,13 +28,11 @@ from daipecore.widgets.get_widget_value import get_widget_value
 
 # COMMAND ----------
 
-
 @notebook_function()
 def create_input_widgets(widgets: Widgets):
     widgets.add_text("observation_period", "90", "Observation period")
     widgets.add_text("default_days", "90", "Default days")
     widgets.add_text("default_prediction", "365", "Default prediction")
-
 
 # COMMAND ----------
 
@@ -43,11 +41,9 @@ def create_input_widgets(widgets: Widgets):
 
 # COMMAND ----------
 
-
 @transformation(read_table("silver.tbl_joined_loans_and_repayments"), display=False)
 def read_joined_loans_and_repayments(df: DataFrame):
     return df
-
 
 # COMMAND ----------
 
@@ -98,7 +94,6 @@ def read_joined_loans_and_repayments(df: DataFrame):
 
 # COMMAND ----------
 
-
 @transformation(read_joined_loans_and_repayments, display=True)
 def select_columns(df: DataFrame):
     columns = [
@@ -142,7 +137,6 @@ def select_columns(df: DataFrame):
     ]
     return df.select(columns)
 
-
 # COMMAND ----------
 
 # MAGIC %md
@@ -150,15 +144,12 @@ def select_columns(df: DataFrame):
 
 # COMMAND ----------
 
-
 @transformation(select_columns)
 def get_buckets(df: DataFrame):
     split_list = [float(i) for i in np.arange(0, 81, 5)]
     return Bucketizer(splits=split_list, inputCol="Age", outputCol="AgeGroup").transform(df).drop("Age")
 
-
 # COMMAND ----------
-
 
 @transformation(get_buckets)
 def get_new_features(df: DataFrame):
@@ -174,7 +165,6 @@ def get_new_features(df: DataFrame):
         .withColumn("DaysToFirstPayment", f.datediff("FirstPaymentDate", "LoanDate"))
         .drop("MaturityDate_Original", "AppliedAmount", "FirstPaymentDate")
     )
-
 
 # COMMAND ----------
 
@@ -208,7 +198,6 @@ def get_target(df: DataFrame, default_days, default_prediction, observation_peri
         .withColumn("FeaturesForPrediction", f.when(f.col("DaysFromStart") <= observation_period, 1).otherwise(0))
     )
 
-
 # COMMAND ----------
 
 # MAGIC %md
@@ -216,14 +205,11 @@ def get_target(df: DataFrame, default_days, default_prediction, observation_peri
 
 # COMMAND ----------
 
-
 @transformation(get_target, get_widget_value("observation_period"))
 def get_loans_with_immediate_default(df: DataFrame, observation_period):
     return df.filter(f.col("label") == 1).filter(f.col("DaysFromStart") < observation_period).select("LoanID").distinct()
 
-
 # COMMAND ----------
-
 
 @transformation(get_target, get_loans_with_immediate_default)
 def get_target_without_shortterm_default(df_target: DataFrame, df_loans_with_immediate_default: DataFrame):
@@ -233,14 +219,12 @@ def get_target_without_shortterm_default(df_target: DataFrame, df_loans_with_imm
         .filter(f.col("FeaturesForPrediction") == 1)
     )
 
-
 # COMMAND ----------
 
 # MAGIC %md
 # MAGIC ## Select only one row for each Loan, deal with null values
 
 # COMMAND ----------
-
 
 @transformation(get_target_without_shortterm_default, display=True)
 def get_unique_observations(df: DataFrame):
@@ -288,7 +272,6 @@ def get_unique_observations(df: DataFrame):
         .withColumn("ActiveScheduleFirstPaymentReached", f.col("ActiveScheduleFirstPaymentReached").cast("int"))
     )
 
-
 # COMMAND ----------
 
 numeric_features = [
@@ -309,6 +292,7 @@ numeric_features = [
     "MaturityDateDelay",
     "AmountNotGranted",
 ]
+
 categorical_features = [
     "LanguageCode",
     "Gender",
@@ -327,7 +311,6 @@ categorical_features = [
 ]
 
 # COMMAND ----------
-
 
 def get_schema():
     return TableSchema(
@@ -370,15 +353,12 @@ def get_schema():
         # tbl_properties={} # INSERT TBLPROPERTIES HERE (OPTIONAL)
     )
 
-
 # COMMAND ----------
-
 
 @transformation(get_unique_observations)
 @table_overwrite("gold.tbl_target_features", get_schema())
 def save_unique_observations_parsed(df: DataFrame):
     return df.select(*(f.col(c).cast("double").alias(c) if c in numeric_features else f.col(c) for c in df.columns))
-
 
 # COMMAND ----------
 

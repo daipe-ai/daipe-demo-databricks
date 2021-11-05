@@ -52,6 +52,7 @@ jobs:
       - name: setup
         run: |
           export SHELL=$SHELL # for python to be able to access the bash version
+          chmod +x env-init.sh
           ./env-init.sh -y --verbose
 
       - name: deploy

@@ -4,8 +4,7 @@ imports:
 parameters:
   databricks:
     address: '[Your workspace address]'
-    workspace:
-      base_dir: '/daipedemo'
+
   datalakebundle:
     notebook:
       display:

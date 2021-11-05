@@ -9,7 +9,7 @@
 
 # COMMAND ----------
 
-# MAGIC %run ../app/install_master_package
+# MAGIC %run ../app/bootstrap
 
 # COMMAND ----------
 
@@ -38,12 +38,10 @@ import seaborn as sns
 
 # COMMAND ----------
 
-
 @transformation(read_table("silver.tbl_defaults"), display=True)
 def read_silver_loans_tbl_defaults(df: DataFrame, logger: Logger):
     logger.info(df.count())
     return df
-
 
 # COMMAND ----------
 
@@ -52,30 +50,23 @@ def read_silver_loans_tbl_defaults(df: DataFrame, logger: Logger):
 
 # COMMAND ----------
 
-
 @transformation(read_silver_loans_tbl_defaults, display=True)
 def min_and_max_year(df: DataFrame):
     return df.select("Year").agg(f.min("Year").alias("min"), f.max("Year").alias("max"))
 
-
 # COMMAND ----------
-
 
 @transformation(read_silver_loans_tbl_defaults)
 def get_countries(df: DataFrame):
     return df.select("Country").dropDuplicates()
 
-
 # COMMAND ----------
-
 
 @transformation(read_silver_loans_tbl_defaults)
 def get_ratings(df: DataFrame):
     return df.select("Rating").dropDuplicates()
 
-
 # COMMAND ----------
-
 
 @notebook_function(min_and_max_year, get_countries, get_ratings)
 def create_input_widgets(years: DataFrame, countries: DataFrame, ratings: DataFrame, widgets: Widgets):
@@ -91,14 +82,12 @@ def create_input_widgets(years: DataFrame, countries: DataFrame, ratings: DataFr
     widgets.add_select("country", country_list, country_list[0], "Select country")
     widgets.add_select("rating", rating_list, "C", "Select rating")
 
-
 # COMMAND ----------
 
 # MAGIC %md
 # MAGIC #### Aggregating the data per month and per country
 
 # COMMAND ----------
-
 
 @notebook_function(read_silver_loans_tbl_defaults)
 def defaults_per_month(df: DataFrame):
@@ -115,9 +104,7 @@ def defaults_per_month(df: DataFrame):
         .orderBy("Defaults", ascending=False)
     )
 
-
 # COMMAND ----------
-
 
 @notebook_function(read_silver_loans_tbl_defaults)
 def defaults_per_country(df: DataFrame):
@@ -133,14 +120,12 @@ def defaults_per_country(df: DataFrame):
         .orderBy("Defaults", ascending=False)
     )
 
-
 # COMMAND ----------
 
 # MAGIC %md
 # MAGIC #### Converting to Pandas and plotting the results
 
 # COMMAND ----------
-
 
 @notebook_function(defaults_per_month, get_widget_value("year"), get_widget_value("country"), get_widget_value("rating"))
 def plot_defaults_per_month(df: DataFrame, year, country, rating, widgets: Widgets):
@@ -151,9 +136,7 @@ def plot_defaults_per_month(df: DataFrame, year, country, rating, widgets: Widge
     ax.set_title(f"Defaults per Month in {year} in {country} of {rating} rating")
     return display(ax)  # noqa: F821
 
-
 # COMMAND ----------
-
 
 @notebook_function(defaults_per_country, get_widget_value("year"), get_widget_value("rating"))
 def plot_defaults_per_country(df: DataFrame, year, rating, widgets: Widgets):
@@ -163,7 +146,6 @@ def plot_defaults_per_country(df: DataFrame, year, rating, widgets: Widgets):
     ax = sns.barplot(x="Country", y="Defaults", data=df.toPandas())
     ax.set_title(f"Defaults per Country of {rating} rating during {year}")
     return display(ax)  # noqa: F821
-
 
 # COMMAND ----------
 

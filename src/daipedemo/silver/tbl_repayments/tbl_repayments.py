@@ -8,7 +8,7 @@
 
 # COMMAND ----------
 
-# MAGIC %run ../../app/install_master_package
+# MAGIC %run ../../app/bootstrap
 
 # COMMAND ----------
 
@@ -58,7 +58,6 @@ from daipedemo.silver.tbl_repayments.schema import get_schema
 @table_upsert("silver.tbl_repayments", get_schema())
 def apply_schema_and_save(df: DataFrame):
     return df.withColumn("ReportAsOfEOD", f.to_date("ReportAsOfEOD")).withColumn("Date", f.to_date("Date"))
-
 
 # COMMAND ----------
 
