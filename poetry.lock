@@ -346,7 +346,7 @@ protobuf = ">=3.7.0"
 
 [[package]]
 name = "feature-store-bundle"
-version = "1.1.1.dev5"
+version = "1.1.1.dev8"
 description = "Feature Store for the Daipe AI Platform"
 category = "main"
 optional = false
@@ -1459,7 +1459,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=1.2.3)", "pytest-flake8", "pyt
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.10"
-content-hash = "10b981f8350ce3574b068700486804f46c5f019600251328f4d39e7f84ccb42d"
+content-hash = "cc8b94eaa49d08a5be060b6b9e97ac701d4cd0be6305d9c5b91ff40196c4274e"
 
 [metadata.files]
 appdirs = [
@@ -1663,8 +1663,8 @@ facets-overview = [
     {file = "facets_overview-1.0.0-py2.py3-none-any.whl", hash = "sha256:bda7e7b68ff68f5757af87b9cf8b76994ab15db08db2155e15e4eae58695f4ae"},
 ]
 feature-store-bundle = [
-    {file = "feature-store-bundle-1.1.1.dev5.tar.gz", hash = "sha256:a625d185044b6850b9c3eefa7268a1996727a76d9ab1b54d6482fed55a6df5ec"},
-    {file = "feature_store_bundle-1.1.1.dev5-py3-none-any.whl", hash = "sha256:32a284568c547c62cba23e4f3cf1e5033fb4ee4aa7791caf6e9fd55aa07d0f68"},
+    {file = "feature-store-bundle-1.1.1.dev8.tar.gz", hash = "sha256:e3438a90f71e245cb2025d7bc66bd60e39f80d66678694e92b0003915da49fbe"},
+    {file = "feature_store_bundle-1.1.1.dev8-py3-none-any.whl", hash = "sha256:3cdcba8284311598c852aa7a1aba294ea2d2cf466de3bfe36da7c9ff6206f2e2"},
 ]
 filelock = [
     {file = "filelock-3.0.12-py3-none-any.whl", hash = "sha256:929b7d63ec5b7d6b71b0fa5ac14e030b3f70b75747cef1b10da9b879fef15836"},
