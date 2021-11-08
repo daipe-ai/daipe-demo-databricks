@@ -4,7 +4,7 @@
 
 # COMMAND ----------
 
-# MAGIC %run ../../app/install_master_package
+# MAGIC %run ../../app/bootstrap
 
 # COMMAND ----------
 
@@ -19,11 +19,11 @@ from pyspark.sql import functions as f, types as t
 # COMMAND ----------
 
 
-@dl.transformation(get_widget_value("run_date"), display=False)
-def load_feature_store(date_str, feature_store: FeatureStore):
+@dl.transformation(display=False)
+def load_feature_store(feature_store: FeatureStore):
     """Get today's features"""
 
-    return feature_store.get_latest("loans", "run_date").select("LoanId", "run_date")
+    return feature_store.get_latest("loans").select("LoanId")
 
 
 # COMMAND ----------
@@ -46,7 +46,6 @@ def get_schema():
     return dl.TableSchema(
         [
             t.StructField("LoanId", t.StringType(), True),
-            t.StructField("run_date", t.TimestampType(), False),
             t.StructField("default_prediction", t.BooleanType(), True),
         ],
         primary_key="LoanId",
@@ -62,10 +61,12 @@ def save_predictions(df: DataFrame):
     """Save predictions to table"""
 
     return (
-        df.select("LoanId", "run_date", "prediction")
+        df.select("LoanId", "prediction")
         .withColumn("prediction", f.col("prediction").cast("boolean"))
         .withColumnRenamed("prediction", "default_prediction")
     )
 
 
 # COMMAND ----------
+
+

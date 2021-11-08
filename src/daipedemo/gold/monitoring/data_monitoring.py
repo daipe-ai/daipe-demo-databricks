@@ -4,7 +4,11 @@
 
 # COMMAND ----------
 
-# MAGIC %run ../../app/install_master_package
+# MAGIC %run ../../app/bootstrap
+
+# COMMAND ----------
+
+# MAGIC %pip install alibi_detect
 
 # COMMAND ----------
 
@@ -38,26 +42,26 @@ def set_widgets(widgets: Widgets):
 # COMMAND ----------
 
 
-@dl.transformation(get_widget_value("run_date"), display=False)
+@dl.transformation(get_widget_value("run_date"), display=True)
 def features_day_before(date_str: str, feature_store: FeatureStore):
     """Get a features a day before"""
 
     run_date = dt.datetime.strptime(date_str, "%Y-%m-%d")
 
     day_before = run_date - dt.timedelta(days=1)
-    return feature_store.get("loans").where(f.col("run_date") == day_before).select("LoanId", "run_date")
+    return feature_store.get_historized("loans").where(f.col("run_date") == day_before).select("LoanId", "run_date")
 
 
 # COMMAND ----------
 
 
-@dl.transformation(get_widget_value("run_date"), display=False)
+@dl.transformation(get_widget_value("run_date"), display=True)
 def features_now(date_str: str, feature_store: FeatureStore):
     """Get a features a day today"""
 
     run_date = dt.datetime.strptime(date_str, "%Y-%m-%d")
 
-    return feature_store.get_latest("loans", "run_date").where(f.col("run_date") == run_date).select("LoanId", "run_date")
+    return feature_store.get_historized("loans").where(f.col("run_date") == run_date).select("LoanId", "run_date")
 
 
 # COMMAND ----------
@@ -176,3 +180,5 @@ def check_drift(result, logger: Logger):
 
 
 # COMMAND ----------
+
+

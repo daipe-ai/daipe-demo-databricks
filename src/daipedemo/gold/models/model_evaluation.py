@@ -4,7 +4,7 @@
 
 # COMMAND ----------
 
-# MAGIC %run ../../app/install_master_package
+# MAGIC %run ../../app/bootstrap
 
 # COMMAND ----------
 
@@ -31,7 +31,7 @@ model_name = "rfc_loan_default_prediction"
 
 @dl.transformation(display=False)
 def features_now(feature_store: FeatureStore):
-    return feature_store.get_latest("loans", "run_date").select("LoanId", "run_date", "label")
+    return feature_store.get_latest("loans").select("LoanId", "label")
 
 
 # COMMAND ----------
@@ -43,7 +43,7 @@ def get_accuracy(model_name, model_stage, df):
     model_uri = f"models:/{model_name}/{model_stage}"
 
     fs = feature_store.FeatureStoreClient()
-    predictions = fs.score_batch(model_uri, df).select("LoanId", "run_date", "prediction")
+    predictions = fs.score_batch(model_uri, df).select("LoanId", "prediction")
     preds = predictions.select("prediction").toPandas()
 
     labels = df.select("label").toPandas()
@@ -95,5 +95,3 @@ def trigger_promotion(staging_acc, prod_acc, logger: Logger):
     else:
         logger.info("All good")
 
-
-# COMMAND ----------

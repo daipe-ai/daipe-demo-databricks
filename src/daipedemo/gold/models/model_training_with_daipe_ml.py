@@ -1,14 +1,14 @@
 # Databricks notebook source
 # MAGIC %md
 # MAGIC # Model training with Daipe ML
-# MAGIC
+# MAGIC 
 # MAGIC ###It greatly helps in the following part of a datascientist's work:
 # MAGIC * Data exploration
 # MAGIC * Feature selection
 # MAGIC * Model training
 # MAGIC * Model evaluation
 # MAGIC * Model productionization
-# MAGIC
+# MAGIC 
 # MAGIC Return to <a href="$../_index">index page</a>
 
 # COMMAND ----------
@@ -22,7 +22,7 @@
 
 # COMMAND ----------
 
-# MAGIC %run ../../app/install_master_package
+# MAGIC %run ../../app/bootstrap
 
 # COMMAND ----------
 
@@ -48,9 +48,9 @@ dbx_feature_store = feature_store.FeatureStoreClient()
 # COMMAND ----------
 
 
-@transformation(display=False)
+@transformation(display=True)
 def load_feature_store(feature_store: FeatureStore):
-    return feature_store.get_latest("loans", "run_date")
+    return feature_store.get_latest("loans")
 
 
 # COMMAND ----------
@@ -104,7 +104,7 @@ categorical_features = [
 # COMMAND ----------
 
 # MAGIC %md #1. Data exploration
-# MAGIC
+# MAGIC 
 # MAGIC ###We can use Daipe ML to obtain a plot which gives us a good overview of each feature and its relationship with the target.
 
 # COMMAND ----------
@@ -155,19 +155,18 @@ selected_features
 # COMMAND ----------
 
 # DBTITLE 1,finally, we select the resulting best feature set for modelling
-key = ["LoanId", "run_date"]
+key = ["LoanId"]
 
 feature_lookups = [
     FeatureLookup(
-        table_name="dev_feature_store.features_loans",
-        feature_name=feature,
+        table_name="dev_feature_store.features_loans_latest",
+        feature_names=[feature for feature in selected_features],
         lookup_key=key,
     )
-    for feature in selected_features
 ]
 
 training_set = dbx_feature_store.create_training_set(
-    df=df.select("LoanId", "run_date", "label"), feature_lookups=feature_lookups, label="label", exclude_columns=key
+    df=df.select("LoanId", "label"), feature_lookups=feature_lookups, label="label", exclude_columns=key
 )
 
 df_ml_spark = training_set.load_df()
@@ -176,7 +175,7 @@ df_ml_pandas = df_ml_spark.toPandas()
 # COMMAND ----------
 
 # MAGIC %md # 3. Model training, evaluation and productionization
-# MAGIC
+# MAGIC 
 # MAGIC ## `supervised_wrapper`
 
 # COMMAND ----------
@@ -187,7 +186,7 @@ train_df, test_df, model_summary = supervised_wrapper(
     model_type=ds.MlModel.spark_random_forest_classifier,
     use_mlflow=False,
     label_col="label",
-    params_fit_model={"max_evals": 1},
+    params_fit_model={"max_evals": 2},
 )
 
 # COMMAND ----------
@@ -217,3 +216,7 @@ with mlflow.start_run(run_name="Random Forest Classifier - Loan Default Predicti
     client = MlflowClient()
     client.transition_model_version_stage(name=model_name, version=model_details.version, stage="Staging")
     client.update_model_version(name=model_name, version=model_details.version, description="This model predicts loan defaults.")
+
+# COMMAND ----------
+
+
