@@ -4,10 +4,6 @@
 
 # COMMAND ----------
 
-pip install feature-store-bundle==1.1.1a5
-
-# COMMAND ----------
-
 # MAGIC %run ../../../app/bootstrap
 
 # COMMAND ----------
@@ -24,7 +20,7 @@ def set_widgets(widgets: Widgets):
     """Set a widget for picking run_date"""
 
     widgets.add_text("run_date", dt.date.today().strftime("%Y-%m-%d"))
-
+X
 
 # COMMAND ----------
 
@@ -43,7 +39,7 @@ from featurestorebundle.databricks.FeatureStoreWriter import FeatureStoreWriter 
 def write_features(features_writer: FeatureStoreWriter):
     """Write all the features to Feature Store at once"""
 
-    features_writer.write(features_storage)  # noqa: F821
+    features_writer.write_historized(features_storage)  # noqa: F821
 
 
 # COMMAND ----------
