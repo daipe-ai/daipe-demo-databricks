@@ -1,6 +1,6 @@
 # Databricks notebook source
 # MAGIC %sh
-# MAGIC pip install benvy==1.2.0
+# MAGIC pip install benvy==1.2.1
 
 # COMMAND ----------
 
@@ -20,4 +20,5 @@ if is_databricks_repo():
 
 # COMMAND ----------
 
-# %install_master_package_whl
+import os
+os.environ["APP_ENV"] = "dev"

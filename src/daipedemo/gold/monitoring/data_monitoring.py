@@ -4,11 +4,11 @@
 
 # COMMAND ----------
 
-# MAGIC %run ../../app/bootstrap
+# MAGIC %pip install alibi_detect
 
 # COMMAND ----------
 
-# MAGIC %pip install alibi_detect
+# MAGIC %run ../../app/bootstrap
 
 # COMMAND ----------
 

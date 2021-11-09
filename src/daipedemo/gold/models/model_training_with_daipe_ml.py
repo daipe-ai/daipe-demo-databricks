@@ -26,16 +26,20 @@
 
 # COMMAND ----------
 
-import datasciencefunctions as ds
-import mlflow.spark
+import os
+
 from databricks import feature_store
 from databricks.feature_store import FeatureLookup
-from datalakebundle.imports import transformation
+
+import datasciencefunctions as ds
 from datasciencefunctions.data_exploration import plot_feature_hist_with_binary_target
 from datasciencefunctions.feature_selection import feature_selection_merits
 from datasciencefunctions.supervised import supervised_wrapper
+
+from datalakebundle.imports import transformation
 from featurestorebundle.feature.FeatureStore import FeatureStore
-from mlflow.tracking.client import MlflowClient
+
+from daipedemo.stage_model import stage_model
 
 # COMMAND ----------
 
@@ -157,16 +161,16 @@ selected_features
 # DBTITLE 1,finally, we select the resulting best feature set for modelling
 key = ["LoanId"]
 
-feature_lookups = [
+feature_lookup = [
     FeatureLookup(
-        table_name="dev_feature_store.features_loans_latest",
+        table_name=f"{os.environ['APP_ENV']}_feature_store.features_loans_latest",
         feature_names=[feature for feature in selected_features],
         lookup_key=key,
     )
 ]
 
 training_set = dbx_feature_store.create_training_set(
-    df=df.select("LoanId", "label"), feature_lookups=feature_lookups, label="label", exclude_columns=key
+    df=df.select("LoanId", "label"), feature_lookups=feature_lookup, label="label", exclude_columns=key
 )
 
 df_ml_spark = training_set.load_df()
@@ -186,7 +190,7 @@ train_df, test_df, model_summary = supervised_wrapper(
     model_type=ds.MlModel.spark_random_forest_classifier,
     use_mlflow=False,
     label_col="label",
-    params_fit_model={"max_evals": 2},
+    params_fit_model={"max_evals": 1},
 )
 
 # COMMAND ----------
@@ -197,25 +201,7 @@ train_df, test_df, model_summary = supervised_wrapper(
 
 # COMMAND ----------
 
-model_name = "rfc_loan_default_prediction"
-
-with mlflow.start_run(run_name="Random Forest Classifier - Loan Default Prediction") as run:
-    dbx_feature_store.log_model(
-        model_summary["models"]["pipeline"],
-        model_name,
-        flavor=mlflow.spark,
-        training_set=training_set,
-    )
-
-    ds.supervised.log_model_summary(model_summary)
-
-    run_id = run.info.run_id
-    model_uri = f"runs:/{run_id}/{model_name}"
-    model_details = mlflow.register_model(model_uri=model_uri, name=model_name)
-
-    client = MlflowClient()
-    client.transition_model_version_stage(name=model_name, version=model_details.version, stage="Staging")
-    client.update_model_version(name=model_name, version=model_details.version, description="This model predicts loan defaults.")
+stage_model("rfc_loan_default_prediction", model_summary, training_set)
 
 # COMMAND ----------
 
