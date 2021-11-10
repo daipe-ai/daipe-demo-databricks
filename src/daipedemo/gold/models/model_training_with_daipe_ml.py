@@ -13,20 +13,12 @@
 
 # COMMAND ----------
 
-# MAGIC %sh
-# MAGIC cp /dbfs/FileStore/datasciencefunctions-0.2.0b1-py3-none-any.whl /dbfs/datasciencefunctions-0.2.0b1-py3-none-any.whl
-
-# COMMAND ----------
-
-# MAGIC %pip install /dbfs/datasciencefunctions-0.2.0b1-py3-none-any.whl --use-feature=2020-resolver
-
-# COMMAND ----------
-
-# MAGIC %run ../../app/bootstrap
+# MAGIC %run ./app/bootstrap
 
 # COMMAND ----------
 
 import os
+from logging import Logger
 
 from databricks import feature_store
 from databricks.feature_store import FeatureLookup
@@ -36,7 +28,7 @@ from datasciencefunctions.data_exploration import plot_feature_hist_with_binary_
 from datasciencefunctions.feature_selection import feature_selection_merits
 from datasciencefunctions.supervised import supervised_wrapper
 
-from datalakebundle.imports import transformation
+from datalakebundle.imports import transformation, notebook_function
 from featurestorebundle.feature.FeatureStore import FeatureStore
 
 from daipedemo.stage_model import stage_model
@@ -154,7 +146,10 @@ selected_features, feature_selection_history = feature_selection_merits(
     best_n=3,
 )
 
-selected_features
+@notebook_function(selected_features)
+def log_model_metrics(selected_features, logger: Logger):
+  logger.info(f"{len(selected_features)} features selected:")
+  logger.info(", ".join(sorted(selected_features)))
 
 # COMMAND ----------
 
@@ -192,6 +187,14 @@ train_df, test_df, model_summary = supervised_wrapper(
     label_col="label",
     params_fit_model={"max_evals": 1},
 )
+
+# COMMAND ----------
+
+@notebook_function(model_summary)
+def log_model_metrics(model_summary, logger: Logger):
+  logger.info(f"Metrics:")
+  for metric_name, value in model_summary["metrics"].items():
+    logger.info(f"{metric_name.upper()} = {value:.3f}")
 
 # COMMAND ----------
 

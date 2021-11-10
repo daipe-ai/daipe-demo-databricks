@@ -4,13 +4,19 @@
 
 # COMMAND ----------
 
-# MAGIC %run ../../../app/bootstrap
+# MAGIC %run ../../app/bootstrap
 
 # COMMAND ----------
 
-import datalakebundle.imports as dl
 import datetime as dt
+
+import datalakebundle.imports as dl
 from daipecore.widgets.Widgets import Widgets
+from featurestorebundle.databricks.FeatureStoreWriter import FeatureStoreWriter
+
+# COMMAND ----------
+
+# MAGIC %run ./loan_feature_decorator_init
 
 # COMMAND ----------
 
@@ -23,16 +29,9 @@ def set_widgets(widgets: Widgets):
 
 # COMMAND ----------
 
-# MAGIC %run ./loan_feature_decorator_init
+# MAGIC %run ./features/loan_features
 
 # COMMAND ----------
-
-# MAGIC %run ./loan_features
-
-# COMMAND ----------
-
-from featurestorebundle.databricks.FeatureStoreWriter import FeatureStoreWriter  # noqa E402
-
 
 @dl.notebook_function()
 def write_features(features_writer: FeatureStoreWriter):
@@ -40,7 +39,6 @@ def write_features(features_writer: FeatureStoreWriter):
 
     features_writer.write_latest(features_storage)  # noqa: F821
     features_writer.write_historized(features_storage)  # noqa: F821
-
 
 # COMMAND ----------
 

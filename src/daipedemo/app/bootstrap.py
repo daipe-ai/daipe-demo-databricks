@@ -16,7 +16,7 @@ from benvy.databricks.repos import bootstrap  # noqa
 from benvy.databricks.detector import is_databricks_repo  # noqa
 
 if is_databricks_repo():
-    bootstrap.setup_env()
+    bootstrap.setup_env() 
 
 # COMMAND ----------
 

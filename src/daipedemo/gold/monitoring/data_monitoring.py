@@ -4,87 +4,116 @@
 
 # COMMAND ----------
 
-# MAGIC %pip install alibi_detect
+# MAGIC %run ./app/bootstrap
 
 # COMMAND ----------
 
-# MAGIC %run ../../app/bootstrap
+from logging import Logger
+from collections import namedtuple
 
-# COMMAND ----------
-
+import pandas as pd
+import datetime as dt
 from alibi_detect.cd.tabular import TabularDrift
 
-import datalakebundle.imports as dl
-from featurestorebundle.feature.FeatureStore import FeatureStore
+from pyspark.sql import functions as f, types as t, SparkSession, DataFrame
 from databricks.feature_store import FeatureStoreClient
-from pyspark.sql import functions as f, types as t, SparkSession
-import pandas as pd
-import seaborn as sns
-import datetime as dt
-from logging import Logger
+
+import datalakebundle.imports as dl
 from daipecore.widgets.Widgets import Widgets
-from daipecore.widgets.get_widget_value import get_widget_value
+from featurestorebundle.feature.FeatureStore import FeatureStore
+from daipedemo.gold.monitoring.lib import get_drift_table_schema, plot_drift
+
+Args = namedtuple('Args', 'model_uri run_date entity_name id_column time_column')
 
 # COMMAND ----------
 
-model_uri = "models:/rfc_loan_default_prediction/Production"
+# MAGIC %md
+# MAGIC #### Create widgets for arguments
 
 # COMMAND ----------
-
 
 @dl.notebook_function()
 def set_widgets(widgets: Widgets):
-    """Set a widget for picking run_date"""
+    """Set widgets for args"""
 
     widgets.add_text("run_date", dt.date.today().strftime("%Y-%m-%d"))
-
+    widgets.add_text("model_name", "")
+    widgets.add_text("entity_name", "")
+    widgets.add_text("id_column", "")
+    widgets.add_text("time_column", "")
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC #### Read widget arguments
 
-@dl.transformation(get_widget_value("run_date"), display=True)
-def features_day_before(date_str: str, feature_store: FeatureStore):
+# COMMAND ----------
+
+@dl.notebook_function()
+def args(widgets: Widgets) -> Args:
+    """Get widgets args"""
+    
+    return (
+        Args(f"models:/{widgets.get_value('model_name')}/Production",
+            dt.datetime.strptime(widgets.get_value("run_date"), "%Y-%m-%d"),
+            widgets.get_value("entity_name"),
+            widgets.get_value("id_column"),
+            widgets.get_value("time_column"),
+        )
+    )
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC #### Define function for loading
+
+# COMMAND ----------
+
+def get_features(feature_store: FeatureStore, date: dt.datetime, args: Args):
+    """Get widgets args"""
+
+    dbx_fs_client = FeatureStoreClient()
+    
+    features = (
+      feature_store
+      .get_historized(args.entity_name)
+      .where(f.col(args.time_column) == date)
+      .select(args.id_column, args.time_column)
+    )
+    
+    return (
+      dbx_fs_client
+      .score_batch(args.model_uri, features)
+      .drop(args.id_column, args.time_column, "prediction")
+      .toPandas()
+    )
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ## Get features from a day before run_date
+
+# COMMAND ----------
+
+@dl.transformation(args, display=True)
+def features_day_before(args: Args, feature_store: FeatureStore):
     """Get a features a day before"""
 
-    run_date = dt.datetime.strptime(date_str, "%Y-%m-%d")
-
-    day_before = run_date - dt.timedelta(days=1)
-    return feature_store.get_historized("loans").where(f.col("run_date") == day_before).select("LoanId", "run_date")
-
+    day_before = args.run_date - dt.timedelta(days=1)
+    return get_features(feature_store, day_before, args)
 
 # COMMAND ----------
 
-
-@dl.transformation(get_widget_value("run_date"), display=True)
-def features_now(date_str: str, feature_store: FeatureStore):
-    """Get a features a day today"""
-
-    run_date = dt.datetime.strptime(date_str, "%Y-%m-%d")
-
-    return feature_store.get_historized("loans").where(f.col("run_date") == run_date).select("LoanId", "run_date")
-
+# MAGIC %md
+# MAGIC ## Get features from run_date
 
 # COMMAND ----------
 
-
-@dl.transformation(features_now)
-def now(df):
-    """Have Databricks Feature store collect all necessary features for today"""
-
-    fs = FeatureStoreClient()
-    return fs.score_batch(model_uri, df).drop("LoanId", "run_date", "prediction").toPandas()
-
-
-# COMMAND ----------
-
-
-@dl.transformation(features_day_before)
-def day_before(df):
-    """Have Databricks Feature store collect all necessary features for today"""
-
-    fs = FeatureStoreClient()
-    return fs.score_batch(model_uri, df).drop("LoanId", "run_date", "prediction").toPandas()
-
+@dl.transformation(args, display=True)
+def features_today(args: Args, feature_store: FeatureStore):
+    """Get a features a today"""
+    
+    return get_features(feature_store, args.run_date, args)
 
 # COMMAND ----------
 
@@ -93,79 +122,49 @@ def day_before(df):
 
 # COMMAND ----------
 
-
-@dl.notebook_function(now, day_before)
+@dl.notebook_function(features_today, features_day_before)
 def show_plot(now_df, day_before_df):
-    plot_data = pd.concat([now_df.assign(period="training"), day_before_df.assign(period="serving")], axis=0, ignore_index=True)
-
-    sns.set(
-        rc={
-            "figure.figsize": (11.7 * 1.5, 8.27 * 1.5),
-            "font.size": 8,
-            "axes.titlesize": 8,
-            "axes.labelsize": 20,
-            "legend.fontsize": 20,
-            "legend.title_fontsize": 20,
-        },
-    )
-    sns.set_style("whitegrid")
-    sns.kdeplot(data=plot_data, hue="period", x="Amount", fill=True, common_norm=False)
-
+    plot_drift(now_df, day_before_df, "Amount")
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC ### Calculate Drift using Alibi-detect
 
-@dl.notebook_function(now, day_before)
+# COMMAND ----------
+
+@dl.notebook_function(features_today, features_day_before)
 def get_drift(features_now_pandas, features_day_before_pandas):
     """Calculate drift"""
 
     td = TabularDrift(features_day_before_pandas.values, p_val=0.05)
     return td.predict(features_now_pandas.values)
 
-
-# COMMAND ----------
-
-
-def get_schema():
-    """Schema for logging table"""
-
-    return dl.TableSchema(
-        [
-            t.StructField("Date", t.DateType()),
-            t.StructField("Threshold", t.DoubleType()),
-            t.StructField("Is_Drift", t.BooleanType()),
-        ],
-        primary_key="Date",
-    )
-
-
 # COMMAND ----------
 
 # MAGIC %md
 # MAGIC ### Log drift to table
+# MAGIC 
+# MAGIC Table contains all drift calculations for each __[Date, Entity_name]__ 
 
 # COMMAND ----------
 
-
-@dl.transformation(get_widget_value("run_date"), get_drift, display=True)
-@dl.table_upsert("gold.tbl_data_monitoring", get_schema())
-def save_result(date_str, result, spark: SparkSession):
+@dl.transformation(args, get_drift, display=True)
+@dl.table_upsert("gold.tbl_data_monitoring", get_drift_table_schema())
+def save_result(args: Args, result, spark: SparkSession):
     """Save schema into a logging table"""
-
-    run_date = dt.datetime.strptime(date_str, "%Y-%m-%d")
-
-    data = [[run_date, float(result["data"]["threshold"]), bool(result["data"]["is_drift"])]]
-    df = spark.createDataFrame(data, schema=t.StructType(get_schema()))
+    
+    data = [[args.run_date, args.entity_name, float(result["data"]["threshold"]), bool(result["data"]["is_drift"])]]
+    df = spark.createDataFrame(data, schema=t.StructType(get_drift_table_schema()))
     return df
-
 
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ## Crash if drift detected
+# MAGIC ## Throw an exception if drift is NOT detected
+# MAGIC to cancel the pipeline, if drift is detected continue to retrain the model
 
 # COMMAND ----------
-
 
 @dl.notebook_function(get_drift)
 def check_drift(result, logger: Logger):
@@ -173,11 +172,11 @@ def check_drift(result, logger: Logger):
 
     logger.info("Checking drift...")
 
-    if result["data"]["is_drift"]:
-        raise Exception("Data drift detected. Model retraining initiated.")
-
-    logger.info("No drift detected. All good.")
-
+    if not result["data"]["is_drift"]:
+        logger.info("Data drift has NOT been detected. Cancelling retraining pipeline.")
+        raise Exception("Data drift has NOT been detected. Cancelling retraining pipeline.")
+    
+    logger.info("Data drift detected. Commencing retraining pipeline...")
 
 # COMMAND ----------
 
