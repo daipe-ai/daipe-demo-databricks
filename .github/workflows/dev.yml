@@ -3,5 +3,5 @@ on:
   push:
 
 jobs:
-  call-build:
+  build:
     uses: daipe-ai/daipe-demo-databricks/.github/workflows/build.yml@master
