@@ -48,6 +48,6 @@ jobs:
           conda activate $PWD/.venv
           source ~/.poetry/env
           ~/.poetry/bin/poetry install --no-root --no-dev # remove all dev dependencies
-          pip install databricks-connect==7.3.7 # pyspark is still needed
+          pip install https://daipe-packages.s3.eu-central-1.amazonaws.com/databricks-connect-9.1.2.tar.gz # pyspark is still needed
           pip install poethepoet
           poe container-check
