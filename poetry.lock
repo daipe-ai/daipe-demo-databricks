@@ -429,7 +429,7 @@ test = ["six (==1.14.0)", "pyannotate (==1.2.0)", "pytest (==4.6.10)", "pytest-d
 name = "greenlet"
 version = "1.1.2"
 description = "Lightweight in-process concurrent programming"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*"
 
@@ -666,15 +666,15 @@ spark = ["pyspark (>=2.4.0)"]
 
 [[package]]
 name = "lineage-bundle"
-version = "1.0.4"
+version = "1.2.0"
 description = "Lineage generation bundle"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7,<4.0"
 
 [package.dependencies]
 console-bundle = ">=0.5,<0.6"
-daipe-core = ">=1.0,<2.0"
+daipe-core = ">=1.2,<2.0"
 networkx = ">=2.6.3,<3.0.0"
 pyfony-bundles = ">=0.4.0,<0.5.0"
 pyfony-sqlalchemy-bundle = ">=1.0.0,<2.0.0"
@@ -720,6 +720,14 @@ python-dateutil = ">=2.7"
 name = "mccabe"
 version = "0.6.1"
 description = "McCabe checker, plugin for flake8"
+category = "dev"
+optional = false
+python-versions = "*"
+
+[[package]]
+name = "minify-html"
+version = "0.6.10"
+description = "Extremely fast and smart HTML + JS + CSS minifier"
 category = "dev"
 optional = false
 python-versions = "*"
@@ -782,7 +790,7 @@ test = ["check-manifest", "fastjsonschema", "testpath", "pytest", "pytest-cov"]
 name = "networkx"
 version = "2.6.3"
 description = "Python package for creating and manipulating graphs and networks"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 
@@ -1070,7 +1078,7 @@ pyfony-bundles = ">=0.4.0,<0.5.0"
 name = "pyfony-sqlalchemy-bundle"
 version = "1.0.1"
 description = "SQL Alchemy bundle for the Pyfony framework"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7,<4.0"
 
@@ -1311,7 +1319,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*"
 name = "sqlalchemy"
 version = "1.4.26"
 description = "Database Abstraction Library"
-category = "dev"
+category = "main"
 optional = false
 python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,!=3.5.*,>=2.7"
 
@@ -1495,7 +1503,7 @@ python-versions = "*"
 name = "werkzeug"
 version = "2.0.2"
 description = "The comprehensive WSGI web application library."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6"
 
@@ -1517,7 +1525,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=1.2.3)", "pytest-flake8", "pyt
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.10"
-content-hash = "b2237fd1322c5d8d3aee27a12907065e2e9c92f98f812c0327550a8f44cd9254"
+content-hash = "98e99f703dd349e181f2f5a9e9886f33f2f44488e084eeb008bbd2d9ccb4dbac"
 
 [metadata.files]
 appdirs = [
@@ -1895,7 +1903,7 @@ koalas = [
     {file = "koalas-1.8.1.tar.gz", hash = "sha256:b94c1ded2ee2641835908d7a71d9b5779ca8a4a2aab9d94a5e0bcf82c80c7765"},
 ]
 lineage-bundle = [
-    {file = "lineage_bundle-1.0.4-py3-none-any.whl", hash = "sha256:21bdd55a6ad2d8f8594a35fc3f3d6a29237984c6d1cec0bb9e96972114dbac51"},
+    {file = "lineage_bundle-1.2.0-py3-none-any.whl", hash = "sha256:d2c49d15f520f622ba9520429151f4dd9fb3de7364ca2bb14bd73f9a1a4106ea"},
 ]
 logger-bundle = [
     {file = "logger_bundle-0.7.0-py3-none-any.whl", hash = "sha256:699b3ff0454ae6db1a2ec510002583e10d213d02bab4a29a78ea59ab74a14133"},
@@ -1995,6 +2003,17 @@ matplotlib = [
 mccabe = [
     {file = "mccabe-0.6.1-py2.py3-none-any.whl", hash = "sha256:ab8a6258860da4b6677da4bd2fe5dc2c659cff31b3ee4f7f5d64e79735b80d42"},
     {file = "mccabe-0.6.1.tar.gz", hash = "sha256:dd8d182285a0fe56bace7f45b5e7d1a6ebcbf524e8f3bd87eb0f125271b8831f"},
+]
+minify-html = [
+    {file = "minify_html-0.6.10-cp37-cp37m-macosx_10_7_x86_64.whl", hash = "sha256:c72435f5416efe7aac53cfb01035a2f4d7d9692cf4a83a3bd59ad0509c157ee4"},
+    {file = "minify_html-0.6.10-cp37-cp37m-manylinux2010_x86_64.whl", hash = "sha256:bc7991eb1ee23693f0bff454e8ef6438ca898b6b0189dd7b602f5ab8f57baa91"},
+    {file = "minify_html-0.6.10-cp37-none-win_amd64.whl", hash = "sha256:ad8e7b85ca8fa651a0961dc04420521e003d5dcfd34cf63b16b1973f2c68eaf2"},
+    {file = "minify_html-0.6.10-cp38-cp38-macosx_10_7_x86_64.whl", hash = "sha256:3e6ac1211d0315d87958ddea3e7c119a23889c63c0b49cff65d6e926aac0cfb2"},
+    {file = "minify_html-0.6.10-cp38-cp38-manylinux2010_x86_64.whl", hash = "sha256:fbba1739f8d2a7ddac39e286dd04613c854acfe8d8610bb8bd6cfb7020d6314f"},
+    {file = "minify_html-0.6.10-cp38-none-win_amd64.whl", hash = "sha256:bf50dda7a3e06ed8cb49006b50e0905691b584596b51c5b384308c415e1369d5"},
+    {file = "minify_html-0.6.10-cp39-cp39-macosx_10_7_x86_64.whl", hash = "sha256:d0261528ce5e57b85f5ac90e30844c13cb596cddd8b67e0b8ad44f9290b3d25b"},
+    {file = "minify_html-0.6.10-cp39-cp39-manylinux2010_x86_64.whl", hash = "sha256:55a1fbf76b3c08ca3483a3924b9f66345646819c7c6a3e031a4d42130f2c3b86"},
+    {file = "minify_html-0.6.10-cp39-none-win_amd64.whl", hash = "sha256:bb24cf0c1bcffe3160e1a3f34c94800ef9b8a447a0582cda564538bb2ae98a2a"},
 ]
 mistune = [
     {file = "mistune-0.8.4-py2.py3-none-any.whl", hash = "sha256:88a1051873018da288eee8538d476dffe1262495144b33ecb586c4ab266bb8d4"},
