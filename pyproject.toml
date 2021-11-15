@@ -88,7 +88,6 @@ zipp = "3.4.1"
 importlib-metadata = "3.10.0"
 distro = "1.4.0"
 feature-store-bundle = "1.1.1dev9"
-lineage-bundle = "^1.2"
 
 [tool.poetry.dev-dependencies]
 databricks-connect = "9.1.2"
