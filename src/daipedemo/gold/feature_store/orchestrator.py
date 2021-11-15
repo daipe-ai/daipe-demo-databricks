@@ -1,18 +1,20 @@
 # Databricks notebook source
 # MAGIC %md
-# MAGIC # Calculate features and write them to Feature Store
+# MAGIC # Orchestrating writing features to Feature Store
 
 # COMMAND ----------
 
-# MAGIC %run ../../app/bootstrap
+# MAGIC %md
+# MAGIC #### Inititialize feature store
 
 # COMMAND ----------
 
-import datetime as dt
+# MAGIC %run ../../mlops/fs/feature_store_init
 
-import datalakebundle.imports as dl
-from daipecore.widgets.Widgets import Widgets
-from featurestorebundle.databricks.FeatureStoreWriter import FeatureStoreWriter
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC #### Initialize writer for Loan features
 
 # COMMAND ----------
 
@@ -20,12 +22,8 @@ from featurestorebundle.databricks.FeatureStoreWriter import FeatureStoreWriter
 
 # COMMAND ----------
 
-
-@dl.notebook_function()
-def set_widgets(widgets: Widgets):
-    """Set a widget for picking run_date"""
-
-    widgets.add_text("run_date", dt.date.today().strftime("%Y-%m-%d"))
+# MAGIC %md
+# MAGIC ### Run all feature notebooks
 
 # COMMAND ----------
 
@@ -33,12 +31,16 @@ def set_widgets(widgets: Widgets):
 
 # COMMAND ----------
 
-@dl.notebook_function()
-def write_features(features_writer: FeatureStoreWriter):
-    """Write all the features to Feature Store at once"""
+# MAGIC %run ./features/interest_features
 
-    features_writer.write_latest(features_storage)  # noqa: F821
-    features_writer.write_historized(features_storage)  # noqa: F821
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ## Write all features at once
+
+# COMMAND ----------
+
+# MAGIC %run ../../mlops/fs/feature_store_write
 
 # COMMAND ----------
 

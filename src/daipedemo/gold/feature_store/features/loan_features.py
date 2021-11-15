@@ -38,11 +38,6 @@ def create_input_widgets(widgets: Widgets):
     widgets.add_text("default_days", "90", "Default days")
     widgets.add_text("default_prediction", "365", "Default prediction")
     widgets.add_text("run_date", dt.date.today().strftime("%Y-%m-%d"))
-    widgets.add_select("storage_type", ["latest", "historized"], "latest")
-
-# COMMAND ----------
-
-test = "ahoj"
 
 # COMMAND ----------
 
