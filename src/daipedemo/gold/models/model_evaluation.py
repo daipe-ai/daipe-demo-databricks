@@ -4,7 +4,7 @@
 
 # COMMAND ----------
 
-# MAGIC %run ./app/bootstrap
+# MAGIC %run ../../app/bootstrap
 
 # COMMAND ----------
 
@@ -42,7 +42,3 @@ def compare_and_promote_models(new_is_better: bool, logger: Logger):
         promote_new_model()
     else:
         logger.info("Old model stays")
-
-# COMMAND ----------
-
-

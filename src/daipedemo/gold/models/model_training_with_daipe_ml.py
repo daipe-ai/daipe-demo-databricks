@@ -13,15 +13,12 @@
 
 # COMMAND ----------
 
-# MAGIC %run ./app/bootstrap
+# MAGIC %run ../../app/bootstrap_daipeML
 
 # COMMAND ----------
 
 import os
 from logging import Logger
-
-from databricks import feature_store
-from databricks.feature_store import FeatureLookup
 
 import datasciencefunctions as ds
 from datasciencefunctions.data_exploration import plot_feature_hist_with_binary_target
@@ -31,11 +28,7 @@ from datasciencefunctions.supervised import supervised_wrapper
 from datalakebundle.imports import transformation, notebook_function
 from featurestorebundle.feature.FeatureStore import FeatureStore
 
-from daipedemo.stage_model import stage_model
-
-# COMMAND ----------
-
-dbx_feature_store = feature_store.FeatureStoreClient()
+from daipedemo.mlops.daipe_ml import stage_model, train_model
 
 # COMMAND ----------
 
@@ -43,11 +36,9 @@ dbx_feature_store = feature_store.FeatureStoreClient()
 
 # COMMAND ----------
 
-
 @transformation(display=True)
-def load_feature_store(feature_store: FeatureStore):
+def load_features(feature_store: FeatureStore):
     return feature_store.get_latest("loans")
-
 
 # COMMAND ----------
 
@@ -56,8 +47,27 @@ def load_feature_store(feature_store: FeatureStore):
 
 # COMMAND ----------
 
-df = load_feature_store.result
+df = load_features.result
 df_pandas = df.toPandas()
+
+# COMMAND ----------
+
+# MAGIC %md # Data exploration
+
+# COMMAND ----------
+
+plot_feature_hist_with_binary_target(
+    df=df,
+    target_col="label",
+    cat_cols=[
+        "AgeGroup",
+    ],
+)
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC # Feature selection
 
 # COMMAND ----------
 
@@ -78,67 +88,13 @@ numeric_features = [
     "AmountNotGranted",
 ]
 
-categorical_features = [
-    "NewCreditCustomer",
-    "VerificationType",
-    "LanguageCode",
-    "Gender",
-    "Country",
-    "UseOfLoan",
-    "Education",
-    "MaritalStatus",
-    "NrOfDependants",
-    "EmploymentStatus",
-    "EmploymentDurationCurrentEmployer",
-    "WorkExperience",
-    "OccupationArea",
-    "HomeOwnershipType",
-    "ActiveScheduleFirstPaymentReached",
-    "AgeGroup",
-]
-
-# COMMAND ----------
-
-# MAGIC %md #1. Data exploration
-# MAGIC 
-# MAGIC ###We can use Daipe ML to obtain a plot which gives us a good overview of each feature and its relationship with the target.
-
-# COMMAND ----------
-
-plot_feature_hist_with_binary_target(
-    df=df,
-    target_col="label",
-    cat_cols=[
-        "EmploymentDurationCurrentEmployer",
-        "WorkExperience",
-        "AgeGroup",
-    ],
-)
-
-# COMMAND ----------
-
-# MAGIC %md #2. Feature selection
-
 # COMMAND ----------
 
 df_corr = df_pandas[numeric_features + ["label"]].corr()
-df_corr
-
-# COMMAND ----------
-
-# DBTITLE 1,target/label correlation with features
 corr_target = df_corr.loc[["label"], df_corr.columns != "label"].abs()
-corr_target
-
-# COMMAND ----------
-
-# DBTITLE 1,correlation between features excluding target/label
 corr_features = df_corr.loc[df_corr.columns != "label", df_corr.index != "label"].abs()
-corr_features
 
-# COMMAND ----------
-
-selected_features, feature_selection_history = feature_selection_merits(
+selected_features, _ = feature_selection_merits(
     features_correlations=corr_features,
     target_correlations=corr_target,
     algorithm="forward",
@@ -146,61 +102,25 @@ selected_features, feature_selection_history = feature_selection_merits(
     best_n=3,
 )
 
-@notebook_function(selected_features)
-def log_model_metrics(selected_features, logger: Logger):
-  logger.info(f"{len(selected_features)} features selected:")
-  logger.info(", ".join(sorted(selected_features)))
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC # Model creation
 
 # COMMAND ----------
 
-# DBTITLE 1,finally, we select the resulting best feature set for modelling
-key = ["LoanId"]
-
-feature_lookup = [
-    FeatureLookup(
-        table_name=f"{os.environ['APP_ENV']}_feature_store.features_loans_latest",
-        feature_names=[feature for feature in selected_features],
-        lookup_key=key,
-    )
-]
-
-training_set = dbx_feature_store.create_training_set(
-    df=df.select("LoanId", "label"), feature_lookups=feature_lookup, label="label", exclude_columns=key
-)
-
-df_ml_spark = training_set.load_df()
-df_ml_pandas = df_ml_spark.toPandas()
-
-# COMMAND ----------
-
-# MAGIC %md # 3. Model training, evaluation and productionization
-# MAGIC 
-# MAGIC ## `supervised_wrapper`
-
-# COMMAND ----------
-
-# train test split, hyperparameter space, metrics to log and evaluate model, mlflow is done automatically
-train_df, test_df, model_summary = supervised_wrapper(
-    df=df_ml_spark,
+model_summary, training_set = train_model(
+    df,
+    entity_name="loans",
+    id_column="LoanId",
+    selected_features=selected_features,
     model_type=ds.MlModel.spark_random_forest_classifier,
-    use_mlflow=False,
-    label_col="label",
-    params_fit_model={"max_evals": 1},
 )
-
-# COMMAND ----------
-
-@notebook_function(model_summary)
-def log_model_metrics(model_summary, logger: Logger):
-    logger.info(f"Metrics:")
-    for metric_name, value in model_summary["metrics"].items():
-        logger.info(f"{metric_name.upper()} = {value:.3f}")
 
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ## Log model to MLflow through Feature store and move it to Staging
-# MAGIC <img src="https://databricks.com/wp-content/uploads/2021/06/MLflow-logo-pos-TM-1.png" alt="mlflow" width="200"/>
+# MAGIC ## Log model to MLflow through Feature store
 
 # COMMAND ----------
 
