@@ -17,7 +17,6 @@ displayHTML("""
 
 # COMMAND ----------
 
-
 @dl.notebook_function()
 def orchestrate(dbutils: DBUtils):
     dbutils.notebook.run("./../bronze/tbl_loans", 0)
