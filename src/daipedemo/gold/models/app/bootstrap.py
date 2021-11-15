@@ -3,8 +3,4 @@
 
 # COMMAND ----------
 
-
-
-# COMMAND ----------
-
 # MAGIC %run ../../../app/bootstrap

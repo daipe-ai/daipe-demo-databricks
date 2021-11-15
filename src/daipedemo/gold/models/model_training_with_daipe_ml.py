@@ -192,14 +192,14 @@ train_df, test_df, model_summary = supervised_wrapper(
 
 @notebook_function(model_summary)
 def log_model_metrics(model_summary, logger: Logger):
-  logger.info(f"Metrics:")
-  for metric_name, value in model_summary["metrics"].items():
-    logger.info(f"{metric_name.upper()} = {value:.3f}")
+    logger.info(f"Metrics:")
+    for metric_name, value in model_summary["metrics"].items():
+        logger.info(f"{metric_name.upper()} = {value:.3f}")
 
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ## Log model to MLflow through Feature store
+# MAGIC ## Log model to MLflow through Feature store and move it to Staging
 # MAGIC <img src="https://databricks.com/wp-content/uploads/2021/06/MLflow-logo-pos-TM-1.png" alt="mlflow" width="200"/>
 
 # COMMAND ----------

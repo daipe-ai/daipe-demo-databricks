@@ -26,6 +26,8 @@ def stage_model(model_name: str, model_summary, training_set: TrainingSet):
       log_model_summary(model_summary)
 
       run_id = run.info.run_id
+      print(f"Run ID: {run_id}")
+      
       model_uri = f"runs:/{run_id}/{model_name}"
       model_details = mlflow.register_model(model_uri=model_uri, name=model_name)
 

@@ -25,3 +25,7 @@ def orchestrate(dbutils: DBUtils):
     dbutils.notebook.run("./../silver/tbl_loans", 0)
     dbutils.notebook.run("./../silver/tbl_repayments/tbl_repayments", 0)
     dbutils.notebook.run("./../silver/tbl_joined_loans_and_repayments", 0)
+
+# COMMAND ----------
+
+
