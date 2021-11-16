@@ -80,6 +80,7 @@ wcwidth = "0.2.5"
 zipp = "3.4.1"
 importlib-metadata = "3.10.0"
 distro = "1.4.0"
+marshmallow = "3.10.0"
 
 [tool.poetry.dev-dependencies]
 databricks-connect = { url = "https://daipe-packages.s3.eu-central-1.amazonaws.com/databricks-connect-9.1.2.tar.gz" }
