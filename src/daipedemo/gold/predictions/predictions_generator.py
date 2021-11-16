@@ -78,6 +78,8 @@ def get_schema(args: Args):
 @dl.table_overwrite(f"gold.{args.result.table_name}", get_schema.result)
 def save_predictions(args: Args, df: DataFrame):
     """Save predictions to table"""
+    
+    df.display()
 
     return (
         df

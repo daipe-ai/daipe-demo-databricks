@@ -3,7 +3,7 @@
 
 # COMMAND ----------
 
-# MAGIC %run ../../../app/bootstrap
+# MAGIC %run ./bootstrap
 
 # COMMAND ----------
 

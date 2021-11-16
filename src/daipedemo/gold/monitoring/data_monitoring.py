@@ -4,7 +4,7 @@
 
 # COMMAND ----------
 
-# MAGIC %run ./app/bootstrap
+# MAGIC %run ../../app/bootstrap_alibi
 
 # COMMAND ----------
 

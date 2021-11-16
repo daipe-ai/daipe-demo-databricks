@@ -17,8 +17,7 @@ def set_widgets(widgets: Widgets):
     """Set a widget for picking run_date"""
 
     widgets.add_text("run_date", dt.date.today().strftime("%Y-%m-%d"))
-    widgets.add_multiselect('time_windows', ["30d", "60d", "90d"], "90d")
-
+    widgets.add_text('time_windows', "30d,60d,90d")
 
 # COMMAND ----------
 
