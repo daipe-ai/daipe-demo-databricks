@@ -79,8 +79,6 @@ def get_schema(args: Args):
 def save_predictions(args: Args, df: DataFrame):
     """Save predictions to table"""
     
-    df.display()
-
     return (
         df
         .select(args.id_column, "prediction")
