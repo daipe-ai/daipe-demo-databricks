@@ -1,0 +1,22 @@
+name: tests
+on:
+  pull_request:
+
+jobs:
+  promote_model:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
+
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: install_mlflow
+        run: |
+          pip install mlflow
+      - name: Check schema
+        run: |
+          python ./schema_check.py
