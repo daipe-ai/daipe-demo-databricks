@@ -13,3 +13,11 @@ jobs:
       - name: Check schema
         run: |
           ./schema_check.sh
+
+      - name: Check performance
+        run: |
+          ./schema_check.sh
+
+      - name: Check special cases
+        run: |
+          ./schema_check.sh
