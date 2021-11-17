@@ -1,2 +1,1 @@
-Another test message
-foo
+Different test message
