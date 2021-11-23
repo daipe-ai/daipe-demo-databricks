@@ -58,10 +58,12 @@ def args(widgets: Widgets) -> Args:
 
 # COMMAND ----------
 
-@dl.transformation(dl.read_table("silver.tbl_joined_loans_and_repayments"), args, display=False)
+@dl.transformation(dl.read_table("silver.tbl_joined_loans_and_repayments"), args, display=True)
 def joined_loans_and_repayments_with_time_windows(df: DataFrame, args: Args):    
     return (
-      with_time_windows(df, "Timestamp", f.lit(args.run_date), args.time_windows)
+      with_time_windows(df, "Date", f.lit(args.run_date), args.time_windows)
+      .select("LoanId", "Date", "InterestRepayment", *[f"is_time_window_{time_window}" for time_window in args.time_windows])
+      .orderBy("Date", ascending=False)
     )
 
 # COMMAND ----------
