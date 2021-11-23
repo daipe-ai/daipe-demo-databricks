@@ -38,7 +38,7 @@ from datalakebundle.imports import *
 
 # MAGIC %md
 # MAGIC ### Applying schema and saving table
-# MAGIC The `get_schema()` functin should be passed as a second argument into the `@table_overwrite`, `@table_upsert` or `@table_append` decorators.
+# MAGIC The `get_schema()` function should be passed as a second argument into the `@table_overwrite`, `@table_upsert` or `@table_append` decorators.
 
 # COMMAND ----------
 

@@ -3,4 +3,4 @@ imports:
 
 parameters:
   databricks:
-    address: '[Your DEV cluster address]'
+    address: '[Your workspace address]'

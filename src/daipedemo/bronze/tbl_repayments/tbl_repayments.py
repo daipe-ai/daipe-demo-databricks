@@ -39,7 +39,7 @@ from daipedemo.bronze.tbl_repayments.csv_schema import get_schema as get_csv_sch
 # MAGIC
 # MAGIC #### Passing configuration to notebook functions (advanced)
 # MAGIC
-# MAGIC The following function uses the `"%loans.confirmed_csv_path%"` config parameter. To change it:
+# MAGIC The following function uses the `"%loans.repayments_csv_path%"` config parameter. To change it:
 # MAGIC
 # MAGIC 1. [Setup your local development environment](https://docs.daipe.ai/data-pipelines-workflow/daipe-demo-project/)
 # MAGIC 1. Edit the `src/daipedemo/_config/config.yaml` file on your local machine

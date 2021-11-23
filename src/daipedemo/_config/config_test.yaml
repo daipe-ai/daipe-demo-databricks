@@ -3,4 +3,4 @@ imports:
 
 parameters:
   databricks:
-    address: https://westeurope.azuredatabricks.net
+    address: '[Your workspace address]'

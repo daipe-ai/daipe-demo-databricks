@@ -1,0 +1,13 @@
+name: Branch delete pipeline
+on:
+  delete:
+
+jobs:
+  delete:
+    uses: daipe-ai/daipe-demo-databricks/.github/workflows/run_command.yml@master
+    with:
+      command: daipe dbx:repo:delete --env=test --repo-url=${{ github.server_url }}/${{ github.repository }}.git --repo-name=${GITHUB_REF#refs/heads/}
+      env: test
+    secrets:
+      DBX_URL: ${{ secrets.DBX_URL }}
+      DBX_TOKEN: ${{ secrets.DBX_TOKEN }}

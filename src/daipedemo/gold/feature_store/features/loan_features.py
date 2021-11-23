@@ -285,7 +285,6 @@ def cast_numeric_features_to_double(df: DataFrame):
 def append_run_date(df: DataFrame, run_date):
     return df.withColumn("run_date", f.lit(dt.datetime.strptime(run_date, "%Y-%m-%d")))
 
-
 # COMMAND ----------
 
 @transformation(append_run_date)
