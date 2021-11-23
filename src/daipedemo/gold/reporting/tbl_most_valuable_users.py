@@ -2,7 +2,7 @@
 # MAGIC %md
 # MAGIC # #7 Simple aggregation
 # MAGIC ## Gold layer
-# MAGIC Return to <a href="$../_index">index page</a>
+# MAGIC Return to <a href="$../../_index">index page</a>
 # MAGIC 
 # MAGIC In this notebook you will see how to create a simple table of aggregations for reporting using the **Daipe** framework.
 

@@ -8,7 +8,7 @@ from logging import Logger
 
 import datalakebundle.imports as dl
 from daipecore.widgets.Widgets import Widgets
-from featurestorebundle.databricks.FeatureStoreWriter import FeatureStoreWriter
+from featurestorebundle.databricks.DatabricksFeatureStoreWriter import DatabricksFeatureStoreWriter
 
 # COMMAND ----------
 

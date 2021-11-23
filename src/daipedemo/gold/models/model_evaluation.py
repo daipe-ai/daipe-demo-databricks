@@ -4,7 +4,7 @@
 # MAGIC 
 # MAGIC Here we have a simple notebook where adding just a simple definition of an evaluation function gets you __a ready-to-go model redeployment workflow.__ 
 # MAGIC 
-# MAGIC Return to <a href="$../_index">index page</a>
+# MAGIC Return to <a href="$../../_index">index page</a>
 
 # COMMAND ----------
 

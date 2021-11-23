@@ -9,7 +9,7 @@
 # MAGIC * Model evaluation
 # MAGIC * Model productionization
 # MAGIC 
-# MAGIC Return to <a href="$../_index">index page</a>
+# MAGIC Return to <a href="$../../_index">index page</a>
 
 # COMMAND ----------
 

@@ -2,7 +2,7 @@
 # MAGIC %md
 # MAGIC # Creating features for ML
 # MAGIC 
-# MAGIC Return to <a href="$../_index">index page</a>
+# MAGIC Return to <a href="$../../../_index">index page</a>
 # MAGIC 
 # MAGIC In this notebook we preprocess the data for modelling purposes.
 

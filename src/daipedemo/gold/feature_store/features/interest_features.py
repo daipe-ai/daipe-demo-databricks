@@ -2,7 +2,7 @@
 # MAGIC %md
 # MAGIC # Creating features with `time_windows`
 # MAGIC 
-# MAGIC Return to <a href="$../_index">index page</a>
+# MAGIC Return to <a href="$../../../_index">index page</a>
 # MAGIC 
 # MAGIC In this notebook we explore the optimal __time windows__ calculation from Daipe Feature store.
 

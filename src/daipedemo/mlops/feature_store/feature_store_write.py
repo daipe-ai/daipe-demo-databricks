@@ -1,6 +1,6 @@
 # Databricks notebook source
 @dl.notebook_function()
-def write_features(logger: Logger, features_writer: FeatureStoreWriter):
+def write_features(logger: Logger, features_writer: DatabricksFeatureStoreWriter):
     """Write all the features to Feature Store at once"""
     
     a = [result.fillna(0) for result in features_storage.results]
