@@ -96,7 +96,3 @@ def select_columns_and_save(df: DataFrame):
 
 # MAGIC %md
 # MAGIC ### Continue to the <a href="$../gold/reporting/tbl_most_valuable_users">sample notebook #7</a>
-
-# COMMAND ----------
-
-

@@ -19,6 +19,7 @@ displayHTML("""
 
 @dl.notebook_function()
 def orchestrate(dbutils: DBUtils):
+    dbutils.notebook.run("./../bronze/init", 0)
     dbutils.notebook.run("./../bronze/tbl_loans", 0)
     dbutils.notebook.run("./../bronze/tbl_repayments/tbl_repayments", 0)
     dbutils.notebook.run("./../silver/tbl_loans", 0)

@@ -49,7 +49,7 @@ def train_model(df, entity_name, id_column, selected_features, model_type):
     ]
 
     training_set = dbx_feature_store.create_training_set(
-        df=df.select("LoanId", "label"), feature_lookups=feature_lookup, label="label", exclude_columns=key
+        df=df.select(id_column, "label"), feature_lookups=feature_lookup, label="label", exclude_columns=key
     )
 
     # train test split, hyperparameter space, metrics to log and evaluate model, mlflow is done automatically

@@ -1,6 +1,6 @@
 # Databricks notebook source
 # MAGIC %md
-# MAGIC # Data monitoring
+# MAGIC # Data monitoring 📈 🖥️
 
 # COMMAND ----------
 

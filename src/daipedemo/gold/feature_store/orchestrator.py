@@ -13,6 +13,20 @@
 
 # COMMAND ----------
 
+import datetime as dt
+
+import numpy as np
+from daipecore.widgets.Widgets import Widgets
+
+# COMMAND ----------
+
+@dl.notebook_function()
+def set_widgets(widgets: Widgets):
+    widgets.add_text("run_date", dt.date.today().strftime("%Y-%m-%d"))
+    widgets.add_text('time_windows', "30d,60d,90d")
+
+# COMMAND ----------
+
 # MAGIC %md
 # MAGIC #### Initialize writer for Loan features
 
@@ -31,17 +45,9 @@
 
 # COMMAND ----------
 
-# MAGIC %run ./features/interest_features
-
-# COMMAND ----------
-
 # MAGIC %md
 # MAGIC ## Write all features at once
 
 # COMMAND ----------
 
 # MAGIC %run ../../mlops/feature_store/feature_store_write
-
-# COMMAND ----------
-
-

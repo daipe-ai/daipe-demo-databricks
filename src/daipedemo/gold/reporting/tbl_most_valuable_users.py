@@ -57,7 +57,7 @@ def get_schema():
 # COMMAND ----------
 
 @transformation(most_valuable_users, display=True)
-@table_overwrite("gold.tbl_most_valuable_users", get_schema())
+@table_overwrite("gold.tbl_most_valuable_users", get_schema(), recreate_table=True)
 def save(df: DataFrame, logger: Logger):
     logger.info(f"Saving {df.count()} records")
     number_of_mvu = 10

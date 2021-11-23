@@ -13,14 +13,6 @@ from featurestorebundle.notebook.decorator.feature import feature
 
 # COMMAND ----------
 
-
-@dl.notebook_function()
-def set_widgets(widgets: Widgets):
-    widgets.add_select("storage_type", ["latest", "historized"], "latest")
-
-
-# COMMAND ----------
-
 entity = Entity(
     name="loans",
     id_column="LoanId",
@@ -28,14 +20,6 @@ entity = Entity(
     time_column="run_date",
     time_column_type=t.DateType(),
 )
-
-# COMMAND ----------
-
-
-@dl.notebook_function()
-def storage_type(widgets: Widgets):
-    return widgets.get_value("storage_type")
-
 
 # COMMAND ----------
 
