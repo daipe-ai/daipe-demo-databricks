@@ -1,6 +1,10 @@
 # Databricks notebook source
 # MAGIC %md
 # MAGIC # Evaluate new model
+# MAGIC 
+# MAGIC Here we have a simple notebook where adding just a simple definition of an evaluation function gets you __a ready-to-go model redeployment workflow.__ 
+# MAGIC 
+# MAGIC Return to <a href="$../_index">index page</a>
 
 # COMMAND ----------
 
@@ -17,6 +21,8 @@ import datalakebundle.imports as dl
 
 # MAGIC %md
 # MAGIC ### Define custom evaluation metric
+# MAGIC 
+# MAGIC In our case `accuracy` 
 
 # COMMAND ----------
 

@@ -128,4 +128,9 @@ stage_model("rfc_loan_default_prediction", model_summary, training_set)
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC ### Continue to <a href="$./model_evaluation">sample notebook #12</a>
+
+# COMMAND ----------
+
 

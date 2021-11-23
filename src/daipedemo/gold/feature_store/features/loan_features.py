@@ -42,10 +42,9 @@ def create_input_widgets(widgets: Widgets):
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ### Define lengths of time windows
+# MAGIC ### Read data
 
 # COMMAND ----------
-
 
 @transformation(read_table("silver.tbl_joined_loans_and_repayments"))
 def read_joined_loans_and_repayments(df: DataFrame):
@@ -57,7 +56,6 @@ def read_joined_loans_and_repayments(df: DataFrame):
 # MAGIC ### Preselect columns which might be useful as features
 
 # COMMAND ----------
-
 
 @transformation(read_joined_loans_and_repayments)
 def select_columns(df: DataFrame):
@@ -190,7 +188,6 @@ def get_target_without_shortterm_default(df_target: DataFrame, df_loans_with_imm
 
 # COMMAND ----------
 
-
 @transformation(get_target_without_shortterm_default)
 def get_unique_observations(df: DataFrame):
     return (
@@ -277,7 +274,6 @@ categorical_features = [
 
 # COMMAND ----------
 
-
 @transformation(get_unique_observations)
 def cast_numeric_features_to_double(df: DataFrame):
     return df.select(*(f.col(c).cast("double").alias(c) if c in numeric_features else f.col(c) for c in df.columns))
@@ -285,14 +281,12 @@ def cast_numeric_features_to_double(df: DataFrame):
 
 # COMMAND ----------
 
-
 @transformation(cast_numeric_features_to_double, get_widget_value("run_date"))
 def append_run_date(df: DataFrame, run_date):
     return df.withColumn("run_date", f.lit(dt.datetime.strptime(run_date, "%Y-%m-%d")))
 
 
 # COMMAND ----------
-
 
 @transformation(append_run_date)
 @loan_feature(
@@ -330,7 +324,6 @@ def customer_personal_features(df: DataFrame):
 
 # COMMAND ----------
 
-
 @transformation(append_run_date)
 @loan_feature(
     ("IncomeTotal", "Total Income of borrower"),
@@ -353,7 +346,6 @@ def customer_financial_features(df: DataFrame):
 
 
 # COMMAND ----------
-
 
 @transformation(append_run_date)
 @loan_feature(
@@ -396,4 +388,4 @@ def customer_loan_features(df: DataFrame):
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ### Continue to the <a href="$../models/model_training_with_daipe_ml">sample notebook #10</a>
+# MAGIC ### Continue to the <a href="$./interest_features">sample notebook #10</a>

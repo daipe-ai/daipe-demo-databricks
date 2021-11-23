@@ -21,9 +21,9 @@ from databricks.feature_store import FeatureStoreClient
 import datalakebundle.imports as dl
 from daipecore.widgets.Widgets import Widgets
 from featurestorebundle.feature.FeatureStore import FeatureStore
-from daipedemo.gold.monitoring.lib import get_drift_table_schema, plot_drift
+from daipedemo.mlops.monitoring import get_drift_table_schema, plot_drift
 
-Args = namedtuple('Args', 'model_uri run_date entity_name id_column time_column')
+Args = namedtuple('Args', 'model_uri run_date entity_name id_column time_column feature_to_plot')
 
 # COMMAND ----------
 
@@ -41,6 +41,7 @@ def set_widgets(widgets: Widgets):
     widgets.add_text("entity_name", "")
     widgets.add_text("id_column", "")
     widgets.add_text("time_column", "")
+    widgets.add_text("feature_to_plot", "")
 
 # COMMAND ----------
 
@@ -59,6 +60,7 @@ def args(widgets: Widgets) -> Args:
             widgets.get_value("entity_name"),
             widgets.get_value("id_column"),
             widgets.get_value("time_column"),
+            widgets.get_value("feature_to_plot"),
         )
     )
 
@@ -122,9 +124,9 @@ def features_today(args: Args, feature_store: FeatureStore):
 
 # COMMAND ----------
 
-@dl.notebook_function(features_today, features_day_before)
-def show_plot(now_df, day_before_df):
-    plot_drift(now_df, day_before_df, "Amount")
+@dl.notebook_function(features_today, features_day_before, args)
+def show_plot(now_df, day_before_df, args: Args):
+    plot_drift(now_df, day_before_df, args.feature_to_plot)
 
 # COMMAND ----------
 

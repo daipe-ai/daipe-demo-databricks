@@ -1,4 +1,13 @@
 # Databricks notebook source
+# MAGIC %md
+# MAGIC # Creating features with `time_windows`
+# MAGIC 
+# MAGIC Return to <a href="$../_index">index page</a>
+# MAGIC 
+# MAGIC In this notebook we explore the optimal __time windows__ calculation from Daipe Feature store.
+
+# COMMAND ----------
+
 # MAGIC %run ../../../app/bootstrap
 
 # COMMAND ----------
@@ -19,10 +28,20 @@ Args = namedtuple('Args', 'run_date time_windows')
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC ### Widgets for parameters
+
+# COMMAND ----------
+
 @dl.notebook_function()
 def create_input_widgets(widgets: Widgets):
     widgets.add_text("run_date", dt.date.today().strftime("%Y-%m-%d"))
     widgets.add_text('time_windows', "30d,60d,90d")
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ### Reading parameters from widgets
 
 # COMMAND ----------
 
@@ -39,12 +58,11 @@ def args(widgets: Widgets) -> Args:
 
 # COMMAND ----------
 
-@dl.transformation(dl.read_table("silver.tbl_joined_loans_and_repayments"), args, display=True)
-def joined_loans_and_repayments_with_time_windows(df: DataFrame, args: Args):
-  
-    df = df.withColumn("Timestamp", f.to_timestamp("Date"))
-    
-    return with_time_windows(df, "Timestamp", f.lit(args.run_date), args.time_windows)
+@dl.transformation(dl.read_table("silver.tbl_joined_loans_and_repayments"), args, display=False)
+def joined_loans_and_repayments_with_time_windows(df: DataFrame, args: Args):    
+    return (
+      with_time_windows(df, "Timestamp", f.lit(args.run_date), args.time_windows)
+    )
 
 # COMMAND ----------
 
@@ -75,6 +93,11 @@ def new_features(df: DataFrame, args: Args):
   return (
     grouped_df.withColumn('run_date', f.lit(args.run_date))
   )
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ### Continue to <a href="$../../models/model_training_with_daipe_ml">sample notebook #11</a>
 
 # COMMAND ----------
 

@@ -9,7 +9,7 @@
 
 # COMMAND ----------
 
-# MAGIC %run ../../mlops/fs/feature_store_init
+# MAGIC %run ../../mlops/feature_store/feature_store_init
 
 # COMMAND ----------
 
@@ -40,7 +40,7 @@
 
 # COMMAND ----------
 
-# MAGIC %run ../../mlops/fs/feature_store_write
+# MAGIC %run ../../mlops/feature_store/feature_store_write
 
 # COMMAND ----------
 

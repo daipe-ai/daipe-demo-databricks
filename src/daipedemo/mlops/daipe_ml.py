@@ -112,7 +112,6 @@ def train_model(df, entity_name, id_column, selected_features, model_type):
 
     displayHTML = get_display_html()
     displayHTML(html)
-    displayHTML("<img src='http://datasciencestunt.com/wp-content/uploads/2021/05/unnamed.png'>")
 
     return model_summary, training_set
   
