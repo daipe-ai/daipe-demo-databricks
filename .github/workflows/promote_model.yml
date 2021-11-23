@@ -28,4 +28,4 @@ jobs:
 
       - name: promote
         run: |
-          python promote_model.py {{ inputs.model_name }}
+          python src/daipedemo/mlops/promote_model.py {{ inputs.model_name }}
