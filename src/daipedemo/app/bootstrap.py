@@ -31,3 +31,7 @@ if "APP_ENV" not in os.environ:
 
 if "DAIPE_BOOTSTRAPPED" not in os.environ:
     os.environ["DAIPE_BOOTSTRAPPED"] = "1"
+
+# COMMAND ----------
+
+

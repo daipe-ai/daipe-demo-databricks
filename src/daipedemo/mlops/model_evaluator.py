@@ -40,12 +40,18 @@ def __get_model_metric(args: Args, model_stage: str, df: DataFrame) -> float:
     return args.eval_metric(labels, preds)
 
 
-def promote_new_model():
+def promote_new_model(model_name: str, git_repo_handle: str):
     """Makes a github API call which runs a model promotion pipeline"""
     logger.info(f"Running production promotion pipeline for new model")
 
     headers = {f"Authorization": f"token {dbutils.secrets.get(scope='git', key='token')}"}
-    git_repo_handle = "daipe-ai/daipe-demo-databricks"
     url = f"https://api.github.com/repos/{git_repo_handle}/actions/workflows/promote_model.yml/dispatches"
 
-    requests.post(url, headers=headers, json={"ref": "master"})
+    requests.post(url,
+                  headers=headers,
+                  json={
+                    "ref": "master",
+                    "inputs": {
+                      "model_name": model_name
+                    }
+                  })
