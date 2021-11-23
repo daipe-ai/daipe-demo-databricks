@@ -1,6 +1,11 @@
 name: promote_model
 on:
   workflow_dispatch:
+    inputs:
+      model_name:
+        description: 'The name of the model in Mlflow'     
+        required: true
+        type: string
 
 jobs:
   promote_model:
@@ -23,4 +28,4 @@ jobs:
 
       - name: promote
         run: |
-          python src/daipedemo/promote_model.py
+          python promote_model.py {{ inputs.model_name }}
