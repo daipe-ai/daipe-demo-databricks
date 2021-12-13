@@ -4,3 +4,5 @@ imports:
 parameters:
   databricks:
     address: '[Your workspace address]'
+    repo:
+      base_dir: "/Repos/{user_folder_name}/{repo_name}"

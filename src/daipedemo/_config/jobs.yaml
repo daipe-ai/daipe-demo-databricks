@@ -1,0 +1,80 @@
+parameters:
+  jobs:
+    notebooks:
+      base_dir: '%databricks.repo.base_dir%/src/%daipe.root_module.name%'
+
+  jobsbundle:
+    databricks:
+      notifications:
+        on_failure: []
+
+    jobs:
+      retraining_pipeline:
+        name: '{repo_name} - {identifier}'
+        tasks:
+          - task_key: 'data-monitoring'
+            notebook_task:
+              notebook_path: '%jobs.notebooks.base_dir%/gold/monitoring/data_monitoring'
+              base_parameters:
+                entity_name: 'loans'
+                feature_to_plot: 'Amount'
+                id_column: 'LoanId'
+                model_name: 'rfc_loan_default_prediction'
+                run_date: '2021-11-23'
+                time_column: 'run_date'
+            new_cluster:
+              spark_version: '9.1.x-scala2.12'
+              node_type_id: 'Standard_DS3_v2'
+              num_workers: 0
+          - task_key: 'retraining'
+            depends_on:
+              - task_key: 'data-monitoring'
+            notebook_task:
+              notebook_path: '%jobs.notebooks.base_dir%/gold/models/model_training_with_daipe_ml'
+            new_cluster:
+              spark_version: '9.1.x-scala2.12'
+              node_type_id: 'Standard_DS3_v2'
+              num_workers: 0
+          - task_key: 'model_evaluation'
+            depends_on:
+              - task_key: 'retraining'
+            notebook_task:
+              notebook_path: '%jobs.notebooks.base_dir%/gold/models/model_evaluation'
+              base_parameters:
+                entity_name: 'loans'
+                id_column: 'LoanId'
+                model_name: 'rfc_loan_default_prediction'
+            new_cluster:
+              spark_version: '9.1.x-scala2.12'
+              node_type_id: 'Standard_DS3_v2'
+              num_workers: 0
+
+      feature_orchestration:
+        name: '{repo_name} - {identifier}'
+        tasks:
+          - task_key: 'feature-orchestrator'
+            notebook_task:
+              notebook_path: '%jobs.notebooks.base_dir%/gold/feature_store/orchestrator'
+              base_parameters:
+                run_date: '2021-11-23'
+                time_windows: '30d,60d,90d'
+            new_cluster:
+              spark_version: '9.1.x-scala2.12'
+              node_type_id: 'Standard_DS3_v2'
+              num_workers: 0
+              
+      predictions:
+        name: '{repo_name} - {identifier}'
+        tasks:
+          - task_key: 'predictions-generator'
+            notebook_task:
+              notebook_path: '%jobs.notebooks.base_dir%/gold/predictions/predictions_generator'
+              base_parameters:
+                entity_name: 'loans'
+                id_column: 'LoanId'
+                model_name: 'rfc_loan_default_prediction'
+                table_name: 'tbl_defaults_predictions'
+            new_cluster:
+              spark_version: '9.1.x-scala2.12'
+              node_type_id: 'Standard_DS3_v2'
+              num_workers: 0
