@@ -5,11 +5,11 @@ on:
 
 jobs:
   build:
-    uses: daipe-ai/daipe-demo-databricks/.github/workflows/build.yml@master
+    uses: daipe-ai/daipe-ci-cd/build.yml@master
 
   deploy:
     needs: build
-    uses: daipe-ai/daipe-demo-databricks/.github/workflows/run_command.yml@master
+    uses: daipe-ai/daipe-ci-cd/run_command.yml@master
     with:
       command: daipe dbx:repo:update --env=test --repo-url=${{ github.server_url }}/${{ github.repository }}.git --tag=${{ github.ref }} --repo-name=master
       env: prod
