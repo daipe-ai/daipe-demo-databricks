@@ -4,4 +4,4 @@ on:
 
 jobs:
   build:
-    uses: daipe-ai/daipe-ci-cd/build.yml@master
+    uses: daipe-ai/daipe-ci-cd/.github/workflows/build.yml@master
