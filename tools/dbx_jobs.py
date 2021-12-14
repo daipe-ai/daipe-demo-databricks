@@ -18,11 +18,13 @@ from jobsbundle.job.JobCreateOrUpdateCommand import JobCreateOrUpdateCommand
 from daipecore.imports import Widgets, get_widget_value
 from datalakebundle.imports import notebook_function
 
+os.environ["DBX_TOKEN"] = str(dbutils.notebook.entry_point.getDbutils().notebook().getContext().apiToken().get())
+
 # COMMAND ----------
 
 @notebook_function("%jobsbundle.jobs%")
 def create_widget(jobs, widgets: Widgets):
-    widgets.add_select("job", ["all"] + list(jobs), "all")
+    widgets.add_select("job", ["<all>"] + list(jobs), "<all>")
 
 # COMMAND ----------
 
@@ -42,7 +44,3 @@ def create_job(job: str, jobs, command: JobCreateOrUpdateCommand):
         create_or_update_job(command, job)
     else:
         create_or_update_job(command, job)
-
-# COMMAND ----------
-
-
