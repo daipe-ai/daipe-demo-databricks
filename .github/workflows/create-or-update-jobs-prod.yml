@@ -11,7 +11,7 @@ jobs:
     needs: build
     uses: daipe-ai/daipe-demo-databricks/.github/workflows/run_command.yml@master
     with:
-      command: bash ./jobs/prod ${{ github.event.repository.name }}
+      command: bash ./tools/_jobs/prod ${{ github.event.repository.name }}
       env: prod
     secrets:
       DBX_URL: ${{ secrets.DBX_URL }}

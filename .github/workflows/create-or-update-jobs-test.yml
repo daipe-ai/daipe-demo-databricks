@@ -10,7 +10,7 @@ jobs:
     needs: build
     uses: daipe-ai/daipe-demo-databricks/.github/workflows/run_command.yml@master
     with:
-      command: bash ./jobs/test ${{ github.head_ref }} ${{ github.event.repository.name }}
+      command: bash ./tools/_jobs/test ${{ github.head_ref }} ${{ github.event.repository.name }}
       env: test
     secrets:
       DBX_URL: ${{ secrets.DBX_URL }}
