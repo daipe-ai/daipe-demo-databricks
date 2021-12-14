@@ -1,4 +1,9 @@
 # Databricks notebook source
+# MAGIC %md
+# MAGIC <a href="$../index">Back to index</a>
+
+# COMMAND ----------
+
 pip install jobs-bundle=="0.4.0" &> /dev/null
 
 # COMMAND ----------

@@ -1,4 +1,9 @@
 # Databricks notebook source
+# MAGIC %md
+# MAGIC <a href="$../index">Back to index</a>
+
+# COMMAND ----------
+
 dbutils.widgets.dropdown("1. poetry action", choices=["add", "update", "remove"], defaultValue="add")
 dbutils.widgets.text("2. package", defaultValue="")
 poetry_action = dbutils.widgets.get("1. poetry action")
