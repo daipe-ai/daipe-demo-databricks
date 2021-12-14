@@ -1,0 +1,69 @@
+name: Reusable build workflow
+
+on:
+  push:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
+
+      - uses: conda-incubator/setup-miniconda@v2.1.1
+        with:
+          miniconda-version: 'py39_4.10.3'
+      - run: |
+          conda config --remove channels defaults
+          conda config --append channels conda-forge
+
+      - name: cache venv
+        id: cache-venv
+        uses: actions/cache@v2
+        with:
+          path: |
+            .venv
+            ~/.poetry/env
+          key: ${{ runner.os }}-env-${{ hashFiles('**/poetry.lock') }}
+
+      - name: setup
+        run: |
+          export SHELL=$SHELL # for python to be able to access the bash version
+          chmod +x env-init.sh
+          ./env-init.sh -y --verbose
+
+      - name: decoratorIndentCheck
+        run: |
+          bash decorators_indent_check.sh
+
+      - name: unitTests
+        run: |
+          eval "$(conda shell.bash hook)"
+          conda activate $PWD/.venv
+
+          pip uninstall databricks-connect -y # local sparkSession only works with pyspark
+          pip install https://daipe-packages.s3.eu-central-1.amazonaws.com/pyspark-3.2.0-py2.py3-none-any.whl
+          pip install https://daipe-packages.s3.eu-central-1.amazonaws.com/delta_spark-1.1.0-py3-none-any.whl
+
+          export SPARK_HOME=$(python -c 'import sysconfig; print(sysconfig.get_paths()["purelib"])')/pyspark
+          export PYSPARK_PYTHON=$PWD/.venv/bin/python
+          export PYSPARK_DRIVER_PYTHON=$PWD/.venv/bin/python
+
+          chmod +x run_tests.sh
+          chmod +x .venv/ -R
+
+          ./run_tests.sh
+
+          pip uninstall pyspark -y
+          pip uninstall delta-spark -y
+
+      - name: containerChecks
+        run: |
+          eval "$(conda shell.bash hook)"
+          conda activate $PWD/.venv
+          source ~/.poetry/env
+          ~/.poetry/bin/poetry install --no-root --no-dev # remove all dev dependencies
+          pip install https://daipe-packages.s3.eu-central-1.amazonaws.com/databricks-connect-9.1.2.tar.gz # pyspark is still needed
+          pip install poethepoet
+          poe container-check

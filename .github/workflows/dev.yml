@@ -1,7 +1,0 @@
-name: Dev pipeline
-on:
-  push:
-
-jobs:
-  build:
-    uses: daipe-ai/daipe-project-ci-cd/.github/workflows/build.yml@v1

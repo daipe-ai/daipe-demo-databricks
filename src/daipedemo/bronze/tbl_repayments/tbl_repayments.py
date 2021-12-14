@@ -30,6 +30,7 @@
 # COMMAND ----------
 
 from pyspark.sql.dataframe import DataFrame
+from pyspark.sql import functions as f
 from datalakebundle.imports import *
 from daipedemo.bronze.tbl_repayments.csv_schema import get_schema as get_csv_schema
 
@@ -48,6 +49,15 @@ from daipedemo.bronze.tbl_repayments.csv_schema import get_schema as get_csv_sch
 # MAGIC #### Hidden files
 # MAGIC
 # MAGIC It is also possible to use hidden files for longer reusable parts of code such as schemas. The `daipedemo.bronze.tbl_repayments.csv_schema.py` is used here as an example. Creating these files requires the local developement environment as they are __not visible__ from Databricks.
+
+# COMMAND ----------
+
+# for unit testing example
+@transformation(
+    read_csv("%loans.repayments_csv_path%", schema=get_csv_schema(), options=dict(header=True)),
+)
+def load_csv_and_make_transformation(df: DataFrame):
+    return df.withColumn("dummy_col", f.lit("dummy"))
 
 # COMMAND ----------
 
