@@ -2,14 +2,14 @@
 # MAGIC %md
 # MAGIC # #8 Comprehensive reporting
 # MAGIC ## Gold layer
-# MAGIC
-# MAGIC Return to <a href="$../_index">index page</a>
-# MAGIC
+# MAGIC 
+# MAGIC Return to <a href="$../../_index">index page</a>
+# MAGIC 
 # MAGIC In this notebook it all comes together. We are going to aggregate data and display it while using widgets for filtering.
 
 # COMMAND ----------
 
-# MAGIC %run ../app/bootstrap
+# MAGIC %run ../../app/bootstrap
 
 # COMMAND ----------
 
@@ -74,7 +74,6 @@ def create_input_widgets(years: DataFrame, countries: DataFrame, ratings: DataFr
     max_year = years.collect()[0][1]
     country_list = list(map(lambda x: x[0], countries.toPandas().values.tolist()))
     rating_list = list(map(lambda x: x[0], ratings.toPandas().values.tolist()))
-    # country_list.append("All")
     rating_list.remove(None)
     rating_list.sort()
 
@@ -154,9 +153,15 @@ def plot_defaults_per_country(df: DataFrame, year, rating, widgets: Widgets):
 
 # COMMAND ----------
 
-# dbutils.widgets.removeAll()
+#@notebook_function()
+#def remove_widgets(widgets: Widgets):
+#    widgets.remove_all()
 
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ### Continue to the <a href="$./tbl_target_features">sample notebook #9</a>
+# MAGIC ### Continue to the <a href="$../feature_store/loans/loan_features">sample notebook #9</a>
+
+# COMMAND ----------
+
+

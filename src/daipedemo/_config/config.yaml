@@ -1,4 +1,16 @@
+imports:
+  - jobs.yaml
+
 parameters:
+  repo:
+    org: "daipe-ai"
+    name: "daipe_demo_databricks"
+    handle: "%repo.org%/%repo.name%"
+
+  databricks:
+    repo:
+      base_dir: "/Repos/%daipe.root_module.name%/{repo_name}"
+
   datalake:
     base_path: '/%kernel.environment%'
 
