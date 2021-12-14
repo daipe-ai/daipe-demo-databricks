@@ -2,6 +2,10 @@ parameters:
   jobs:
     notebooks:
       base_dir: '%databricks.repo.base_dir%/src/%daipe.root_module.name%'
+    cluster:
+      spark_version: "9.1.x-scala2.12"
+      node_type_id: "Standard_DS3_v2"
+      num_workers: 0
 
   jobsbundle:
     databricks:
@@ -9,6 +13,63 @@ parameters:
         on_failure: []
 
     jobs:
+      etl_orchestration:
+        name: '{repo_name} - {identifier}'
+        tasks:
+          - task_key: 'init'
+            notebook_task:
+              notebook_path: '%jobs.notebooks.base_dir%/bronze/init'
+            new_cluster:
+              spark_version: '%jobs.cluster.spark_version%'
+              node_type_id: '%jobs.cluster.node_type_id%'
+              num_workers: '%jobs.cluster.num_workers%'
+          - task_key: 'bronze_tbl_loans'
+            depends_on:
+              - task_key: 'init'
+            notebook_task:
+              notebook_path: '%jobs.notebooks.base_dir%/bronze/tbl_loans'
+            new_cluster:
+              spark_version: '%jobs.cluster.spark_version%'
+              node_type_id: '%jobs.cluster.node_type_id%'
+              num_workers: '%jobs.cluster.num_workers%'
+          - task_key: 'bronze_tbl_repayments'
+            depends_on:
+              - task_key: 'init'
+            notebook_task:
+              notebook_path: '%jobs.notebooks.base_dir%/bronze/tbl_repayments'
+            new_cluster:
+              spark_version: '%jobs.cluster.spark_version%'
+              node_type_id: '%jobs.cluster.node_type_id%'
+              num_workers: '%jobs.cluster.num_workers%'
+          - task_key: 'silver_tbl_loans'
+            depends_on:
+              - task_key: 'bronze_tbl_loans'
+            notebook_task:
+              notebook_path: '%jobs.notebooks.base_dir%/silver/tbl_loans'
+            new_cluster:
+              spark_version: '%jobs.cluster.spark_version%'
+              node_type_id: '%jobs.cluster.node_type_id%'
+              num_workers: '%jobs.cluster.num_workers%'
+          - task_key: 'silver_tbl_repayments'
+            depends_on:
+              - task_key: 'bronze_tbl_repayments'
+            notebook_task:
+              notebook_path: '%jobs.notebooks.base_dir%/silver/tbl_repayments'
+            new_cluster:
+              spark_version: '%jobs.cluster.spark_version%'
+              node_type_id: '%jobs.cluster.node_type_id%'
+              num_workers: '%jobs.cluster.num_workers%'
+          - task_key: 'silver_tbl_joined_loans_and_repayments'
+            depends_on:
+              - task_key: 'silver_tbl_loans'
+              - task_key: 'silver_tbl_repayments'
+            notebook_task:
+              notebook_path: '%jobs.notebooks.base_dir%/silver/tbl_joined_loans_and_repayments'
+            new_cluster:
+              spark_version: '%jobs.cluster.spark_version%'
+              node_type_id: '%jobs.cluster.node_type_id%'
+              num_workers: '%jobs.cluster.num_workers%'
+
       retraining_pipeline:
         name: '{repo_name} - {identifier}'
         tasks:
@@ -23,18 +84,18 @@ parameters:
                 run_date: '2021-11-23'
                 time_column: 'run_date'
             new_cluster:
-              spark_version: '9.1.x-scala2.12'
-              node_type_id: 'Standard_DS3_v2'
-              num_workers: 0
+              spark_version: '%jobs.cluster.spark_version%'
+              node_type_id: '%jobs.cluster.node_type_id%'
+              num_workers: '%jobs.cluster.num_workers%'
           - task_key: 'retraining'
             depends_on:
               - task_key: 'data-monitoring'
             notebook_task:
               notebook_path: '%jobs.notebooks.base_dir%/gold/models/model_training_with_daipe_ml'
             new_cluster:
-              spark_version: '9.1.x-scala2.12'
-              node_type_id: 'Standard_DS3_v2'
-              num_workers: 0
+              spark_version: '%jobs.cluster.spark_version%'
+              node_type_id: '%jobs.cluster.node_type_id%'
+              num_workers: '%jobs.cluster.num_workers%'
           - task_key: 'model_evaluation'
             depends_on:
               - task_key: 'retraining'
@@ -45,9 +106,9 @@ parameters:
                 id_column: 'LoanId'
                 model_name: 'rfc_loan_default_prediction'
             new_cluster:
-              spark_version: '9.1.x-scala2.12'
-              node_type_id: 'Standard_DS3_v2'
-              num_workers: 0
+              spark_version: '%jobs.cluster.spark_version%'
+              node_type_id: '%jobs.cluster.node_type_id%'
+              num_workers: '%jobs.cluster.num_workers%'
 
       feature_orchestration:
         name: '{repo_name} - {identifier}'
@@ -59,9 +120,9 @@ parameters:
                 run_date: '2021-11-23'
                 time_windows: '30d,60d,90d'
             new_cluster:
-              spark_version: '9.1.x-scala2.12'
-              node_type_id: 'Standard_DS3_v2'
-              num_workers: 0
+              spark_version: '%jobs.cluster.spark_version%'
+              node_type_id: '%jobs.cluster.node_type_id%'
+              num_workers: '%jobs.cluster.num_workers%'
               
       predictions:
         name: '{repo_name} - {identifier}'
@@ -75,6 +136,6 @@ parameters:
                 model_name: 'rfc_loan_default_prediction'
                 table_name: 'tbl_defaults_predictions'
             new_cluster:
-              spark_version: '9.1.x-scala2.12'
-              node_type_id: 'Standard_DS3_v2'
-              num_workers: 0
+              spark_version: '%jobs.cluster.spark_version%'
+              node_type_id: '%jobs.cluster.node_type_id%'
+              num_workers: '%jobs.cluster.num_workers%'
