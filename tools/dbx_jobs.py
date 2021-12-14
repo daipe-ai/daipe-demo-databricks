@@ -4,7 +4,7 @@
 
 # COMMAND ----------
 
-pip install jobs-bundle=="0.4.0" &> /dev/null
+# MAGIC %pip install jobs-bundle=="0.4.0" &> /dev/null
 
 # COMMAND ----------
 
