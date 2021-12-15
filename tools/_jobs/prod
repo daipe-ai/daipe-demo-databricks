@@ -4,6 +4,7 @@ ENV=$(basename "$0")
 
 REPO_NAME=$1
 
+daipe dbx:job:create-or-update etl_orchestration --env="$ENV" --repo_name="$REPO_NAME"
 daipe dbx:job:create-or-update retraining_pipeline --env="$ENV" --repo_name="$REPO_NAME"
 daipe dbx:job:create-or-update feature_orchestration --env="$ENV" --repo_name="$REPO_NAME"
 daipe dbx:job:create-or-update predictions --env="$ENV" --repo_name="$REPO_NAME"
