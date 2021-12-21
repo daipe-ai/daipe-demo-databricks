@@ -167,7 +167,7 @@ python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*"
 
 [[package]]
 name = "daipe-core"
-version = "1.3.0"
+version = "1.3.2"
 description = "Daipe framework core"
 category = "main"
 optional = false
@@ -251,7 +251,7 @@ simpleeval = ">=0.9.10,<1.0.0"
 
 [[package]]
 name = "dbx-deploy"
-version = "1.2.0"
+version = "1.2.2"
 description = "Databricks Deployment Tool"
 category = "dev"
 optional = false
@@ -559,7 +559,7 @@ python-versions = ">=3.6"
 
 [[package]]
 name = "jobs-bundle"
-version = "0.4.0"
+version = "0.5.0"
 description = "Databricks jobs management bundle for the Daipe Framework"
 category = "dev"
 optional = false
@@ -1485,7 +1485,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=1.2.3)", "pytest-flake8", "pyt
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.10"
-content-hash = "dc968396eb8a0a5e1a9e565d50f0234649ad8432d0bf55cfd75d9661b223fbef"
+content-hash = "910711c4007bdebfb1bc520e7e119cae787c3afe7460e7c075a648a0d587a4ed"
 
 [metadata.files]
 appdirs = [
@@ -1638,7 +1638,7 @@ cython = [
     {file = "Cython-0.29.23.tar.gz", hash = "sha256:6a0d31452f0245daacb14c979c77e093eb1a546c760816b5eed0047686baad8e"},
 ]
 daipe-core = [
-    {file = "daipe_core-1.3.0-py3-none-any.whl", hash = "sha256:7b15c9bdee7150f17f5853c6ceeb5f4476b208b7004ed57ad26f77697a71acce"},
+    {file = "daipe_core-1.3.2-py3-none-any.whl", hash = "sha256:5aee2e51295b300b83b5acf1f40fd0dfc785291902d747f5c72299cc26f02c6c"},
 ]
 databricks-bundle = [
     {file = "databricks_bundle-1.3.1-py3-none-any.whl", hash = "sha256:6f658f444da49b1c8b904fad2d2f67969d74fed824fce62139f3caa6d460a49b"},
@@ -1652,7 +1652,7 @@ datalake-bundle = [
     {file = "datalake_bundle-1.2.2-py3-none-any.whl", hash = "sha256:0da33499bfc095fa91a1331f38299bf628e63d5cc13272f6f0a52f5dc16e34dc"},
 ]
 dbx-deploy = [
-    {file = "dbx_deploy-1.2.0-py3-none-any.whl", hash = "sha256:fb7be4fa677b67c090c05c3bc39f9b0005c21ebe25325105ff4d717e297f9252"},
+    {file = "dbx_deploy-1.2.2-py3-none-any.whl", hash = "sha256:0dda768b346f454dd9d9dfbcaedd10077efad1a9a6bef754d863c8b0f74d74f2"},
 ]
 dbx-notebook-exporter = [
     {file = "dbx-notebook-exporter-0.4.1.tar.gz", hash = "sha256:45fc607bdbd919db425b5a03417a9b7b722c25c92c633c353dbbb510ec0d193d"},
@@ -1797,7 +1797,7 @@ joblib = [
     {file = "joblib-1.0.1.tar.gz", hash = "sha256:9c17567692206d2f3fb9ecf5e991084254fe631665c450b443761c4186a613f7"},
 ]
 jobs-bundle = [
-    {file = "jobs_bundle-0.4.0-py3-none-any.whl", hash = "sha256:ef7459d7033c3e2191060cdb1a820d03f70f2372ac3d2a7ff23432045481d623"},
+    {file = "jobs_bundle-0.5.0-py3-none-any.whl", hash = "sha256:2d3226e287f8b3bf55b62fb8295bab4c6b9002cdd6fead4999bbf1c44febde98"},
 ]
 jsonschema = [
     {file = "jsonschema-4.2.1-py3-none-any.whl", hash = "sha256:2a0f162822a64d95287990481b45d82f096e99721c86534f48201b64ebca6e8c"},

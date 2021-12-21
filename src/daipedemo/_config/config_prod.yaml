@@ -4,6 +4,10 @@ imports:
 parameters:
   databricks:
     address: '[Your workspace address]'
+    repo:
+      base_dir: "/Repos/{repo_name}/{branch_name}"
+    job:
+      suffix: "{repo_name}"
 
   datalakebundle:
     notebook:

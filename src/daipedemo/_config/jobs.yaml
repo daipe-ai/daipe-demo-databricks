@@ -6,6 +6,8 @@ parameters:
       spark_version: "9.1.x-scala2.12"
       node_type_id: "Standard_DS3_v2"
       num_workers: 0
+      spark_env_vars:
+        APP_ENV: "%kernel.environment%"
 
   jobsbundle:
     databricks:
@@ -14,7 +16,7 @@ parameters:
 
     jobs:
       etl_orchestration:
-        name: '{repo_name} - {identifier}'
+        name: '{identifier} - %databricks.job.suffix%'
         tasks:
           - task_key: 'init'
             notebook_task:
@@ -53,7 +55,7 @@ parameters:
             new_cluster: '%jobs.cluster%'
 
       retraining_pipeline:
-        name: '{repo_name} - {identifier}'
+        name: '{identifier} - %databricks.job.suffix%'
         tasks:
           - task_key: 'data-monitoring'
             notebook_task:
@@ -84,7 +86,7 @@ parameters:
             new_cluster: '%jobs.cluster%'
 
       feature_orchestration:
-        name: '{repo_name} - {identifier}'
+        name: '{identifier} - %databricks.job.suffix%'
         tasks:
           - task_key: 'feature-orchestrator'
             notebook_task:
@@ -95,7 +97,7 @@ parameters:
             new_cluster: '%jobs.cluster%'
 
       predictions:
-        name: '{repo_name} - {identifier}'
+        name: '{identifier} - %databricks.job.suffix%'
         tasks:
           - task_key: 'predictions-generator'
             notebook_task:
