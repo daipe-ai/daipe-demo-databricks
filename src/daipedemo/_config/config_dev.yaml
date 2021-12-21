@@ -5,4 +5,6 @@ parameters:
   databricks:
     address: '[Your workspace address]'
     repo:
-      base_dir: "/Repos/{user_folder_name}/{repo_name}"
+      base_dir: "/Repos/{user_folder_name}/{dir_name}"
+    job:
+      suffix: "{user_folder_name} ({dir_name})"
