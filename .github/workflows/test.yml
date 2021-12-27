@@ -15,4 +15,3 @@ jobs:
       command: daipe dbx:repo:update --env=test --repo-url=${{ github.server_url }}/${{ github.repository }}.git --branch=${{ github.head_ref }} --repo-name=${{ github.head_ref }}
     secrets:
       DBX_TOKEN: ${{ secrets.DBX_TOKEN }}
-
