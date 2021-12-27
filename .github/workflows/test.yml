@@ -4,14 +4,18 @@ on:
 
 jobs:
   build:
-    uses: daipe-ai/daipe-project-ci-cd/.github/workflows/build.yml@v1
+    uses: daipe-ai/daipe-project-ci-cd/.github/workflows/build.yml@master
 
-  deploy:
+  replace:
     needs: build
-    uses: daipe-ai/daipe-project-ci-cd/.github/workflows/run_command.yml@v1
-    with:
-      command: daipe dbx:repo:update --env=test --repo-url=${{ github.server_url }}/${{ github.repository }}.git --branch=${{ github.head_ref }} --repo-name=${{ github.head_ref }}
-      env: test
+    uses: daipe-ai/daipe-project-ci-cd/.github/workflows/replace_dbx_url.yml@master
     secrets:
       DBX_URL: ${{ secrets.DBX_URL }}
+
+  deploy:
+    needs: replace
+    uses: daipe-ai/daipe-project-ci-cd/.github/workflows/run_command.yml@master
+    with:
+      command: daipe dbx:repo:update --env=test --repo-url=${{ github.server_url }}/${{ github.repository }}.git --branch=${{ github.head_ref }} --repo-name=${{ github.head_ref }}
+    secrets:
       DBX_TOKEN: ${{ secrets.DBX_TOKEN }}
