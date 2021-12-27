@@ -3,18 +3,14 @@ on:
   pull_request:
 
 jobs:
-  build:
-    uses: daipe-ai/daipe-project-ci-cd/.github/workflows/build.yml@master
-
   replace:
-    needs: build
-    uses: daipe-ai/daipe-project-ci-cd/.github/workflows/replace_dbx_url.yml@master
+    uses: daipe-ai/daipe-project-ci-cd/.github/workflows/replace_dbx_url.yml@test
     secrets:
       DBX_URL: ${{ secrets.DBX_URL }}
 
   deploy:
     needs: replace
-    uses: daipe-ai/daipe-project-ci-cd/.github/workflows/run_command.yml@master
+    uses: daipe-ai/daipe-project-ci-cd/.github/workflows/run_command.yml@test
     with:
       command: daipe dbx:repo:update --env=test --repo-url=${{ github.server_url }}/${{ github.repository }}.git --branch=${{ github.head_ref }} --repo-name=${{ github.head_ref }}
     secrets:
