@@ -5,9 +5,9 @@ parameters:
   databricks:
     address: 'https://adb-8328309645514519.19.azuredatabricks.net/'
     repo:
-      base_dir: "/Repos/{repo_name}/{branch_name}"
+      base_dir: "/Repos/{repo_name}/{tag_name}"
     job:
-      suffix: "{repo_name}"
+      suffix: "{repo_name} ({tag_name})"
 
   datalakebundle:
     notebook:
