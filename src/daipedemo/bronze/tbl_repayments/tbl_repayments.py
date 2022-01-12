@@ -13,13 +13,13 @@
 # MAGIC %md
 # MAGIC ### Decorators
 # MAGIC Here are the most important decorators
-# MAGIC  - `@transformation()` - for manipulating with DataFrames
-# MAGIC    - read_csv()
-# MAGIC    - read_table()
-# MAGIC  - `@notebook_function()`  - for anything other than manipulationg with DataFrames
-# MAGIC  - `@table_overwrite`
-# MAGIC  - `@table_upsert`
-# MAGIC  - `@table_append`
+# MAGIC  - `@dp.transformation()` - for manipulating with DataFrames
+# MAGIC    - dp.read_csv()
+# MAGIC    - dp.read_table()
+# MAGIC  - `@dp.notebook_function()`  - for anything other than manipulationg with DataFrames
+# MAGIC  - `@dp.table_overwrite`
+# MAGIC  - `@dp.table_upsert`
+# MAGIC  - `@dp.table_append`
 # MAGIC
 # MAGIC  For further information read [here](https://docs.daipe.ai/data-pipelines-workflow/managing-datalake/#4-writing-function-based-notebooks)
 
@@ -30,7 +30,7 @@
 # COMMAND ----------
 
 from pyspark.sql.dataframe import DataFrame
-from datalakebundle.imports import *
+import daipe as dp
 from daipedemo.bronze.tbl_repayments.csv_schema import get_schema as get_csv_schema
 
 # COMMAND ----------
@@ -51,10 +51,10 @@ from daipedemo.bronze.tbl_repayments.csv_schema import get_schema as get_csv_sch
 
 # COMMAND ----------
 
-@transformation(
-    read_csv("%loans.repayments_csv_path%", schema=get_csv_schema(), options=dict(header=True)),
+@dp.transformation(
+    dp.read_csv("%loans.repayments_csv_path%", schema=get_csv_schema(), options=dict(header=True)),
 )
-@table_overwrite("bronze.tbl_repayments")
+@dp.table_overwrite("bronze.tbl_repayments")
 def load_csv_and_save(df: DataFrame):
     return df
 

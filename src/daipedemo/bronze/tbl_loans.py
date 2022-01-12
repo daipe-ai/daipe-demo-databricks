@@ -25,12 +25,12 @@
 
 # MAGIC %md
 # MAGIC ### Imports
-# MAGIC Everything the Daipe framework needs is imported using `from datalakebundle.imports import *`
+# MAGIC Everything the Daipe framework needs is imported using `import daipe as dp`
 
 # COMMAND ----------
 
 from pyspark.sql.dataframe import DataFrame
-from datalakebundle.imports import *
+import daipe as dp
 
 # COMMAND ----------
 
@@ -67,13 +67,13 @@ display(df)
 
 # MAGIC %md
 # MAGIC
-# MAGIC #### Introducing the `@transformation()` decorator
+# MAGIC #### Introducing the `@dp.transformation()` decorator
 # MAGIC
 # MAGIC The tranformation decorator is used whenever the enclosed function manipulates with a DataFrame - meaning a DataFrame is its input and a transformed DataFrame its output. `display=True` allows to display the input DataFrame.
 # MAGIC
 # MAGIC It takes a `read_csv` function as an argument. The `read_csv` function loads the CSV data into a DataFrame which is then __injected__ into the `save` function. We can simply do the DataFrame modifications inside the save function.
 # MAGIC
-# MAGIC The modified DataFrame is then returned and saved in a table using the secondary `@table_overwrite()` decorator. This decorator takes a `table_name` as its argument and it is used in conjunction with the `@transformation()` decorator to save to output DataFrame into the `table_name`.
+# MAGIC The modified DataFrame is then returned and saved in a table using the secondary `@dp.table_overwrite()` decorator. This decorator takes a `table_name` as its argument and it is used in conjunction with the `@dp.transformation()` decorator to save to output DataFrame into the `table_name`.
 # MAGIC
 # MAGIC #### Advantages
 # MAGIC
@@ -87,8 +87,8 @@ display(df)
 
 # COMMAND ----------
 
-@transformation(read_csv("/LoanData.csv", options=dict(header=True, inferSchema=True)), display=True)
-@table_overwrite("bronze.tbl_loans")
+@dp.transformation(dp.read_csv("/LoanData.csv", options=dict(header=True, inferSchema=True)), display=True)
+@dp.table_overwrite("bronze.tbl_loans")
 def save(df: DataFrame):
     return df.orderBy("LoanDate")
 

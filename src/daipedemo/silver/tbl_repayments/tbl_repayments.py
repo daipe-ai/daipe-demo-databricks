@@ -14,7 +14,7 @@
 
 from pyspark.sql import functions as f
 from pyspark.sql.dataframe import DataFrame
-from datalakebundle.imports import *
+import daipe as dp
 
 # COMMAND ----------
 
@@ -22,12 +22,12 @@ from datalakebundle.imports import *
 # MAGIC In this case we will load it from the `daipedemo.silver.tbl_repayments.schema` python module which contains the following code:
 # MAGIC
 # MAGIC ```python
-# MAGIC from datalakebundle.table.schema.TableSchema import TableSchema
+# MAGIC import daipe as dp
 # MAGIC from pyspark.sql import types as t
 # MAGIC
 # MAGIC
 # MAGIC def get_schema():
-# MAGIC     return TableSchema(
+# MAGIC     return dp.TableSchema(
 # MAGIC         [
 # MAGIC             t.StructField("ReportAsOfEOD", t.DateType(), True),
 # MAGIC             t.StructField("LoanID", t.StringType(), True),
@@ -47,15 +47,15 @@ from datalakebundle.imports import *
 # MAGIC %md
 # MAGIC ### Table upsert
 # MAGIC
-# MAGIC It is not necessary to overwrite the table while incorporating new data. `@table_upsert` uses the primary key to either __update__ existing records or __insert__ new ones.
+# MAGIC It is not necessary to overwrite the table while incorporating new data. `@dp.table_upsert` uses the primary key to either __update__ existing records or __insert__ new ones.
 
 # COMMAND ----------
 
 from daipedemo.silver.tbl_repayments.schema import get_schema
 
 
-@transformation(read_table("bronze.tbl_repayments"), display=True)
-@table_upsert("silver.tbl_repayments", get_schema())
+@dp.transformation(dp.read_table("bronze.tbl_repayments"), display=True)
+@dp.table_upsert("silver.tbl_repayments", get_schema())
 def apply_schema_and_save(df: DataFrame):
     return df.withColumn("ReportAsOfEOD", f.to_date("ReportAsOfEOD")).withColumn("Date", f.to_date("Date"))
 

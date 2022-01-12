@@ -18,8 +18,7 @@ from alibi_detect.cd.tabular import TabularDrift
 from pyspark.sql import functions as f, types as t, SparkSession, DataFrame
 from databricks.feature_store import FeatureStoreClient
 
-from datalakebundle.imports import *
-from daipecore.widgets.Widgets import Widgets
+import daipe as dp
 from featurestorebundle.feature.FeatureStore import FeatureStore
 from daipedemo.mlops.monitoring import get_drift_table_schema, plot_drift
 
@@ -32,8 +31,8 @@ Args = namedtuple('Args', 'model_uri run_date entity_name id_column time_column 
 
 # COMMAND ----------
 
-@notebook_function()
-def set_widgets(widgets: Widgets):
+@dp.notebook_function()
+def set_widgets(widgets: dp.Widgets):
     """Set widgets for args"""
 
     widgets.add_text("run_date", dt.date.today().strftime("%Y-%m-%d"))
@@ -50,8 +49,8 @@ def set_widgets(widgets: Widgets):
 
 # COMMAND ----------
 
-@notebook_function()
-def args(widgets: Widgets) -> Args:
+@dp.notebook_function()
+def args(widgets: dp.Widgets) -> Args:
     """Get widgets args"""
     
     return (
@@ -97,7 +96,7 @@ def get_features(feature_store: FeatureStore, date: dt.datetime, args: Args):
 
 # COMMAND ----------
 
-@transformation(args, display=True)
+@dp.transformation(args, display=True)
 def features_day_before(args: Args, feature_store: FeatureStore):
     """Get a features a day before"""
 
@@ -111,7 +110,7 @@ def features_day_before(args: Args, feature_store: FeatureStore):
 
 # COMMAND ----------
 
-@transformation(args, display=True)
+@dp.transformation(args, display=True)
 def features_today(args: Args, feature_store: FeatureStore):
     """Get a features a today"""
     
@@ -124,7 +123,7 @@ def features_today(args: Args, feature_store: FeatureStore):
 
 # COMMAND ----------
 
-@notebook_function(features_today, features_day_before, args)
+@dp.notebook_function(features_today, features_day_before, args)
 def show_plot(now_df, day_before_df, args: Args):
     plot_drift(now_df, day_before_df, args.feature_to_plot)
 
@@ -135,7 +134,7 @@ def show_plot(now_df, day_before_df, args: Args):
 
 # COMMAND ----------
 
-@notebook_function(features_today, features_day_before)
+@dp.notebook_function(features_today, features_day_before)
 def get_drift(features_now_pandas, features_day_before_pandas):
     """Calculate drift"""
 
@@ -151,8 +150,8 @@ def get_drift(features_now_pandas, features_day_before_pandas):
 
 # COMMAND ----------
 
-@transformation(args, get_drift, display=True)
-@table_upsert("gold.tbl_data_monitoring", get_drift_table_schema())
+@dp.transformation(args, get_drift, display=True)
+@dp.table_upsert("gold.tbl_data_monitoring", get_drift_table_schema())
 def save_result(args: Args, result, spark: SparkSession):
     """Save schema into a logging table"""
     
@@ -168,7 +167,7 @@ def save_result(args: Args, result, spark: SparkSession):
 
 # COMMAND ----------
 
-@notebook_function(get_drift)
+@dp.notebook_function(get_drift)
 def check_drift(result, logger: Logger):
     """Throw an exception if drift is detected"""
 

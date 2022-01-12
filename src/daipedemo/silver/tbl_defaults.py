@@ -7,7 +7,7 @@
 
 # MAGIC %md
 # MAGIC #### Widgets
-# MAGIC Many people love using [Databricks widgets](https://docs.databricks.com/notebooks/widgets.html) to parametrize notebooks. To use widgets in Daipe, you should put them into a `@notebook_function`.
+# MAGIC Many people love using [Databricks widgets](https://docs.databricks.com/notebooks/widgets.html) to parametrize notebooks. To use widgets in Daipe, you should put them into a `@dp.notebook_function`.
 # MAGIC 
 # MAGIC Don't forget to check  or run command `dbutils.widgets.help()` to see options you have while working with widgets.
 
@@ -20,9 +20,7 @@
 from pyspark.sql import functions as f, types as t
 from logging import Logger
 from pyspark.sql.dataframe import DataFrame
-from datalakebundle.imports import *
-from daipecore.widgets.Widgets import Widgets
-from daipecore.widgets.get_widget_value import get_widget_value
+import daipe as dp
 
 # COMMAND ----------
 
@@ -30,8 +28,8 @@ from daipecore.widgets.get_widget_value import get_widget_value
 
 # COMMAND ----------
 
-@notebook_function()
-def create_input_widgets(widgets: Widgets):
+@dp.notebook_function()
+def create_input_widgets(widgets: dp.Widgets):
     widgets.add_select("base_year", list(map(str, range(2009, 2022))), "2015", "Base year")
 
 # COMMAND ----------
@@ -41,7 +39,7 @@ def create_input_widgets(widgets: Widgets):
 
 # COMMAND ----------
 
-@transformation(read_table("silver.tbl_loans"), get_widget_value("base_year"), display=True)
+@dp.transformation(dp.read_table("silver.tbl_loans"), dp.get_widget_value("base_year"), display=True)
 def read_table_bronze_loans_tbl_loans(df: DataFrame, base_year, logger: Logger):
     logger.info(f"Using base year: {base_year}")
 
@@ -49,7 +47,7 @@ def read_table_bronze_loans_tbl_loans(df: DataFrame, base_year, logger: Logger):
 
 # COMMAND ----------
 
-@transformation(read_table_bronze_loans_tbl_loans, display=True)
+@dp.transformation(read_table_bronze_loans_tbl_loans, display=True)
 def add_defaulted_column(df: DataFrame):
     return df.withColumn("Defaulted", f.col("DefaultDate").isNotNull()).where(f.col("Defaulted"))
 
@@ -61,7 +59,7 @@ def add_defaulted_column(df: DataFrame):
 # COMMAND ----------
 
 def get_schema():
-    return TableSchema(
+    return dp.TableSchema(
         [
             t.StructField("LoanID", t.StringType(), True),
             t.StructField("Rating", t.StringType(), True),
@@ -77,8 +75,8 @@ def get_schema():
 
 # COMMAND ----------
 
-@transformation(add_defaulted_column, display=True)
-@table_upsert("silver.tbl_defaults", get_schema())
+@dp.transformation(add_defaulted_column, display=True)
+@dp.table_upsert("silver.tbl_defaults", get_schema())
 def select_columns_and_save(df: DataFrame):
     return df.select("LoanID", "Rating", "Country", "Defaulted", f.year("DefaultDate").alias("Year"), f.month("DefaultDate").alias("Month"))
 
@@ -88,8 +86,8 @@ def select_columns_and_save(df: DataFrame):
 
 # COMMAND ----------
 
-# @notebook_function()
-# def remove_widgets(widgets: Widgets):
+# @dp.notebook_function()
+# def remove_widgets(widgets: dp.Widgets):
 #     widgets.remove_all()
 
 # COMMAND ----------

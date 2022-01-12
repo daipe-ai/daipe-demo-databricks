@@ -21,8 +21,7 @@ import numpy as np
 import datetime as dt
 from pyspark.sql import DataFrame, functions as f
 
-from datalakebundle.imports import *
-from daipecore.imports import Widgets
+import daipe as dp
 from featurestorebundle.windows.windowed_features import windowed, with_time_windows
 Args = namedtuple('Args', 'run_date time_windows')
 
@@ -33,8 +32,8 @@ Args = namedtuple('Args', 'run_date time_windows')
 
 # COMMAND ----------
 
-@notebook_function()
-def create_input_widgets(widgets: Widgets):
+@dp.notebook_function()
+def create_input_widgets(widgets: dp.Widgets):
     widgets.add_text("run_date", dt.date.today().strftime("%Y-%m-%d"))
     widgets.add_text('time_windows', "30d,60d,90d")
 
@@ -45,8 +44,8 @@ def create_input_widgets(widgets: Widgets):
 
 # COMMAND ----------
 
-@notebook_function()
-def args(widgets: Widgets) -> Args:
+@dp.notebook_function()
+def args(widgets: dp.Widgets) -> Args:
     """Get widgets args"""
     
     return (
@@ -58,7 +57,7 @@ def args(widgets: Widgets) -> Args:
 
 # COMMAND ----------
 
-@transformation(read_table("silver.tbl_joined_loans_and_repayments"), args, display=True)
+@dp.transformation(dp.read_table("silver.tbl_joined_loans_and_repayments"), args, display=True)
 def joined_loans_and_repayments_with_time_windows(df: DataFrame, args: Args):    
     return (
       with_time_windows(df, "Date", f.lit(args.run_date), args.time_windows)
@@ -68,7 +67,7 @@ def joined_loans_and_repayments_with_time_windows(df: DataFrame, args: Args):
 
 # COMMAND ----------
 
-@transformation(joined_loans_and_repayments_with_time_windows, args, display=True)
+@dp.transformation(joined_loans_and_repayments_with_time_windows, args, display=True)
 @loan_feature(
     ("interest_repayment_{agg_fun}_{time_window}", "{agg_fun} of interest repayment in a {time_window} period"),
     category="personal",

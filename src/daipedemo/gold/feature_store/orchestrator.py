@@ -15,14 +15,12 @@
 
 import datetime as dt
 import numpy as np
-
-from daipecore.widgets.Widgets import Widgets
-from datalakebundle.imports import *
+import daipe as dp
 
 # COMMAND ----------
 
-@notebook_function()
-def set_widgets(widgets: Widgets):
+@dp.notebook_function()
+def set_widgets(widgets: dp.Widgets):
     widgets.add_text("run_date", dt.date.today().strftime("%Y-%m-%d"))
     widgets.add_text('time_windows', "30d,60d,90d")
 
