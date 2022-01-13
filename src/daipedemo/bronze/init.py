@@ -24,7 +24,7 @@ import os
 import urllib.request
 from zipfile import ZipFile
 from pyspark.sql import SparkSession
-from datalakebundle.imports import *
+import daipe as dp
 
 # COMMAND ----------
 
@@ -46,13 +46,13 @@ from datalakebundle.imports import *
 # MAGIC We are using the **Public Reports** dataset from Bondora, an Estonian peer-to-peer loan company.
 # MAGIC For dataset format and explanation visit [here](https://www.bondora.com/en/public-reports#dataset-file-format)
 # MAGIC
-# MAGIC In this use-case we introduce the `@notebook_function()` decorator. This decorator is used when writing functions which do __anything other__ than transforming DataFrames e.g. downloading and unziping data or creating empty databases.
+# MAGIC In this use-case we introduce the `@dp.notebook_function()` decorator. This decorator is used when writing functions which do __anything other__ than transforming DataFrames e.g. downloading and unziping data or creating empty databases.
 # MAGIC
-# MAGIC More about `@notebook_function()` decorator can be found in [technical documentation](https://docs.daipe.ai/data-pipelines-workflow/technical-docs/#notebook_function).
+# MAGIC More about `@dp.notebook_function()` decorator can be found in [technical documentation](https://docs.daipe.ai/data-pipelines-workflow/technical-docs/#notebook_function).
 
 # COMMAND ----------
 
-@notebook_function()
+@dp.notebook_function()
 def download_data():
     opener = urllib.request.URLopener()
     # Bondora server checks User-Agent and forbids the default User-Agent of urllib
@@ -71,7 +71,7 @@ def download_data():
 
 # COMMAND ----------
 
-@notebook_function()
+@dp.notebook_function()
 def unpack_data():
     with ZipFile("/loanData.zip", "r") as zip_obj:
         zip_obj.extractall("/")
@@ -86,7 +86,7 @@ def unpack_data():
 
 # COMMAND ----------
 
-@notebook_function()
+@dp.notebook_function()
 def move_to_dbfs():
     dbutils.fs.cp("file:/LoanData.csv", "dbfs:/")  # noqa: F821
     dbutils.fs.cp("file:/RepaymentsData.csv", "dbfs:/")  # noqa: F821
@@ -99,7 +99,7 @@ def move_to_dbfs():
 
 # COMMAND ----------
 
-@notebook_function()
+@dp.notebook_function()
 def show_env():
     print(f"We are currently in the {os.environ['APP_ENV']} environment")
 
@@ -111,7 +111,7 @@ def show_env():
 
 # COMMAND ----------
 
-@notebook_function()
+@dp.notebook_function()
 def init(spark: SparkSession):
     print(f"create database if not exists {os.environ['APP_ENV']}_bronze;")
     spark.sql(f"create database if not exists {os.environ['APP_ENV']}_bronze;")  # noqa: F821

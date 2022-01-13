@@ -18,8 +18,7 @@ import numpy as np
 import datetime as dt
 from pyspark.sql import DataFrame, Column, functions as f
 
-from datalakebundle.imports import *
-from daipecore.imports import Widgets
+import daipe as dp
 from featurestorebundle.windows.windowed_features import windowed, with_time_windows
 Args = namedtuple('Args', 'run_date time_windows target_date_column')
 
@@ -30,8 +29,8 @@ Args = namedtuple('Args', 'run_date time_windows target_date_column')
 
 # COMMAND ----------
 
-@notebook_function()
-def create_input_widgets(widgets: Widgets):
+@dp.notebook_function()
+def create_input_widgets(widgets: dp.Widgets):
     widgets.add_text("run_date", dt.date.today().strftime("%Y-%m-%d"))
     widgets.add_text('time_windows', "30d,60d,90d")
     widgets.add_select('target_date_column', ["run_date", "MaturityDate_Original_Minus_5y"], "run_date")
@@ -43,8 +42,8 @@ def date(datestr: str):
 
 # COMMAND ----------
 
-@notebook_function()
-def args(widgets: Widgets) -> Args:
+@dp.notebook_function()
+def args(widgets: dp.Widgets) -> Args:
     """Get widgets args"""
     
     return (
@@ -64,7 +63,7 @@ def args(widgets: Widgets) -> Args:
 
 # COMMAND ----------
 
-@transformation(read_table("silver.tbl_joined_loans_and_repayments"), args, display=True)
+@dp.transformation(dp.read_table("silver.tbl_joined_loans_and_repayments"), args, display=True)
 def joined_loans_and_repayments(df: DataFrame, args: Args):
     df = df.withColumn("MaturityDate_Original_Minus_5y", f.date_sub(f.col("MaturityDate_Original"), 365*5))
     diff = f.datediff(f.current_date(), "MaturityDate_Original_Minus_5y")
@@ -83,7 +82,7 @@ def joined_loans_and_repayments(df: DataFrame, args: Args):
 
 # COMMAND ----------
 
-@notebook_function(joined_loans_and_repayments, args)
+@db.notebook_function(joined_loans_and_repayments, args)
 def get_target_date_column(df: DataFrame, args: Args, logger: Logger):
     if args.target_date_column == "run_date":
       logger.info(f"Target date column set to a static run_date = {args.run_date}")
@@ -102,7 +101,7 @@ def get_target_date_column(df: DataFrame, args: Args, logger: Logger):
 
 # COMMAND ----------
 
-@transformation(joined_loans_and_repayments, get_target_date_column, args, display=True)
+@dp.transformation(joined_loans_and_repayments, get_target_date_column, args, display=True)
 def joined_loans_and_repayments_with_time_windows(df: DataFrame, target_date_column: Column, args: Args):
     df_with_time_windows = with_time_windows(df, "Date", target_date_column, args.time_windows)
     
@@ -117,7 +116,7 @@ def joined_loans_and_repayments_with_time_windows(df: DataFrame, target_date_col
 
 # COMMAND ----------
 
-@transformation(joined_loans_and_repayments_with_time_windows, args, display=True)
+@dp.transformation(joined_loans_and_repayments_with_time_windows, args, display=True)
 @loan_feature(
   ('number_of_repayments_in_last_{time_window}', 'Number of repayments made in the last {time_window}.'),
     category = 'test',

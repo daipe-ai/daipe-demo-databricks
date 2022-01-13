@@ -6,14 +6,13 @@
 import datetime as dt
 from logging import Logger
 
-import datalakebundle.imports as dl
-from daipecore.widgets.Widgets import Widgets
+import daipe as dp
 from featurestorebundle.databricks.DatabricksFeatureStoreWriter import DatabricksFeatureStoreWriter
 
 # COMMAND ----------
 
-@dl.notebook_function()
-def set_widgets(widgets: Widgets):
+@dp.notebook_function()
+def set_widgets(widgets: dp.Widgets):
     """Set a widget for picking run_date"""
 
     widgets.add_text("run_date", dt.date.today().strftime("%Y-%m-%d"))

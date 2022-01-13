@@ -19,9 +19,7 @@
 import datetime as dt
 
 import numpy as np
-from daipecore.widgets.Widgets import Widgets
-from daipecore.widgets.get_widget_value import get_widget_value
-from datalakebundle.imports import *
+import daipe as dp
 from pyspark.ml.feature import Bucketizer
 from pyspark.sql import DataFrame, functions as f, Window
 
@@ -32,8 +30,8 @@ from pyspark.sql import DataFrame, functions as f, Window
 
 # COMMAND ----------
 
-@notebook_function()
-def create_input_widgets(widgets: Widgets):
+@dp.notebook_function()
+def create_input_widgets(widgets: dp.Widgets):
     widgets.add_text("observation_period", "90", "Observation period")
     widgets.add_text("default_days", "90", "Default days")
     widgets.add_text("default_prediction", "365", "Default prediction")
@@ -46,7 +44,7 @@ def create_input_widgets(widgets: Widgets):
 
 # COMMAND ----------
 
-@transformation(read_table("silver.tbl_joined_loans_and_repayments"))
+@dp.transformation(dp.read_table("silver.tbl_joined_loans_and_repayments"))
 def read_joined_loans_and_repayments(df: DataFrame):
     return df
 
@@ -57,7 +55,7 @@ def read_joined_loans_and_repayments(df: DataFrame):
 
 # COMMAND ----------
 
-@transformation(read_joined_loans_and_repayments)
+@dp.transformation(read_joined_loans_and_repayments)
 def select_columns(df: DataFrame):
     return df.select(
         "LoanId",
@@ -106,14 +104,14 @@ def select_columns(df: DataFrame):
 
 # COMMAND ----------
 
-@transformation(select_columns)
+@dp.transformation(select_columns)
 def get_buckets(df: DataFrame):
     split_list = [float(i) for i in np.arange(0, 81, 5)]
     return Bucketizer(splits=split_list, inputCol="Age", outputCol="AgeGroup").transform(df).drop("Age")
 
 # COMMAND ----------
 
-@transformation(get_buckets)
+@dp.transformation(get_buckets)
 def get_new_features(df: DataFrame):
     return (
         df.withColumn(
@@ -146,8 +144,8 @@ def get_new_features(df: DataFrame):
 # nextPaymentDiff - how many days was between two payments, if more than default_days, then we cansider this loans as defaulted
 # DaysFromStart - we want to concentrate only on new loans and investigate its probability of dafault within default_prediction length
 # FeaturesForPrediction - as our features, we want to consider only informations which we learn about a client in the observation_period
-@transformation(
-    get_new_features, get_widget_value("default_days"), get_widget_value("default_prediction"), get_widget_value("observation_period")
+@dp.transformation(
+    get_new_features, dp.get_widget_value("default_days"), dp.get_widget_value("default_prediction"), dp.get_widget_value("observation_period")
 )
 def get_target(df: DataFrame, default_days, default_prediction, observation_period):
     w = Window.partitionBy("LoanID").orderBy("Date")
@@ -167,13 +165,13 @@ def get_target(df: DataFrame, default_days, default_prediction, observation_peri
 
 # COMMAND ----------
 
-@transformation(get_target, get_widget_value("observation_period"))
+@dp.transformation(get_target, dp.get_widget_value("observation_period"))
 def get_loans_with_immediate_default(df: DataFrame, observation_period):
     return df.filter(f.col("label") == 1).filter(f.col("DaysFromStart") < observation_period).select("LoanID").distinct()
 
 # COMMAND ----------
 
-@transformation(get_target, get_loans_with_immediate_default)
+@dp.transformation(get_target, get_loans_with_immediate_default)
 def get_target_without_shortterm_default(df_target: DataFrame, df_loans_with_immediate_default: DataFrame):
     return (
         df_target.join(df_loans_with_immediate_default, on="LoanID", how="left_anti")
@@ -188,7 +186,7 @@ def get_target_without_shortterm_default(df_target: DataFrame, df_loans_with_imm
 
 # COMMAND ----------
 
-@transformation(get_target_without_shortterm_default)
+@dp.transformation(get_target_without_shortterm_default)
 def get_unique_observations(df: DataFrame):
     return (
         df.drop(
@@ -274,20 +272,20 @@ categorical_features = [
 
 # COMMAND ----------
 
-@transformation(get_unique_observations)
+@dp.transformation(get_unique_observations)
 def cast_numeric_features_to_double(df: DataFrame):
     return df.select(*(f.col(c).cast("double").alias(c) if c in numeric_features else f.col(c) for c in df.columns))
 
 
 # COMMAND ----------
 
-@transformation(cast_numeric_features_to_double, get_widget_value("run_date"))
+@dp.transformation(cast_numeric_features_to_double, dp.get_widget_value("run_date"))
 def append_run_date(df: DataFrame, run_date):
     return df.withColumn("run_date", f.lit(dt.datetime.strptime(run_date, "%Y-%m-%d")))
 
 # COMMAND ----------
 
-@transformation(append_run_date)
+@dp.transformation(append_run_date)
 @loan_feature(
     ("Gender", "0 Male 1 Woman 2 Undefined"),
     ("AgeGroup", "Borrowers age group"),
@@ -323,7 +321,7 @@ def customer_personal_features(df: DataFrame):
 
 # COMMAND ----------
 
-@transformation(append_run_date)
+@dp.transformation(append_run_date)
 @loan_feature(
     ("IncomeTotal", "Total Income of borrower"),
     ("LiabilitiesTotal", "Total monthly liabilities"),
@@ -346,7 +344,7 @@ def customer_financial_features(df: DataFrame):
 
 # COMMAND ----------
 
-@transformation(append_run_date)
+@dp.transformation(append_run_date)
 @loan_feature(
     ("NewCreditCustomer", "True if Customer had at least 3 months of credit history in Bondora, otherwise False"),
     ("VerificationType", "0 Not set 1 Income unverified 2 cross-referenced by phone 3 Income verified 4 Income and expenses verified"),

@@ -9,20 +9,18 @@
 # COMMAND ----------
 
 from collections import namedtuple
-import datalakebundle.imports as dl
-from daipecore.widgets.get_widget_value import get_widget_value
 from databricks import feature_store
 from featurestorebundle.feature.FeatureStore import FeatureStore
 from pyspark.sql import DataFrame
 from pyspark.sql import functions as f, types as t
-from daipecore.widgets.Widgets import Widgets
+import daipe as dp
 
 Args = namedtuple('Args', 'model_uri entity_name id_column table_name')
 
 # COMMAND ----------
 
-@dl.notebook_function()
-def set_widgets(widgets: Widgets):
+@dp.notebook_function()
+def set_widgets(widgets: dp.Widgets):
     """Set widgets for args"""
 
     widgets.add_text("model_name", "")
@@ -32,8 +30,8 @@ def set_widgets(widgets: Widgets):
 
 # COMMAND ----------
 
-@dl.notebook_function()
-def args(widgets: Widgets) -> Args:
+@dp.notebook_function()
+def args(widgets: dp.Widgets) -> Args:
     """Get widgets args"""
     
     return (
@@ -47,7 +45,7 @@ def args(widgets: Widgets) -> Args:
 
 # COMMAND ----------
 
-@dl.transformation(args, display=False)
+@dp.transformation(args, display=False)
 def load_feature_store(args: Args, feature_store: FeatureStore):
     """Get today's features"""
 
@@ -55,16 +53,16 @@ def load_feature_store(args: Args, feature_store: FeatureStore):
 
 # COMMAND ----------
 
-@dl.transformation(args, load_feature_store, display=False)
+@dp.transformation(args, load_feature_store, display=False)
 def score_batch(args: Args, ids: DataFrame):
     dbx_feature_store = feature_store.FeatureStoreClient()
     return dbx_feature_store.score_batch(args.model_uri, ids)
 
 # COMMAND ----------
 
-@dl.notebook_function(args)
+@dp.notebook_function(args)
 def get_schema(args: Args):
-    return dl.TableSchema(
+    return dp.TableSchema(
         [
             t.StructField(args.id_column, t.StringType()),
             t.StructField("prediction", t.BooleanType()),
@@ -74,8 +72,8 @@ def get_schema(args: Args):
 
 # COMMAND ----------
 
-@dl.transformation(args, score_batch, display=True)
-@dl.table_overwrite(f"gold.{args.result.table_name}", get_schema.result)
+@dp.transformation(args, score_batch, display=True)
+@dp.table_overwrite(f"gold.{args.result.table_name}", get_schema.result)
 def save_predictions(args: Args, df: DataFrame):
     """Save predictions to table"""
     

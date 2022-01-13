@@ -1,9 +1,9 @@
 from pyspark.sql import types as t
-from datalakebundle.imports import TableSchema
+import daipe as dp
 
 
 def get_schema():
-    return TableSchema(
+    return dp.TableSchema(
         [
             t.StructField("LoanReportAsOfEOD", t.DateType(), nullable=True),
             t.StructField("LoanId", t.StringType(), nullable=True),

@@ -5,7 +5,7 @@ parameters:
     cluster:
       spark_version: "9.1.x-scala2.12"
       node_type_id: "Standard_DS3_v2"
-      num_workers: 0
+      num_workers: 1
       spark_env_vars:
         APP_ENV: "%kernel.environment%"
 
@@ -32,7 +32,7 @@ parameters:
             depends_on:
               - task_key: 'init'
             notebook_task:
-              notebook_path: '%jobs.notebooks.base_dir%/bronze/tbl_repayments'
+              notebook_path: '%jobs.notebooks.base_dir%/bronze/tbl_repayments/tbl_repayments'
             new_cluster: '%jobs.cluster%'
           - task_key: 'silver_tbl_loans'
             depends_on:
@@ -44,7 +44,7 @@ parameters:
             depends_on:
               - task_key: 'bronze_tbl_repayments'
             notebook_task:
-              notebook_path: '%jobs.notebooks.base_dir%/silver/tbl_repayments'
+              notebook_path: '%jobs.notebooks.base_dir%/silver/tbl_repayments/tbl_repayments'
             new_cluster: '%jobs.cluster%'
           - task_key: 'silver_tbl_joined_loans_and_repayments'
             depends_on:

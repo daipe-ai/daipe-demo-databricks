@@ -15,7 +15,7 @@
 
 import pyspark.sql.types as t
 from pyspark.sql.dataframe import DataFrame
-from datalakebundle.imports import *
+import daipe as dp
 
 # COMMAND ----------
 
@@ -29,7 +29,7 @@ from daipedemo.silver.tbl_repayments.schema import get_schema as get_repayments_
 
 
 def get_joined_schema():
-    schema = TableSchema(
+    schema = dp.TableSchema(
         get_loans_schema().fields + get_repayments_schema().fields,  # Schema is a composed of columns from both tables
         primary_key=["LoanID", "Date"],
     )
@@ -49,26 +49,26 @@ def get_joined_schema():
 
 # COMMAND ----------
 
-@transformation(read_table("silver.tbl_loans"))
+@dp.transformation(dp.read_table("silver.tbl_loans"))
 def read_tbl_loans(df: DataFrame):
     return df
 
 # COMMAND ----------
 
-@transformation(read_table("silver.tbl_repayments"))
+@dp.transformation(dp.read_table("silver.tbl_repayments"))
 def read_tbl_repayments(df: DataFrame):
     return df
 
 # COMMAND ----------
 
-@transformation(read_tbl_loans, read_tbl_repayments)
+@dp.transformation(read_tbl_loans, read_tbl_repayments)
 def join_loans_and_repayments(df1: DataFrame, df2: DataFrame):
     return df1.join(df2, "LoanID")
 
 # COMMAND ----------
 
-@transformation(join_loans_and_repayments)
-# @table_overwrite("silver.tbl_joined_loans_and_repayments", get_joined_schema())
+@dp.transformation(join_loans_and_repayments)
+# @dp.table_overwrite("silver.tbl_joined_loans_and_repayments", get_joined_schema())
 def save_joined_loans_and_repayments(df: DataFrame):
     return df
 
@@ -84,8 +84,8 @@ def save_joined_loans_and_repayments(df: DataFrame):
 
 # COMMAND ----------
 
-@transformation(read_table("silver.tbl_loans"), read_table("silver.tbl_repayments"), display=True)
-@table_overwrite("silver.tbl_joined_loans_and_repayments", get_joined_schema())
+@dp.transformation(dp.read_table("silver.tbl_loans"), dp.read_table("silver.tbl_repayments"), display=True)
+@dp.table_overwrite("silver.tbl_joined_loans_and_repayments", get_joined_schema())
 def join_loans_and_repayments_combined(df1: DataFrame, df2: DataFrame):
     return df1.join(df2, "LoanID")
 

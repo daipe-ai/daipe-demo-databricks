@@ -16,23 +16,22 @@ import numpy as np
 from logging import Logger
 from collections import namedtuple
 from daipedemo.mlops.model_evaluator import evaluate_models, promote_new_model
-from daipecore.imports import Widgets
-from datalakebundle.imports import *
+import daipe as dp
 
 Args = namedtuple('Args', 'model_name entity_name id_column repo_handle')
 
 # COMMAND ----------
 
-@notebook_function()
-def create_widgets(widgets: Widgets):
+@dp.notebook_function()
+def create_widgets(widgets: dp.Widgets):
     widgets.add_text("model_name", "")
     widgets.add_text("entity_name", "")
     widgets.add_text("id_column", "")
 
 # COMMAND ----------
 
-@notebook_function("%repo.handle%")
-def args(repo_handle: str, widgets: Widgets) -> Args:
+@dp.notebook_function("%repo.handle%")
+def args(repo_handle: str, widgets: dp.Widgets) -> Args:
     """Get widgets args"""
     
     return (
@@ -63,7 +62,7 @@ def eval_metric(labels, predictions) -> float:
 
 # COMMAND ----------
 
-@notebook_function(
+@dp.notebook_function(
     evaluate_models(eval_metric,
                     model_name=args.result.model_name,
                     entity_name=args.result.entity_name,

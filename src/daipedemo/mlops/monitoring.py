@@ -1,10 +1,8 @@
-from logging import Logger
 import pandas as pd
 import seaborn as sns
-import datetime as dt
 
-from pyspark.sql import types as t, DataFrame
-import datalakebundle.imports as dl
+from pyspark.sql import types as t
+import daipe as dp
 
 
 def plot_drift(now_df, day_before_df, feature: str):
@@ -23,10 +21,11 @@ def plot_drift(now_df, day_before_df, feature: str):
     sns.set_style("whitegrid")
     sns.kdeplot(data=plot_data, hue="period", x=feature, fill=True, common_norm=False)
 
+
 def get_drift_table_schema():
     """Schema for logging table"""
 
-    return dl.TableSchema(
+    return dp.TableSchema(
         [
             t.StructField("Date", t.DateType()),
             t.StructField("Entity_name", t.StringType()),
@@ -35,4 +34,3 @@ def get_drift_table_schema():
         ],
         primary_key=["Date", "Entity_name"],
     )
-    
