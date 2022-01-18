@@ -167,7 +167,7 @@ python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*"
 
 [[package]]
 name = "daipe-core"
-version = "1.3.3"
+version = "1.4.1"
 description = "Daipe framework core"
 category = "main"
 optional = false
@@ -1486,7 +1486,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=1.2.3)", "pytest-flake8", "pyt
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.10"
-content-hash = "22baae73813165cf08f8d8c0ca5d692ae6373384690ce212e16db1117f22753e"
+content-hash = "99d23088854f5d628c575938c069fe72bf6172dffee7c70d0ea4f5e12cae51d1"
 
 [metadata.files]
 appdirs = [
@@ -1639,7 +1639,7 @@ cython = [
     {file = "Cython-0.29.23.tar.gz", hash = "sha256:6a0d31452f0245daacb14c979c77e093eb1a546c760816b5eed0047686baad8e"},
 ]
 daipe-core = [
-    {file = "daipe_core-1.3.3-py3-none-any.whl", hash = "sha256:0232faa27dd22957ffd5ced4f67f31b469060114aab72fc2457b9c5383a97cf3"},
+    {file = "daipe_core-1.4.1-py3-none-any.whl", hash = "sha256:6ac947536f29947b2fd3d0c79821afee86098ea1c9ed7151b00bb104014abaa3"},
 ]
 databricks-bundle = [
     {file = "databricks_bundle-1.3.1-py3-none-any.whl", hash = "sha256:6f658f444da49b1c8b904fad2d2f67969d74fed824fce62139f3caa6d460a49b"},
