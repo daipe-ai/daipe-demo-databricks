@@ -4,4 +4,4 @@ on:
 
 jobs:
   build:
-    uses: daipe-ai/daipe-project-ci-cd/.github/workflows/build.yml@v1
+    uses: daipe-ai/daipe-project-ci-cd/.github/workflows/build.yml@sz-display-check
