@@ -5,3 +5,5 @@ on:
 jobs:
   build:
     uses: daipe-ai/daipe-project-ci-cd/.github/workflows/build.yml@sz-display-check
+    with:
+      check_display_false: true
