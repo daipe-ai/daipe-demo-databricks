@@ -80,7 +80,7 @@ distro = "1.4.0"
 injecta = "0.10.*"
 databricks-bundle = "^1.3.1"
 datalake-bundle = "^1.2.2"
-daipe-core = "^1.3.0"
+daipe-core = "^1.4.1"
 feature-store-bundle = "^1.3.0.dev1"
 
 [tool.poetry.dev-dependencies]
@@ -100,3 +100,4 @@ root_module_name_search_exclude=["daipe"]
 [tool.poe.tasks]
 flake8 = "flake8 --ignore=E501,E305,E302,F403,F405,W503 src"
 container-check = { shell = "python src/$(ls -I daipe.py src)/ContainerTest.py" }
+unify-imports = { shell = "python $(python -c 'import sysconfig; print(sysconfig.get_paths()[\"purelib\"])')/daipecore/shortcut/ShortcutCreator.py" }
