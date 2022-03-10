@@ -4,7 +4,7 @@
 # MAGIC ## Silver level
 # MAGIC Return to <a href="$../../_index">index page</a>
 # MAGIC
-# MAGIC As it was already mentioned in the bronze level table a schema can defined in a __hidden external file__.
+# MAGIC As it was already mentioned in the bronze level table a schema can be defined in a __python file__.
 
 # COMMAND ----------
 

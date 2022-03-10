@@ -37,17 +37,12 @@ from daipedemo.bronze.tbl_repayments.csv_schema import get_schema as get_csv_sch
 
 # MAGIC %md
 # MAGIC
-# MAGIC #### Passing configuration to notebook functions (advanced)
+# MAGIC #### Passing configuration to notebook functions
 # MAGIC
 # MAGIC The following function uses the `"%loans.repayments_csv_path%"` config parameter. To change it:
 # MAGIC
-# MAGIC 1. [Setup your local development environment](https://docs.daipe.ai/data-pipelines-workflow/daipe-demo-project/)
-# MAGIC 1. Edit the `src/daipedemo/_config/config.yaml` file on your local machine
-# MAGIC 1. Deploy changes back to Databricks by using the `console dbx:deploy-master-package` command.
-# MAGIC
-# MAGIC #### Hidden files
-# MAGIC
-# MAGIC It is also possible to use hidden files for longer reusable parts of code such as schemas. The `daipedemo.bronze.tbl_repayments.csv_schema.py` is used here as an example. Creating these files requires the local developement environment as they are __not visible__ from Databricks.
+# MAGIC 1. Edit the `[PROJECT_ROOT]/src/daipedemo/_config/config.yaml`
+# MAGIC 1. (Re)run the following notebook cell
 
 # COMMAND ----------
 
